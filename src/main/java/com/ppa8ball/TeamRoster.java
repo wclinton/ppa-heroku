@@ -3,6 +3,9 @@ package com.ppa8ball;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ppa8ball.stats.PlayerStat;
+import com.ppa8ball.stats.TeamStat;
+
 public class TeamRoster {
 
 	public Player[] players = new Player[5];

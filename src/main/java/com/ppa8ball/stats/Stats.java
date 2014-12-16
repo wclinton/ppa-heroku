@@ -1,4 +1,4 @@
-package com.ppa8ball;
+package com.ppa8ball.stats;
 
 import java.io.IOException;
 import java.io.InputStream;

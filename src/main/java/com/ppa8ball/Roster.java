@@ -2,6 +2,10 @@ package com.ppa8ball;
 
 import java.util.List;
 
+import com.ppa8ball.stats.PlayerStat;
+import com.ppa8ball.stats.Stats;
+import com.ppa8ball.stats.TeamStat;
+
 public class Roster
 {
 	public static String ScoreSheetUrl = "http://www.ppa8ball.com/Scoresheet.pdf";

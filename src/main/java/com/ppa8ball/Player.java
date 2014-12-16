@@ -1,6 +1,8 @@
 package com.ppa8ball;
 import java.text.DecimalFormat;
 
+import com.ppa8ball.stats.PlayerStat;
+
 public class Player
 {
 	public String name;

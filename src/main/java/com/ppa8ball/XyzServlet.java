@@ -8,6 +8,9 @@ import java.util.List;
 import javax.servlet.http.*;
 
 import com.itextpdf.text.DocumentException;
+import com.ppa8ball.stats.PlayerStat;
+import com.ppa8ball.stats.Stats;
+import com.ppa8ball.stats.TeamStat;
 
 @SuppressWarnings("serial")
 public class XyzServlet extends HttpServlet

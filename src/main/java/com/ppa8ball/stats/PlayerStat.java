@@ -1,4 +1,5 @@
-package com.ppa8ball;
+package com.ppa8ball.stats;
+
 
 public class PlayerStat {
 
