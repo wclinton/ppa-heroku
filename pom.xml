@@ -66,7 +66,21 @@
         	<artifactId>jxl</artifactId>
         	<version>2.6.12</version>
         </dependency>
+        <dependency>
+        	<groupId>com.itextg</groupId>
+        	<artifactId>itextg</artifactId>
+        	<version>5.5.3</version>
+        </dependency>
     </dependencies>
+    
+    <repositories>
+    <!--other repositories if any-->
+    <repository>
+        <id>project.local</id>
+        <name>project</name>
+        <url>file://${basedir}/repo</url>
+    </repository>
+    </repositories>
 
     <build>
         <!-- for hot reload of the web application-->
