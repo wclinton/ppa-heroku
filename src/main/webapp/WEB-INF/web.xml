@@ -1,18 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<web-app
-        version="2.5"
-        xmlns="http://java.sun.com/xml/ns/javaee"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-    <servlet>
-        <servlet-name>sign</servlet-name>
-        <servlet-class>com.example.guestbook.SignGuestbookServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>sign</servlet-name>
-        <url-pattern>/sign</url-pattern>
-    </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>guestbook.jsp</welcome-file>
-    </welcome-file-list>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <servlet>
+    <servlet-name>sign</servlet-name>
+    <servlet-class>com.example.guestbook.SignGuestbookServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sign</servlet-name>
+    <url-pattern>/sign</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>guestbook.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>XyzServlet</display-name>
+    <servlet-name>XyzServlet</servlet-name>
+    <servlet-class>com.ppa8ball.XyzServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>XyzServlet</servlet-name>
+    <url-pattern>/xyz</url-pattern>
+  </servlet-mapping>
 </web-app>
