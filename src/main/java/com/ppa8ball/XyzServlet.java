@@ -54,6 +54,7 @@ public class XyzServlet extends HttpServlet
 		{
 			resp.setContentType("text/plain");
 			resp.getWriter().println("Unable to parse parameters.");
+			resp.getWriter().println("The correct params are:.");
 			return;
 		}
 

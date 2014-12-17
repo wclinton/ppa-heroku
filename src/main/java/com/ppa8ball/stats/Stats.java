@@ -14,7 +14,8 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-public class Stats {
+public class Stats
+{
 
 	private final String StatsUrl = "http://www.ppa8ball.com/week08.xls";
 
@@ -31,66 +32,77 @@ public class Stats {
 	private List<TeamStat> teams = new ArrayList<TeamStat>();
 	private List<PlayerStat> players = new ArrayList<PlayerStat>();
 
-	public void load() {
-		try {
+	public void load()
+	{
+		try
+		{
 			Workbook workbook = Workbook.getWorkbook(getExcelSpreadSheet());
 
 			Sheet sheet = workbook.getSheet(1);
 
 			getStats(sheet);
 
-		} catch (BiffException e) {
+		} catch (BiffException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public TeamStat getTeam(int number) {
-		for (TeamStat team : teams) {
+	public TeamStat getTeam(int number)
+	{
+		for (TeamStat team : teams)
+		{
 			if (team.number == number)
 				return team;
 		}
 		return null;
 	}
 
-	public List<PlayerStat> getPlayerStat(int teamNumber, int[] playerOrder) {
+	public List<PlayerStat> getPlayerStat(int teamNumber, int[] playerOrder)
+	{
 		List<PlayerStat> teamPlayers = new ArrayList<PlayerStat>();
 
-		for (PlayerStat playerStat : players) {
+		for (PlayerStat playerStat : players)
+		{
 			if (playerStat.teamNumber == teamNumber)
 				teamPlayers.add(playerStat);
 		}
-		
+
 		if (playerOrder == null)
-		return teamPlayers;
-		
+			return teamPlayers;
+
 		return sortPlayers(teamPlayers, playerOrder);
 	}
-	
+
 	private List<PlayerStat> sortPlayers(List<PlayerStat> players, int[] playerOrder)
 	{
-		
+
 		List<PlayerStat> sortedPlayers = new ArrayList<PlayerStat>();
-		
+
 		for (int index : playerOrder)
 		{
-			sortedPlayers.add(players.get(index-1));
+			sortedPlayers.add(players.get(index - 1));
 		}
-		
+
 		return sortedPlayers;
-		
+
 	}
 
-	private void getStats(Sheet sheet) {
+	private void getStats(Sheet sheet)
+	{
 		Cell cell = sheet.getCell("A2");
 
-		while (cell.getContents() == null || cell.getContents() != "") {
+		while (cell.getContents() == null || cell.getContents() != "")
+		{
 
 			TeamStat team = getTeamStat(sheet, cell);
-			if (!teams.isEmpty()) {
+			if (!teams.isEmpty())
+			{
 				TeamStat lastTeam = teams.get(teams.size() - 1);
 				if (lastTeam.number != team.number)
 					teams.add(team);
@@ -107,7 +119,8 @@ public class Stats {
 		}
 	}
 
-	TeamStat getTeamStat(Sheet sheet, Cell cell) {
+	TeamStat getTeamStat(Sheet sheet, Cell cell)
+	{
 		TeamStat team = new TeamStat();
 		team.number = Integer.parseInt(cell.getContents());
 		Cell nameCell = CellHelp.getCellToRight(sheet, cell);
@@ -115,7 +128,8 @@ public class Stats {
 		return team;
 	}
 
-	PlayerStat getPlayerStat(Sheet sheet, int row, int teamNumber) {
+	PlayerStat getPlayerStat(Sheet sheet, int row, int teamNumber)
+	{
 		PlayerStat player = new PlayerStat();
 
 		player.teamNumber = teamNumber;
@@ -124,28 +138,24 @@ public class Stats {
 		player.lastName = sheet.getCell(lastNameColumn, row).getContents();
 		player.fullName = sheet.getCell(fullNameColumn, row).getContents();
 
-		player.actualAverage = getDecimalValue(sheet
-				.getCell(actualAverage, row));
-		player.adjustedAverage = getDecimalValue(sheet.getCell(adjustedAverage,
-				row));
+		player.actualAverage = getDecimalValue(sheet.getCell(actualAverage, row));
+		player.adjustedAverage = getDecimalValue(sheet.getCell(adjustedAverage, row));
 
-		player.totalPoints = Integer.parseInt(sheet.getCell(totalPointsColumn,
-				row).getContents());
-		player.gamesPlayed = Integer.parseInt(sheet.getCell(gamesPlayed, row)
-				.getContents());
-		player.perfectNights = Integer.parseInt(sheet.getCell(perfectNights,
-				row).getContents());
+		player.totalPoints = Integer.parseInt(sheet.getCell(totalPointsColumn, row).getContents());
+		player.gamesPlayed = Integer.parseInt(sheet.getCell(gamesPlayed, row).getContents());
+		player.perfectNights = Integer.parseInt(sheet.getCell(perfectNights, row).getContents());
 
-		player.gender = getGender(sheet.getCell(genderColumn, row)
-				.getContents());
+		player.gender = getGender(sheet.getCell(genderColumn, row).getContents());
 
 		return player;
 	}
 
-	private static int ColumnToInt(String s) {
+	private static int ColumnToInt(String s)
+	{
 		char c;
 
-		if (s.length() == 1) {
+		if (s.length() == 1)
+		{
 			c = s.charAt(0);
 			return c - 'A';
 		}
@@ -155,10 +165,12 @@ public class Stats {
 		return ColumnToInt("Z") + 1 + c - 'A';
 	}
 
-	private double getDecimalValue(Cell cell) {
+	private double getDecimalValue(Cell cell)
+	{
 		CellType type = cell.getType();
 
-		if (type != CellType.NUMBER_FORMULA && type != CellType.NUMBER) {
+		if (type != CellType.NUMBER_FORMULA && type != CellType.NUMBER)
+		{
 			return 0.0;
 		}
 
@@ -167,27 +179,30 @@ public class Stats {
 
 	}
 
-	private Gender getGender(String s) {
+	private Gender getGender(String s)
+	{
 
-		if (s.compareToIgnoreCase("M") == 0
-				|| s.compareToIgnoreCase("male") == 0)
+		if (s.compareToIgnoreCase("M") == 0 || s.compareToIgnoreCase("male") == 0)
 			return Gender.Male;
 
-		else if (s.compareToIgnoreCase("F") == 0
-				|| s.compareToIgnoreCase("female") == 0)
+		else if (s.compareToIgnoreCase("F") == 0 || s.compareToIgnoreCase("female") == 0)
 
 			return Gender.Female;
 
 		return Gender.Unknown;
 	}
 
-	private InputStream getExcelSpreadSheet() {
-		try {
+	private InputStream getExcelSpreadSheet()
+	{
+		try
+		{
 			return new URL(StatsUrl).openStream();
-		} catch (MalformedURLException e) {
+		} catch (MalformedURLException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

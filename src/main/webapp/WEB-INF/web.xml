@@ -21,4 +21,14 @@
     <servlet-name>XyzServlet</servlet-name>
     <url-pattern>/xyz</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LoadStats</display-name>
+    <servlet-name>LoadStats</servlet-name>
+    <servlet-class>com.ppa8ball.LoadStats</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoadStats</servlet-name>
+    <url-pattern>/LoadStats</url-pattern>
+  </servlet-mapping>
 </web-app>
