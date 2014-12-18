@@ -2,6 +2,7 @@ package com.ppa8ball.stats;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Unindex;
 
 @Entity
@@ -9,9 +10,9 @@ public class PlayerStat {
 
 	@Id public Long id;
 	public int teamNumber;
-	public String firstName;
+	@Index public String firstName;
 	public String lastName;
-	public String fullName;
+	@Index public String fullName;
 	
 	public Gender gender;
 	

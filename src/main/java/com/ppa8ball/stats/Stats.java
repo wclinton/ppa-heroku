@@ -62,6 +62,11 @@ public class Stats
 		}
 		return null;
 	}
+	
+	public List<TeamStat> getTeams()
+	{
+		return teams;
+	}
 
 	public List<PlayerStat> getPlayerStat(int teamNumber, int[] playerOrder)
 	{
@@ -77,6 +82,10 @@ public class Stats
 			return teamPlayers;
 
 		return sortPlayers(teamPlayers, playerOrder);
+	}
+	public List<PlayerStat> getPlayerStats()
+	{
+		return players;
 	}
 
 	private List<PlayerStat> sortPlayers(List<PlayerStat> players, int[] playerOrder)

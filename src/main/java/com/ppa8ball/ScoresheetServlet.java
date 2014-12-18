@@ -13,7 +13,7 @@ import com.ppa8ball.stats.Stats;
 import com.ppa8ball.stats.TeamStat;
 
 @SuppressWarnings("serial")
-public class XyzServlet extends HttpServlet
+public class ScoresheetServlet extends HttpServlet
 {
 	private static int[] playerOrder;
 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.Key;
+import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.Stats;
 import com.ppa8ball.stats.TeamStat;
 
@@ -37,47 +38,70 @@ public class LoadStats extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		// TODO Auto-generated method stub
+
+		request.getParameter("drop");
+
+		boolean drop = Boolean.valueOf(request.getParameter("drop") != null);
+
+		if (drop)
+		{
+			dropDatabase();
+		}
 		response.setContentType("text/plain");
 
 		PrintWriter writer = response.getWriter();
-		List<TeamStat> teams = OfyService.myOfy().load().type(TeamStat.class).limit(10).list();
+		List<TeamStat> teams = OfyService.myOfy().load().type(TeamStat.class).order("number").list();
+		
+		List <PlayerStat> playerStats = OfyService.myOfy().load().type(PlayerStat.class).order("teamNumber").list();
+		//
+		// for (TeamStat teamStat : teams)
+		// {
+		// writer.println("Team Id:" + teamStat.id);
+		//
+		// writer.println("Team name:" + teamStat.name);
+		//
+		// writer.println("Team Number: " + teamStat.number);
+		// }
 
-		for (TeamStat teamStat : teams)
+		// TeamStat y =
+		// OfyService.myOfy().load().type(TeamStat.class).id(5348024557502464L).now();
+
+		if (teams == null || teams.isEmpty())
 		{
-			writer.println("Team Id:" + teamStat.id);
-
-			writer.println("Team name:" + teamStat.name);
-
-			writer.println("Team Number: " + teamStat.number);
-		}
-
-		TeamStat y = OfyService.myOfy().load().type(TeamStat.class).id(5348024557502464L).now();
-
-		Iterable<Key<TeamStat>> allKeys = OfyService.myOfy().load().type(TeamStat.class).keys();
-
-		if (teams == null || teams.size() == 0)
-		{
-
 			Stats s = new Stats();
 
 			s.load();
 
-			// final Objectify ofy = ObjectifyService.ofy();
+			teams = s.getTeams();
 
-			TeamStat team = s.getTeam(1);
-
-			OfyService.myOfy().save().entity(team).now();
-
-			TeamStat x = OfyService.myOfy().load().type(TeamStat.class).id(team.id).now();
-
+			OfyService.myOfy().save().entities(teams).now();
+			
+			 playerStats = s.getPlayerStats();
+			
+			OfyService.myOfy().save().entities(playerStats).now();
+		}
+		
+		
+		//
+		
+		for (TeamStat x : teams)
+		{
 			writer.println("Team Id:" + x.id);
 
 			writer.println("Team name:" + x.name);
 
 			writer.println("Team Number: " + x.number);
-
 		}
+		
+		for (PlayerStat playerStat : playerStats)
+		{
+			writer.println("Player Id:" + playerStat.id);
+
+			writer.println("Player Team Number:" + playerStat.teamNumber);
+
+			writer.println("Player Full Name: " + playerStat.fullName);
+		}
+		
 		writer.flush();
 
 	}
@@ -90,5 +114,26 @@ public class LoadStats extends HttpServlet
 	{
 		// TODO Auto-generated method stub
 	}
+
+	private void dropDatabase()
+	{
+		deleteAll(TeamStat.class);
+		deleteAll(PlayerStat.class);
+	}
+
+	private <T> void deleteAll(Class<T> c)
+	{
+		// You can query for just keys, which will return Key objects much more
+		// efficiently than fetching whole objects
+		Iterable<Key<T>> allKeys = OfyService.myOfy().load().type(c).keys();
+
+		// Useful for deleting items
+		OfyService.myOfy().delete().keys(allKeys);
+	}
+	
+//	private String show(TeamStat teamStat)
+//	{
+//		
+//	}
 
 }

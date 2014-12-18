@@ -13,13 +13,13 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>XyzServlet</display-name>
-    <servlet-name>XyzServlet</servlet-name>
-    <servlet-class>com.ppa8ball.XyzServlet</servlet-class>
+    <display-name>Scoresheet</display-name>
+    <servlet-name>Scoresheet</servlet-name>
+    <servlet-class>com.ppa8ball.ScoresheetServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>XyzServlet</servlet-name>
-    <url-pattern>/xyz</url-pattern>
+    <servlet-name>Scoresheet</servlet-name>
+    <url-pattern>/scoresheet</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
@@ -30,5 +30,15 @@
   <servlet-mapping>
     <servlet-name>LoadStats</servlet-name>
     <url-pattern>/LoadStats</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SearchPlayers</display-name>
+    <servlet-name>SearchPlayers</servlet-name>
+    <servlet-class>com.ppa8ball.SearchPlayersServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SearchPlayers</servlet-name>
+    <url-pattern>/searchplayers</url-pattern>
   </servlet-mapping>
 </web-app>
