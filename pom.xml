@@ -135,7 +135,6 @@
             <plugin>
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
-                <version>1.9.17</version>
                 <configuration>
                     <enableJarClasses>false</enableJarClasses>
                     <!-- Comment in the below snippet to bind to all IPs instead of just localhost -->
@@ -208,6 +207,38 @@
                       <jvmFlag>-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n</jvmFlag>
                     </jvmFlags -->
                 </configuration>
+            </plugin>
+            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+            <plugin>
+            	<groupId>org.eclipse.m2e</groupId>
+            	<artifactId>lifecycle-mapping</artifactId>
+            	<version>1.0.0</version>
+            	<configuration>
+            		<lifecycleMappingMetadata>
+            			<pluginExecutions>
+            				<pluginExecution>
+            					<pluginExecutionFilter>
+            						<groupId>org.codehaus.mojo</groupId>
+            						<artifactId>
+            							versions-maven-plugin
+            						</artifactId>
+            						<versionRange>[2.1,)</versionRange>
+            						<goals>
+            							<goal>
+            								display-dependency-updates
+            							</goal>
+            							<goal>
+            								display-plugin-updates
+            							</goal>
+            						</goals>
+            					</pluginExecutionFilter>
+            					<action>
+            						<ignore></ignore>
+            					</action>
+            				</pluginExecution>
+            			</pluginExecutions>
+            		</lifecycleMappingMetadata>
+            	</configuration>
             </plugin>
         </plugins>
         </pluginManagement>
