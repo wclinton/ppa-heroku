@@ -9,7 +9,7 @@
     <url-pattern>/sign</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
-    <welcome-file>guestbook.jsp</welcome-file>
+    <welcome-file>scoresheet.html</welcome-file>
   </welcome-file-list>
   <servlet>
     <description></description>
