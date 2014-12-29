@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+
+<head lang="en">
+<meta charset="utf-8">
+<title>Active Basket</title>
+<link rel="stylesheet" type="text/css"
+	href="http://angular-ui.github.com/ng-grid/css/ng-grid.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+<script type="text/javascript"
+	src="http://angular-ui.github.com/ng-grid/lib/ng-grid.debug.js"></script>
+<!-- <link rel="stylesheet" type="text/css" -->
+<!-- 	href="static/AngularJSService/css/style.css" /> -->
+<script type="text/javascript">
+	var app = angular.module('myApp', [ 'ngGrid' ]);
+
+	app.controller('MyController', function($scope, $http) {
+
+		/* $scope.populateGridData = function() {
+			var myactivevalue = angular.element(
+					document.querySelector('teams')).val();
+			$http({
+				method : 'GET',
+				url : 'getActiveTeamData/' + myactivevalue
+			}).success(function(dataBasket, status, headers, config) {
+				$scope.myData = dataBasket;
+			}).error(function(data, status, headers, config) {
+				// called asynchronously if an error occurs show here
+			});
+		};
+		$scope.filterOptions = {
+			filterText : ''
+		};
+		$scope.gridOptions = {
+			data : 'myData',
+			showGroupPanel : true,
+			filterOptions : $scope.filterOptions,
+			showColumnMenu : true,
+			showFilter : true,
+			selectedItems : $scope.mySelections,
+			multiSelect : false,
+			rowHeight : 22
+		}; */
+		$scope.getDropDownDataFromServer = function() {
+			$http({
+				method : 'GET',
+				url : 'teams'
+			}).success(function(data, status, headers, config) {
+				$scope.activeTeam = data;
+			}).error(function(data, status, headers, config) {
+				// called asynchronously if an error occurs show here           
+			});
+
+		};
+
+	});
+</script>
+</head>
+
+<body data-ng-controller="MyController" style="overflow: auto;">
+
+	<div class='tab'>
+		<div data-ng-init="getDropDownDataFromServer()"
+			class="activeTeamsDropdownStyle">
+			<b>Active Team:</b> <select id="activeTeam"
+ 				data-ng-model="selectedTeam" /* data-ng-change="populateGridData();"  */
+				style="font-size: 11px">
+				<option value="">-- Select Active Team --</option>
+			
+				<option data-ng-repeat="team in activeTeam.teams" value="{{team.number}}">{{team.number}}.{{team.name}}</option>
+			</select><br>
+		</div>
+	</div>
+</body>
+
+</html>

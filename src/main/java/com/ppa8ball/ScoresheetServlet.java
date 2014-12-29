@@ -24,9 +24,12 @@ public class ScoresheetServlet extends HttpServlet
 		final String awayString = req.getParameter("away");
 		final String isHomeString = req.getParameter("ishome");
 		final String playersString = req.getParameter("players");
+		final String JsonString = req.getParameter("toJson");
+		
 		final int home;
 		final int away;
 		final boolean isHome;
+		final boolean toJson;
 		String[] players;
 
 		try
@@ -34,6 +37,8 @@ public class ScoresheetServlet extends HttpServlet
 			home = Integer.parseInt(homeString);
 			away = Integer.parseInt(awayString);
 			isHome = Boolean.parseBoolean(isHomeString);
+			
+			toJson = Boolean.parseBoolean(JsonString);
 
 			if (playersString != null)
 			{
