@@ -20,7 +20,9 @@
 
 
 <script type="text/javascript">
-	var app = angular.module('myApp', [ 'ngGrid' ]);
+	var app = angular.module('myApp', [ 'ngGrid' ])
+
+	.constant('nameColumnSize', 100);
 
 	app.controller('MyCtrl', function($scope, $http) {
 
@@ -46,21 +48,28 @@
 			rowHeight : 22,
 			columnDefs : [ {
 				field : 'firstName',
-				displayName : 'First Name'
+				displayName : 'First Name',
+				width : 100
 			}, {
 				field : 'lastName',
-				displayName : 'Last Name'
+				displayName : 'Last Name',
+				width : 100
 			},
 
 			{
-				field : 'actualAverage',
-				displayName : 'Average'
+				field : 'displayActualAverage',
+				displayName : 'Average',
+				width : 80,
+				format : "c2",
+				cellFilter : 'number: 1'
 			}, {
 				field : 'totalPoints',
-				displayName : 'Points'
+				displayName : 'Points',
+				width : 80
 			}, {
 				field : 'gamesPlayed',
-				displayName : 'Games'
+				displayName : 'Games',
+				width : 80
 			},
 
 			]
@@ -100,7 +109,7 @@
 	<div class='tab'>
 		<div data-ng-init="getDropDownDataFromServer()"
 			class="activeTeamsDropdownStyle">
-			<b>Active Teams eh:</b> <select id="activeTeam"
+			<b>Select Teams:</b> <select id="activeTeam"
 				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
 				style="font-size: 11px">
 				<option value="">-- Select Active Team --</option>
