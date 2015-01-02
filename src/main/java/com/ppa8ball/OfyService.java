@@ -2,7 +2,6 @@ package com.ppa8ball;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;
-import com.googlecode.objectify.ObjectifyService;
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.TeamStat;
 

@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Unindex;
 public class PlayerStat {
 
 	@Id public Long id;
-	public int teamNumber;
+	@Index public int teamNumber;
 	@Index public String firstName;
 	public String lastName;
 	@Index public String fullName;

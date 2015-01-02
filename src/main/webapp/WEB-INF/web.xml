@@ -51,4 +51,14 @@
     <servlet-name>TeamsServlet</servlet-name>
     <url-pattern>/teams</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PlayersServlet</display-name>
+    <servlet-name>PlayersServlet</servlet-name>
+    <servlet-class>com.ppa8ball.servlets.PlayersServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PlayersServlet</servlet-name>
+    <url-pattern>/players</url-pattern>
+  </servlet-mapping>
 </web-app>
