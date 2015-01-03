@@ -17,10 +17,10 @@ public class Player
 	public Player(PlayerStat playerStat)
 	{
 		this.name = playerStat.fullName;
-		this.average = RoundTo2Decimals(playerStat.adjustedAverage);
+		this.average = RoundTo1Decimals(playerStat.adjustedAverage);
 	}
 
-	double RoundTo2Decimals(double val)
+	private double RoundTo1Decimals(double val)
 	{
 		DecimalFormat df2 = new DecimalFormat("###.#");
 		return Double.valueOf(df2.format(val));

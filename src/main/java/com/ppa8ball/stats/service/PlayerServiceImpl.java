@@ -53,4 +53,9 @@ public class PlayerServiceImpl implements PlayerService
 		List<TeamStat> teams = s.getTeams();
 		OfyService.myOfy().save().entities(teams).now();
 	}
+
+	public PlayersStat GetSparePlayers()
+	{
+		return GetPlayerByTeam(11);
+	}
 }

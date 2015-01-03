@@ -134,6 +134,8 @@ public class Stats
 		team.number = Integer.parseInt(cell.getContents());
 		Cell nameCell = CellHelp.getCellToRight(sheet, cell);
 		team.name = nameCell.getContents();
+		team.isSpare = team.name.equalsIgnoreCase("spare");
+		team.isNoPlayer = team.name.equalsIgnoreCase("No Player");
 		return team;
 	}
 

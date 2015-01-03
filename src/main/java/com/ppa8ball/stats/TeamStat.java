@@ -10,6 +10,8 @@ public class TeamStat
 	@Id public Long id;
 	@Index public int number;
 	public String name;
+	@Index public boolean isSpare;
+	@Index public boolean isNoPlayer;
 	
 	public TeamStat()
 	{
