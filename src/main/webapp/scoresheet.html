@@ -25,6 +25,8 @@
 	.constant('nameColumnSize', 100);
 
 	app.controller('MyCtrl', function($scope, $http) {
+		
+	    $scope.show = false;
 
 		$scope.populateGridData = function() {
 			var myactivevalue = angular.element(
@@ -91,7 +93,10 @@
 				method : 'GET',
 				url : 'teams'
 			}).success(function(data, status, headers, config) {
+				
 				$scope.activeTeam = data;
+				$scope.show = true;
+				
 			}).error(function(data, status, headers, config) {
 				// called asynchronously if an error occurs show here           
 			});
@@ -107,17 +112,32 @@
 <body ng-controller="MyCtrl">
 
 
-	<div class='tab'>
+	<div class='tab' ng-show="show">
 		<div data-ng-init="getDropDownDataFromServer()"
 			class="activeTeamsDropdownStyle">
-			<b>Select Teams:</b> <select id="activeTeam"
+			<b>Your Team:</b> <select id="activeTeam"
 				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
 				style="font-size: 11px">
 				<option value="">-- Select Active Team --</option>
 
 				<option data-ng-repeat="team in activeTeam.teams"
-					value="{{team.number}}">{{team.number}}.{{team.name}}</option>
-			</select><br>
+					value="{{team.number}}"><i>{{team.number}}</i> -
+					{{team.name}}
+				</option>
+			</select>
+			<b>Your Opponent:</b> <select id="opponentTeam"
+				data-ng-model="selectedOpponentTeam"
+				style="font-size: 11px">
+				<option value="">-- Select Active Team --</option>
+
+				<option data-ng-repeat="team in activeTeam.teams"
+					value="{{team.number}}"><i>{{team.number}}</i> -
+					{{team.name}}
+				</option>
+			</select>
+			
+			
+			<br>
 		</div>
 		<div class="gridStyle" ng-grid="gridOptions"></div>
 </body>
