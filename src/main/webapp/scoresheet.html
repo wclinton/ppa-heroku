@@ -24,107 +24,140 @@
 
 	.constant('nameColumnSize', 100);
 
-	app.controller('MyCtrl', function($scope, $http) {
+	app
+			.controller(
+					'MyCtrl',
+					function($scope, $http) {
 
-		$scope.show = false;
-		
-		$scope.position = "home";
+						$scope.show = false;
 
-		$scope.populateGridData = function() {
-			var myactivevalue = angular.element(
-					document.querySelector('#activeTeam')).val();
-			$http({
-				method : 'GET',
-				url : 'players?teamNumber=' + myactivevalue
-			}).success(function(dataBasket, status, headers, config) {
-				$scope.myData = dataBasket;
-			}).error(function(data, status, headers, config) {
-				// called asynchronously if an error occurs show here
-			});
-		};
-		$scope.filterOptions = {
-			filterText : ''
-		};
+						$scope.position = "home";
 
-		$scope.gridOptions = {
-			data : 'myData.players',
-			//showGroupPanel : true,
-			rowHeight : 22,
-			enableRowReordering : true,
-			columnDefs : [ {
-				field : 'firstName',
-				displayName : 'First Name',
-				width : 100
-			}, {
-				field : 'lastName',
-				displayName : 'Last Name',
-				width : 100
-			},
+						$scope.populateGridData = function() {
+							var myactivevalue = angular.element(
+									document.querySelector('#activeTeam'))
+									.val();
+							$http({
+								method : 'GET',
+								url : 'players?teamNumber=' + myactivevalue
+							}).success(
+									function(dataBasket, status, headers,
+											config) {
+										$scope.myData = dataBasket;
+										/*$scope.AddIndex(myData.players);*/
+									}).error(
+									function(data, status, headers, config) {
+										// called asynchronously if an error occurs show here
+									});
+						};
+						$scope.filterOptions = {
+							filterText : ''
+						};
 
-			{
-				field : 'displayActualAverage',
-				displayName : 'Average',
-				width : 80,
-				format : "c2",
-				cellFilter : 'number: 1'
-			}, {
-				field : 'totalPoints',
-				displayName : 'Points',
-				width : 80
-			}, {
-				field : 'gamesPlayed',
-				displayName : 'Games',
-				width : 80
-			},
+						$scope.editableInPopup = '<button id="editBtn" type="button" class="btn btn-primary" ng-click="edit(row)" >Remove</button>';
 
-			]
-		};
+						$scope.edit = function edit(row) {
+							alert("Here I need to know which button was selected "
+									+ row.entity.name)
+						};
 
-		// 		$scope.gridOptions = {
-		// 			data : 'myData',
-		// 			showGroupPanel : true,
-		// 			filterOptions : $scope.filterOptions,
-		// 			showColumnMenu : true,
-		// 			showFilter : true,
-		// 			selectedItems : $scope.mySelections,
-		// 			multiSelect : false,
-		// 			rowHeight : 22
-		//		};
-		$scope.getDropDownDataFromServer = function() {
-			$http({
-				method : 'GET',
-				url : 'teams'
-			}).success(function(data, status, headers, config) {
+						/*
+						$scope.AddIndex(players)
+						{
+							var i=1;
+							
+							for ( var player in players) {
+								player.idx = i;
+								i++;
+								alert(player);
+							}
+						}
+						 */
+						$scope.gridOptions = {
+							data : 'myData.players',
+							//showGroupPanel : true,
+							rowHeight : 22,
+							enableRowReordering : true,
+							columnDefs : [ {
+								field : 'firstName',
+								displayName : 'First Name',
+								width : 100
+							}, {
+								field : 'lastName',
+								displayName : 'Last Name',
+								width : 100
+							},
 
-				$scope.activeTeam = data;
-				$scope.show = true;
+							{
+								field : 'displayActualAverage',
+								displayName : 'Average',
+								width : 80,
+								format : "c2",
+								cellFilter : 'number: 1'
+							}, {
+								field : 'totalPoints',
+								displayName : 'Points',
+								width : 80
+							}, {
+								field : 'gamesPlayed',
+								displayName : 'Games',
+								width : 80
+							}, {
+								cellTemplate : $scope.editableInPopup,
+								width : 80
+							}
 
-			}).error(function(data, status, headers, config) {
-				// called asynchronously if an error occurs show here           
-			});
+							]
+						};
 
-		};
+						// 		$scope.gridOptions = {
+						// 			data : 'myData',
+						// 			showGroupPanel : true,
+						// 			filterOptions : $scope.filterOptions,
+						// 			showColumnMenu : true,
+						// 			showFilter : true,
+						// 			selectedItems : $scope.mySelections,
+						// 			multiSelect : false,
+						// 			rowHeight : 22
+						//		};
+						$scope.getDropDownDataFromServer = function() {
+							$http({
+								method : 'GET',
+								url : 'teams'
+							}).success(function(data, status, headers, config) {
 
-		$scope.GenerateScoreSheet = function() {
-			/*$window.open('GenerateScoreSheet?home=1&away=2&isHome=true');*/
+								$scope.activeTeam = data;
+								$scope.show = true;
 
-			var myTeam = angular.element(document.querySelector('#activeTeam'))
-					.val();
+							}).error(function(data, status, headers, config) {
+								// called asynchronously if an error occurs show here           
+							});
 
-			var opponent = angular.element(
-					document.querySelector('#opponentTeam')).val();
+						};
 
-			 h = true;
+						$scope.GenerateScoreSheet = function() {
+							/*$window.open('GenerateScoreSheet?home=1&away=2&isHome=true');*/
 
-			if ($scope.position == "away") {
-				h = false;
-			}
+							var myTeam = angular.element(
+									document.querySelector('#activeTeam'))
+									.val();
 
-			window.open('GenerateScoreSheet?myTeam=' + myTeam + '&opponentTeam='
-					+ opponent + '&ishome=' + h, '_blank');
-		};
+							var opponent = angular.element(
+									document.querySelector('#opponentTeam'))
+									.val();
 
-	});
+							h = true;
+
+							if ($scope.position == "away") {
+								h = false;
+							}
+
+							window.open('GenerateScoreSheet?myTeam=' + myTeam
+									+ '&opponentTeam=' + opponent + '&ishome='
+									+ h, '_blank');
+						};
+
+					});
 </script>
 
 
@@ -148,7 +181,7 @@
 			</select> <input type="radio" ng-model="position" value="home"> Home <input
 				type="radio" ng-model="position" value="away"> Away <br />
 			<div class="gridStyle" ng-grid="gridOptions"></div>
-			<b>Your Opponent:</b> <select id="opponentTeam"
+			<br> <b>Your Opponent:</b> <select id="opponentTeam"
 				data-ng-model="selectedOpponentTeam" style="font-size: 11px">
 				<option value="">-- Select Active Team --</option>
 
@@ -156,9 +189,9 @@
 					value="{{team.number}}"><i>{{team.number}}</i> -
 					{{team.name}}
 				</option>
-			</select> <br>
-
-			<button ng-click="GenerateScoreSheet()" style="font-size: 16px">Generate Scoresheet</button>
+			</select> <br> <br>
+			<button ng-click="GenerateScoreSheet()" style="font-size: 16px">Generate
+				Scoresheet</button>
 		</div>
 </body>
 
