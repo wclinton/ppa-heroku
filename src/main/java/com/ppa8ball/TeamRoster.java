@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ppa8ball.stats.PlayerStat;
+import com.ppa8ball.stats.PlayersStat;
 import com.ppa8ball.stats.TeamStat;
 
 public class TeamRoster {
@@ -14,12 +15,16 @@ public class TeamRoster {
 	
 	public TeamRoster()
 	{
-		
 	}
 	
 	public TeamRoster(TeamStat teamStat)
 	{
 		this(teamStat, new ArrayList<PlayerStat>());
+	}
+	
+	public TeamRoster(TeamStat teamStat, PlayersStat playersStat)
+	{
+		this(teamStat, playersStat.players);
 	}
 	
 	public TeamRoster(TeamStat teamStat, List<PlayerStat> playerStats)

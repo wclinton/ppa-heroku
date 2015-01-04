@@ -22,8 +22,9 @@ public class TeamsImpl implements TeamService
 	}
 
 	public TeamStat Get(int teamNumber)
-	{
-		return null;
+	{	
+		List<TeamStat> teams= OfyService.myOfy().load().type(TeamStat.class).filter("number", teamNumber).list();
+		return teams.get(0);
 	}
 
 	private List<TeamStat> getFromDB()

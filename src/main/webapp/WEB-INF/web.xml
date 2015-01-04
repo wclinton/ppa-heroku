@@ -61,4 +61,14 @@
     <servlet-name>PlayersServlet</servlet-name>
     <url-pattern>/players</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GenerateScoreSheet</display-name>
+    <servlet-name>GenerateScoreSheet</servlet-name>
+    <servlet-class>com.ppa8ball.scoresheet.GenerateScoreSheetServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GenerateScoreSheet</servlet-name>
+    <url-pattern>/GenerateScoreSheet</url-pattern>
+  </servlet-mapping>
 </web-app>
