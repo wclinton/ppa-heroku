@@ -1,5 +1,6 @@
 package com.ppa8ball.stats.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.ppa8ball.OfyService;
@@ -27,8 +28,8 @@ public class TeamsImpl implements TeamService
 
 	private List<TeamStat> getFromDB()
 	{
-		List<TeamStat> teams = OfyService.myOfy().load().type(TeamStat.class).filter("isSpare", false).filter("isNoPlayer", false)
-				.order("number").list();
+		List<TeamStat> teams = OfyService.myOfy().load().type(TeamStat.class).filter("isNormal", true).list();
+		Collections.sort(teams);
 		return teams;
 	}
 }

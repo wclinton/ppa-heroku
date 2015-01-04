@@ -92,7 +92,6 @@ public class ScoresheetGenerator
 	{
 		form.setField(AwayTeamNameField, teamRoster.name);
 		form.setField(AwayTeamNumberField, Integer.toString(teamRoster.number));
-		// form.setField(HomeTableField, "H Tbl");
 
 		int i = 0;
 		for (String s : AwayTeamAverageFields)

@@ -136,6 +136,7 @@ public class Stats
 		team.name = nameCell.getContents();
 		team.isSpare = team.name.equalsIgnoreCase("spare");
 		team.isNoPlayer = team.name.equalsIgnoreCase("No Player");
+		team.isNormal = (!team.isNoPlayer && !team.isSpare);
 		return team;
 	}
 
