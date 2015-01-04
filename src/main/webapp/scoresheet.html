@@ -78,7 +78,14 @@
 							//showGroupPanel : true,
 							rowHeight : 22,
 							enableRowReordering : true,
-							columnDefs : [ {
+							multiSelect : false,
+							columnDefs : [ 
+							              {
+							            	  cellTemplate: '<div>{{row.rowIndex + 1}}</div>',
+							            	  width: 20
+							            },
+							               
+							               {
 								field : 'firstName',
 								displayName : 'First Name',
 								width : 100
