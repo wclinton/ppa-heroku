@@ -28,19 +28,31 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-		final String homeString = req.getParameter("home");
-		final String awayString = req.getParameter("away");
+		final String myTeamString = req.getParameter("myTeam");
+		final String opponentTeamString = req.getParameter("opponentTeam");
 		final String isHomeString = req.getParameter("ishome");
 		final String playersString = req.getParameter("players");
 		
 		
-		final int home = Integer.parseInt(homeString);
-		final int away = Integer.parseInt(awayString);
+		final int myTeam = Integer.parseInt(myTeamString);
+		final int opponentTeam = Integer.parseInt(opponentTeamString);
 		final boolean isHome = Boolean.parseBoolean(isHomeString);
 		
+		final int home,away;
+		
+		
+		if (isHome)
+		{
+			home = myTeam;
+			away = opponentTeam;
+		}
+		else
+		{
+			home=opponentTeam;
+			away = myTeam;
+		}
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
-		
 		generator.GenerateScoreSheet(response, home, away, isHome);
 	}
 
