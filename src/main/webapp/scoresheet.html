@@ -54,12 +54,14 @@
 							filterText : ''
 						};
 
-						$scope.editableInPopup = '<button id="editBtn" type="button" class="btn btn-primary" ng-click="edit(row)" >Remove</button>';
+						$scope.editableInPopup = '<button id="editBtn" type="button" class="btn btn-primary" ng-click="removeRow(row)" >Remove</button>';
 
-						$scope.edit = function edit(row) {
-							alert("Here I need to know which button was selected "
-									+ row.entity.name)
-						};
+						$scope.removeRow = function(row) {
+						      var index = $scope.myData.players.indexOf(row.entity);
+						      alert(index);
+						      /*$scope.gridOptions.selectItem(index, false);*/
+						      $scope.myData.players.splice(index, 1);
+						    };
 
 						/*
 						$scope.AddIndex(players)
@@ -78,6 +80,7 @@
 							//showGroupPanel : true,
 							rowHeight : 22,
 							enableRowReordering : true,
+							enableRowSelection : false,
 							multiSelect : false,
 							columnDefs : [ 
 							              {
