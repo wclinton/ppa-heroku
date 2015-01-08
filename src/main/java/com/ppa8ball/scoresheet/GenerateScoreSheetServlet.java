@@ -1,8 +1,6 @@
 package com.ppa8ball.scoresheet;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,11 +37,7 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		final String myTeamString = req.getParameter("myTeam");
 		final String opponentTeamString = req.getParameter("opponentTeam");
 		final String isHomeString = req.getParameter("ishome");
-		final String playersString = req.getParameter("players");
 		final String roster = req.getParameter("roster");
-		
-		
-		
 		
 		final int myTeam = Integer.parseInt(myTeamString);
 		final int opponentTeam = Integer.parseInt(opponentTeamString);
