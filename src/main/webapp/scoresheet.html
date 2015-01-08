@@ -44,7 +44,7 @@
 									function(dataBasket, status, headers,
 											config) {
 										$scope.myData = dataBasket;
-										/*$scope.AddIndex(myData.players);*/
+									$scope.AddIndex($scope.myData.players);
 									}).error(
 									function(data, status, headers, config) {
 										// called asynchronously if an error occurs show here
@@ -56,25 +56,89 @@
 
 						$scope.editableInPopup = '<button id="editBtn" type="button" class="btn btn-primary" ng-click="removeRow(row)" >Remove</button>';
 
+						$scope.moveRowUpButton = '<button id="upBtn" type="button" class="btn btn-primary" ng-click="moveRowUp(row)" >Up</button>';
+
+						$scope.moveRowDownButton = '<button id="downBtn" type="button" class="btn btn-primary" ng-click="moveRowDown(row)" >Down</button>';
+
+						
+						
 						$scope.removeRow = function(row) {
 						      var index = $scope.myData.players.indexOf(row.entity);
-						      alert(index);
-						      /*$scope.gridOptions.selectItem(index, false);*/
 						      $scope.myData.players.splice(index, 1);
 						    };
+						    
+						$scope.moveRowUp = function(row) {
+							
+							
+							
+							 var index = $scope.myData.players.indexOf(row.entity);
+							 
+							 var newIndex = index -1;
+							 
+							
+					
+							 if (index != 0)
+								 {	 
+								 
+								 $scope.moveRow(index, newIndex);
+								   
+								   
+								/*   $scope.myData.players[index] = $scope.myData.players[index-1];
+								    
+								   $scope.myData.players[index-1] = element; 
+								   
 
-						/*
-						$scope.AddIndex(players)
+								   $scope.myData.players.splice(0,0,element);
+								   
+								   $scope.myData.players.splice(0,1);
+								   
+								   
+								   $scope.AddIndex( $scope.myData.players);
+									 
+								*/	   
+									   
+									}
+								 
+
+								
+						};
+						
+						$scope.moveRow = function(fromIndex, toIndex)
 						{
+							var element = $scope.myData.players[fromIndex];
+							   
+							   $scope.myData.players.splice(fromIndex,1);
+							   $scope.myData.players.splice(toIndex,0,element); 
+							   
+							   $scope.AddIndex( $scope.myData.players);
+							   $scope.gridOptions.sortBy('idx');
+							   $scope.gridOptions.sortBy('idx');
+						};
+						
+					    
+						$scope.moveRowDown = function(row) {
+							 var index = $scope.myData.players.indexOf(row.entity);
+							 
+							 if (index != $scope.myData.players.length-1)
+								 {
+							$scope.moveRow(index, index+1);
+								 }
+						};
+
+						
+						$scope.AddIndex = function(players)
+						{
+							//alert('add index');
+							
+							//alert(JSON.stringify(players, null, 4));
 							var i=1;
 							
-							for ( var player in players) {
-								player.idx = i;
-								i++;
-								alert(player);
+							for (i=0;i<players.length;i++) {
+								players[i].idx = i;
+					
 							}
-						}
-						 */
+						//	alert(JSON.stringify(players, null, 4));
+						};
 						$scope.gridOptions = {
 							data : 'myData.players',
 							//showGroupPanel : true,
@@ -82,13 +146,18 @@
 							enableRowReordering : true,
 							enableRowSelection : false,
 							multiSelect : false,
+							sortInfo: {fields : ['idx'], directions : ['asc']},
 							columnDefs : [ 
 							              {
 							            	  cellTemplate: '<div>{{row.rowIndex + 1}}</div>',
 							            	  width: 20
 							            },
+							            
+							            {
+											field : 'idx',
+										}, 
 							               
-							               {
+							{
 								field : 'firstName',
 								displayName : 'First Name',
 								width : 100
@@ -114,6 +183,14 @@
 								width : 80
 							}, {
 								cellTemplate : $scope.editableInPopup,
+								width : 80
+							},
+							{
+								cellTemplate : $scope.moveRowUpButton,
+								width : 80
+							},
+							{
+								cellTemplate : $scope.moveRowDownButton,
 								width : 80
 							}
 
