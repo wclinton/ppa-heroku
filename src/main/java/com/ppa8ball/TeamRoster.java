@@ -42,6 +42,12 @@ public class TeamRoster {
 	{
 		this.name = teamStat.name;
 		this.number = teamStat.number;
+		
+		for (int i=players.length;i <5;i++)
+		{
+			players[i-1] = new Player();
+		}
+		
 		this.players = players;
 	}
 }
