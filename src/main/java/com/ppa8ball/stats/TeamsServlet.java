@@ -1,16 +1,14 @@
 package com.ppa8ball.stats;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.google.gson.Gson;
 import com.ppa8ball.stats.service.TeamService;
 import com.ppa8ball.stats.service.TeamsImpl;
 

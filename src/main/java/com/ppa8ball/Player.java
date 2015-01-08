@@ -7,6 +7,11 @@ public class Player
 {
 	public String name;
 	public double average;
+	
+	public Player()
+	{
+		
+	}
 
 	public Player(String name, double average)
 	{

@@ -37,4 +37,11 @@ public class TeamRoster {
 			players[i++] = new Player(playerStat);
 		}
 	}
+	
+	public TeamRoster(TeamStat teamStat, Player [] players)
+	{
+		this.name = teamStat.name;
+		this.number = teamStat.number;
+		this.players = players;
+	}
 }

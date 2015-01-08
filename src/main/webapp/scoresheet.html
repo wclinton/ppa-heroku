@@ -44,7 +44,7 @@
 									function(dataBasket, status, headers,
 											config) {
 										$scope.myData = dataBasket;
-									$scope.AddIndex($scope.myData.players);
+										$scope.AddIndex($scope.myData.players);
 									}).error(
 									function(data, status, headers, config) {
 										// called asynchronously if an error occurs show here
@@ -60,153 +60,121 @@
 
 						$scope.moveRowDownButton = '<button id="downBtn" type="button" class="btn btn-primary" ng-click="moveRowDown(row)" >Down</button>';
 
-						
-						
 						$scope.removeRow = function(row) {
-						      var index = $scope.myData.players.indexOf(row.entity);
-						      $scope.myData.players.splice(index, 1);
-						    };
-						    
+							var index = $scope.myData.players
+									.indexOf(row.entity);
+							$scope.myData.players.splice(index, 1);
+						};
+
 						$scope.moveRowUp = function(row) {
-							
-							
-							
-							 var index = $scope.myData.players.indexOf(row.entity);
-							 
-							 var newIndex = index -1;
-							 
-							
-					
-							 if (index != 0)
-								 {	 
-								 
-								 $scope.moveRow(index, newIndex);
-								   
-								   
-								/*   $scope.myData.players[index] = $scope.myData.players[index-1];
-								    
-								   $scope.myData.players[index-1] = element; 
-								   
 
-								   $scope.myData.players.splice(0,0,element);
-								   
-								   $scope.myData.players.splice(0,1);
-								   
-								   
-								   $scope.AddIndex( $scope.myData.players);
-									 
-								*/	   
-									   
-									}
-								 
+							var index = $scope.myData.players
+									.indexOf(row.entity);
 
-								
-						};
-						
-						$scope.moveRow = function(fromIndex, toIndex)
-						{
-							var element = $scope.myData.players[fromIndex];
-							   
-							   $scope.myData.players.splice(fromIndex,1);
-							   $scope.myData.players.splice(toIndex,0,element); 
-							   
-							   $scope.AddIndex( $scope.myData.players);
-							   $scope.gridOptions.sortBy('idx');
-							   $scope.gridOptions.sortBy('idx');
-						};
-						
-					    
-						$scope.moveRowDown = function(row) {
-							 var index = $scope.myData.players.indexOf(row.entity);
-							 
-							 if (index != $scope.myData.players.length-1)
-								 {
-							$scope.moveRow(index, index+1);
-								 }
-						};
+							var newIndex = index - 1;
 
-						
-						$scope.AddIndex = function(players)
-						{
-							//alert('add index');
-							
-							//alert(JSON.stringify(players, null, 4));
-							var i=1;
-							
-							for (i=0;i<players.length;i++) {
-								players[i].idx = i;
-					
+							if (index != 0) {
+								$scope.moveRow(index, newIndex);
 							}
-						//	alert(JSON.stringify(players, null, 4));
+
+						};
+
+						$scope.moveRow = function(fromIndex, toIndex) {
+							var element = $scope.myData.players[fromIndex];
+
+							$scope.myData.players.splice(fromIndex, 1);
+							$scope.myData.players.splice(toIndex, 0, element);
+
+							//In order to show the correct sequence we need to update to idx values to match the array indexs and re-sort.
+							//Since we are sorting ascending, we must do the sortby twice.
+							$scope.AddIndex($scope.myData.players);
+							$scope.gridOptions.sortBy('idx');
+							$scope.gridOptions.sortBy('idx');
+						};
+
+						$scope.moveRowDown = function(row) {
+							var index = $scope.myData.players
+									.indexOf(row.entity);
+
+							if (index != $scope.myData.players.length - 1) {
+								$scope.moveRow(index, index + 1);
+							}
+						};
+
+						$scope.AddIndex = function(players) {
+							var i = 1;
+
+							for (i = 0; i < players.length; i++) {
+								players[i].idx = i;
+
+							}
+							
 						};
 						$scope.gridOptions = {
 							data : 'myData.players',
-							//showGroupPanel : true,
 							rowHeight : 22,
 							enableRowReordering : true,
 							enableRowSelection : false,
 							multiSelect : false,
-							sortInfo: {fields : ['idx'], directions : ['asc']},
-							columnDefs : [ 
-							              {
-							            	  cellTemplate: '<div>{{row.rowIndex + 1}}</div>',
-							            	  width: 20
-							            },
-							            
-							            {
-											field : 'idx',
-										}, 
-							               
-							{
-								field : 'firstName',
-								displayName : 'First Name',
-								width : 100
-							}, {
-								field : 'lastName',
-								displayName : 'Last Name',
-								width : 100
+							sortInfo : {
+								fields : [ 'idx' ],
+								directions : [ 'asc' ]
 							},
+							columnDefs : [
+									{
+										cellTemplate : '<div>{{row.rowIndex + 1}}</div>',
+										width : 20,
+									},
 
-							{
-								field : 'displayActualAverage',
-								displayName : 'Average',
-								width : 80,
-								format : "c2",
-								cellFilter : 'number: 1'
-							}, {
-								field : 'totalPoints',
-								displayName : 'Points',
-								width : 80
-							}, {
-								field : 'gamesPlayed',
-								displayName : 'Games',
-								width : 80
-							}, {
-								cellTemplate : $scope.editableInPopup,
-								width : 80
-							},
-							{
-								cellTemplate : $scope.moveRowUpButton,
-								width : 80
-							},
-							{
-								cellTemplate : $scope.moveRowDownButton,
-								width : 80
-							}
+									{
+										field : 'idx',
+									},
+
+									{
+										field : 'firstName',
+										displayName : 'First Name',
+										width : 100
+									},
+									{
+										field : 'lastName',
+										displayName : 'Last Name',
+										width : 100
+									},
+
+									{
+										field : 'displayActualAverage',
+										displayName : 'Average',
+										width : 80,
+										format : "c2",
+										cellFilter : 'number: 1'
+									},
+									{
+										field : 'totalPoints',
+										displayName : 'Points',
+										width : 80
+									},
+									{
+										field : 'gamesPlayed',
+										displayName : 'Games',
+										width : 80
+									},
+									{
+										cellTemplate : $scope.editableInPopup,
+										width : 80
+									},
+									{
+										cellTemplate : $scope.moveRowUpButton,
+										width : 80
+									},
+									{
+										cellTemplate : $scope.moveRowDownButton,
+										width : 80
+									}
 
 							]
 						};
 
-						// 		$scope.gridOptions = {
-						// 			data : 'myData',
-						// 			showGroupPanel : true,
-						// 			filterOptions : $scope.filterOptions,
-						// 			showColumnMenu : true,
-						// 			showFilter : true,
-						// 			selectedItems : $scope.mySelections,
-						// 			multiSelect : false,
-						// 			rowHeight : 22
-						//		};
+						
 						$scope.getDropDownDataFromServer = function() {
 							$http({
 								method : 'GET',
@@ -223,8 +191,6 @@
 						};
 
 						$scope.GenerateScoreSheet = function() {
-							/*$window.open('GenerateScoreSheet?home=1&away=2&isHome=true');*/
-
 							var myTeam = angular.element(
 									document.querySelector('#activeTeam'))
 									.val();
@@ -238,10 +204,21 @@
 							if ($scope.position == "away") {
 								h = false;
 							}
+							
+							var roster = [];
+							
+							for (i=0;i<$scope.myData.players.length;i++)
+							
+								{
+								var obj = {};
+									obj['name']  =$scope.myData.players[i].firstName + ' '+ $scope.myData.players[i].lastName;
+									obj['average'] = $scope.myData.players[i].displayActualAverage;
+									roster.push(obj);
+								}
 
 							window.open('GenerateScoreSheet?myTeam=' + myTeam
 									+ '&opponentTeam=' + opponent + '&ishome='
-									+ h, '_blank');
+									+ h+ '&roster='+JSON.stringify(roster), '_blank');
 						};
 
 					});

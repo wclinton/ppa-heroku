@@ -146,9 +146,9 @@ public class Stats
 
 		player.teamNumber = teamNumber;
 
-		player.firstName = sheet.getCell(firstNameColumn, row).getContents();
-		player.lastName = sheet.getCell(lastNameColumn, row).getContents();
-		player.fullName = sheet.getCell(fullNameColumn, row).getContents();
+		player.firstName = sheet.getCell(firstNameColumn, row).getContents().trim();
+		player.lastName = sheet.getCell(lastNameColumn, row).getContents().trim();
+		player.fullName = sheet.getCell(fullNameColumn, row).getContents().trim();
 
 		player.actualAverage = getDecimalValue(sheet.getCell(actualAverage, row));
 		player.adjustedAverage = getDecimalValue(sheet.getCell(adjustedAverage, row));

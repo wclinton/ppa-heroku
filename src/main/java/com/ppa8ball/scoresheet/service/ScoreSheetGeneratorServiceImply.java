@@ -19,6 +19,33 @@ import com.ppa8ball.stats.service.TeamsImpl;
 
 public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 {
+	
+	public void GenerateScoreSheet(HttpServletResponse resp, Scoresheet scoresheet) throws IOException
+	{
+		try
+		{
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+			ScoresheetGenerator.generateScoreSheet(baos, "Dec 10-2014", 8, scoresheet);
+
+			resp.setContentType("application/pdf");
+
+			resp.setHeader("Content-disposition", "inline; filename='javatpoint.pdf'");
+			resp.setContentLength(baos.size());
+			// write ByteArrayOutputStream to the ServletOutputStream
+			OutputStream os = resp.getOutputStream();
+			baos.writeTo(os);
+			os.flush();
+			os.close();
+
+		} catch (DocumentException e)
+		{
+			resp.setContentType("text/plain");
+			resp.getWriter().println("Unable to generate spreadsheet.");
+			return;
+		}
+	}
 
 	
 	public void GenerateScoreSheet(HttpServletResponse resp, int homeTeamNumber, int awayTeamNumber, boolean isHome) throws IOException
@@ -44,29 +71,8 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 			awayTeamRoster = new TeamRoster(awayTeamStat, awayPlayersStats);
 		}
 		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
+		
+		GenerateScoreSheet(resp, scoresheet);
 
-		try
-		{
-
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-			ScoresheetGenerator.generateScoreSheet(baos, "Dec 10-2014", 8, scoresheet);
-
-			resp.setContentType("application/pdf");
-
-			resp.setHeader("Content-disposition", "inline; filename='javatpoint.pdf'");
-			resp.setContentLength(baos.size());
-			// write ByteArrayOutputStream to the ServletOutputStream
-			OutputStream os = resp.getOutputStream();
-			baos.writeTo(os);
-			os.flush();
-			os.close();
-
-		} catch (DocumentException e)
-		{
-			resp.setContentType("text/plain");
-			resp.getWriter().println("Unable to generate spreadsheet.");
-			return;
-		}
 	}
 }
