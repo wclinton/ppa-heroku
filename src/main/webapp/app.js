@@ -84,6 +84,8 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						}
 
 					};
+					
+					//configure the player roster grid.
 					$scope.gridOptions = {
 						data : 'myData.players',
 						rowHeight : 22,
@@ -141,6 +143,7 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						]
 					};
 					
+					//Gets the initial data for the form.
 					$scope.getDropDownDataFromServer = function() { 
 						
 						 var deferred = $q.defer();
@@ -163,26 +166,10 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 							  function(httperror){
 								  deferred.resolve(console.log('some error'));
 							  });
-							  
-						 
 					};
-
-// $scope.getDropDownDataFromServer = function() {
-// $http({
-// method : 'GET',
-// url : 'teams'
-// }).success(function(data, status, headers, config) {
-//
-// $scope.activeTeam = data;
-// $scope.show = true;
-//
-// }).error(function(data, status, headers, config) {
-// // called asynchronously if an error occurs show
-// // here
-// });
-//
-// };
 					
+					
+					//Gets a list of all the current spare players.
 					$scope.getSparePlayers = function()
 					{
 						$http({
@@ -198,6 +185,7 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						});
 					}
 
+					//Open a new window and show the generated scoresheet.
 					$scope.GenerateScoreSheet = function() {
 						var myTeam = angular.element(
 								document.querySelector('#activeTeam')).val();
@@ -229,5 +217,13 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 										+ '&ishome=' + h + '&roster='
 										+ JSON.stringify(roster), '_blank');
 					};
-
+					
+					
+					
+					// Add the spare player to the list of players on the roster.
+					$scope.addSparePlayer = function()
+					{
+						var p= JSON.parse($scope.selectedSparePlayer);
+						$scope.myData.players.push(p);
+					};
 				});

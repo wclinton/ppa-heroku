@@ -41,7 +41,7 @@ public class PlayersServlet extends HttpServlet
 		if (sparesString != null)
 			getSpares = Boolean.parseBoolean(sparesString);
 		else
-			getSpares = true;
+			getSpares = false;
 		
 		if (getSpares)
 		{
