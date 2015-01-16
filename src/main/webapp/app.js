@@ -2,10 +2,7 @@ var app = angular.module('myApp', [ 'ngGrid' ])
 
 .constant('nameColumnSize', 100);
 
-app
-		.controller(
-				'MyCtrl',
-				function($scope, $http) {
+app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 
 					$scope.show = false;
 
@@ -143,22 +140,63 @@ app
 
 						]
 					};
+					
+					$scope.getDropDownDataFromServer = function() { 
+						
+						 var deferred = $q.defer();
+						  var getTeams = $http({method: 'GET', url: '/teams', cache: 'false'});
+						  var getSpares = $http({method: 'GET', url: '/players?spares=true', cache: 'false'});
+						 
+							  // anything you want can go here and will safely be run on the next digest.
+							  
+							  $q.all([getTeams, getSpares])
+							  .then(function(results) {
+								//  deferred.resolve(console.log(results[0].data, results[1].data));
+								 
+								  
+								  console.log(results[0].data);
+								  $scope.activeTeam = results[0].data;
+								  $scope.sparePlayers = results[1].data;
+								  $scope.show = true;
+								  
+							  },
+							  function(httperror){
+								  deferred.resolve(console.log('some error'));
+							  });
+							  
+						 
+					};
 
-					$scope.getDropDownDataFromServer = function() {
+// $scope.getDropDownDataFromServer = function() {
+// $http({
+// method : 'GET',
+// url : 'teams'
+// }).success(function(data, status, headers, config) {
+//
+// $scope.activeTeam = data;
+// $scope.show = true;
+//
+// }).error(function(data, status, headers, config) {
+// // called asynchronously if an error occurs show
+// // here
+// });
+//
+// };
+					
+					$scope.getSparePlayers = function()
+					{
 						$http({
 							method : 'GET',
-							url : 'teams'
+							url : 'players?team=11'
 						}).success(function(data, status, headers, config) {
 
-							$scope.activeTeam = data;
-							$scope.show = true;
+							$scope.sparePlayers = data;
 
 						}).error(function(data, status, headers, config) {
 							// called asynchronously if an error occurs show
 							// here
 						});
-
-					};
+					}
 
 					$scope.GenerateScoreSheet = function() {
 						var myTeam = angular.element(

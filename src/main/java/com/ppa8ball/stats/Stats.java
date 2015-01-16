@@ -17,7 +17,7 @@ import jxl.read.biff.BiffException;
 public class Stats
 {
 
-	private final String StatsUrl = "http://www.ppa8ball.com/stats/2014/week09.xlsx";
+	private final String StatsUrl = "http://www.ppa8ball.com/stats/2014/week09.xls";
 
 	private final int genderColumn = ColumnToInt("C");
 	private final int firstNameColumn = ColumnToInt("D");

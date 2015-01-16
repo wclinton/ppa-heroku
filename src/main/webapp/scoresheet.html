@@ -16,14 +16,7 @@
 <script type="text/javascript"
 	src="http://angular-ui.github.com/ng-grid/lib/ng-grid.debug.js"></script>
 
-<script type="text/javascript" src="app.js"></script>
-
-
-<script type="text/javascript">
-	
-</script>
-
-
+<script src="app.js"></script>
 </head>
 
 <body ng-controller="MyCtrl">
@@ -32,7 +25,11 @@
 	<div class='tab' ng-show="show">
 		<div data-ng-init="getDropDownDataFromServer()"
 			class="activeTeamsDropdownStyle">
-			<b>Your Team:</b> <select id="activeTeam"
+			
+			<input type="radio" ng-model="position" value="home"> Home <input
+				type="radio" ng-model="position" value="away"> Away <br />
+			<b>Your Team:</b> 
+			<select id="activeTeam"
 				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
 				style="font-size: 11px">
 				<option value="">-- Select Active Team --</option>
@@ -41,8 +38,21 @@
 					value="{{team.number}}"><i>{{team.number}}</i> -
 					{{team.name}}
 				</option>
-			</select> <input type="radio" ng-model="position" value="home"> Home <input
-				type="radio" ng-model="position" value="away"> Away <br />
+			</select> 
+			
+				
+			<b>Add Spare Player</b> 
+			<select id="sparePlayers"
+				data-ng-model="selectedSparePlayer" data-ng-change="addSparePlayer();"
+				style="font-size: 11px">
+				<option value="">-- Select Spare Player --</option>
+				<option value="">-- Custom Spare Player --</option>
+
+				<option data-ng-repeat="player in sparePlayers.players"
+					value="{{player}}"><i>{{player.fullName}}</i> -
+					{{player.displayActualAverage}}
+				</option>
+			</select> 
 			<div class="gridStyle" ng-grid="gridOptions"></div>
 			
 			
@@ -51,6 +61,7 @@
 			<br> <b>Your Opponent:</b> <select id="opponentTeam"
 				data-ng-model="selectedOpponentTeam" style="font-size: 11px">
 				<option value="">-- Select Active Team --</option>
+				
 
 				<option data-ng-repeat="team in activeTeam.teams"
 					value="{{team.number}}"><i>{{team.number}}</i> -
