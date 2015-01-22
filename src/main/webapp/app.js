@@ -149,10 +149,11 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						 var deferred = $q.defer();
 						  var getTeams = $http({method: 'GET', url: '/teams', cache: 'false'});
 						  var getSpares = $http({method: 'GET', url: '/players?spares=true', cache: 'false'});
+						  var getWeeks = $http({method: 'GET', url: '/weeks', cache: 'false'});
 						 
 							  // anything you want can go here and will safely be run on the next digest.
 							  
-							  $q.all([getTeams, getSpares])
+							  $q.all([getTeams, getSpares,getWeeks])
 							  .then(function(results) {
 								//  deferred.resolve(console.log(results[0].data, results[1].data));
 								 
@@ -160,6 +161,7 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 								  console.log(results[0].data);
 								  $scope.activeTeam = results[0].data;
 								  $scope.sparePlayers = results[1].data;
+								  $scope.weeks = results[2].data.weeks;
 								  $scope.show = true;
 								  
 							  },

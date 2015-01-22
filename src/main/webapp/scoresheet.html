@@ -26,6 +26,18 @@
 		<div data-ng-init="getDropDownDataFromServer()"
 			class="activeTeamsDropdownStyle">
 			
+			
+			<b>Current Week</b>
+			<select id="activeWeeks"
+				data-ng-model="selectedWeek" 
+				style="font-size: 11px">
+				<option value="">-- Select Week --</option>
+
+				<option data-ng-repeat="week in weeks"
+					value="{{week.number}}"> Week {{week.number}} - {{week.date |  date:'MMMM d yyyy'}}
+				</option>
+			</select> 
+			
 			<input type="radio" ng-model="position" value="home"> Home <input
 				type="radio" ng-model="position" value="away"> Away <br />
 			<b>Your Team:</b> 

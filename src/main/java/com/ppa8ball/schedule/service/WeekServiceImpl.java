@@ -7,16 +7,17 @@ import com.googlecode.objectify.Key;
 import com.ppa8ball.OfyService;
 import com.ppa8ball.schedule.Match;
 import com.ppa8ball.schedule.Week;
+import com.ppa8ball.schedule.Weeks;
 
 public class WeekServiceImpl implements WeekService
 {
 
-	public List<Week> GetAll()
+	public Weeks GetAll()
 	{
 		List<Week> weeks = OfyService.myOfy().load().type(Week.class).list();
 
 		Collections.sort(weeks);
-		return weeks;
+		return new Weeks(weeks);
 	}
 
 	public void Save(Week week)

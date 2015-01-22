@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ppa8ball.schedule.Week;
+import com.ppa8ball.schedule.Weeks;
 import com.ppa8ball.schedule.service.WeekServiceImpl;
 
 /**
@@ -30,7 +30,7 @@ public class WeeksServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		Iterable<Week> weeks = new WeekServiceImpl().GetAll();
+		Weeks weeks = new WeekServiceImpl().GetAll();
 		
 		JsonHelper.ReturnJson(response, (Object) weeks);
 
