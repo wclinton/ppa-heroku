@@ -11,7 +11,7 @@ import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Week
+public class Week implements Comparable<Week>
 {
 	@Id public Long id;
 	@Index public String season;
@@ -50,5 +50,13 @@ public class Week
 	{
 		String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
 		return "Week:"+number + " " + formattedDate;
+	}
+
+	@Override
+	public int compareTo(Week w)
+	{
+		if (this.number < w.number)
+			return -1;
+		else return 1;
 	}
 }
