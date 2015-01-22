@@ -10,9 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.googlecode.objectify.Key;
+import com.ppa8ball.schedule.Load;
+import com.ppa8ball.schedule.Match;
+import com.ppa8ball.schedule.Schedule;
+import com.ppa8ball.schedule.Week;
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.Stats;
 import com.ppa8ball.stats.TeamStat;
+import com.ppa8ball.stats.service.PlayerService;
+import com.ppa8ball.stats.service.PlayerServiceImpl;
 
 //import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -38,21 +44,16 @@ public class LoadStats extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		dropDatabase();
 
-		request.getParameter("drop");
-
-		boolean drop = Boolean.valueOf(request.getParameter("drop") != null);
-
-		if (drop)
-		{
-			dropDatabase();
-		}
 		response.setContentType("text/plain");
 
 		PrintWriter writer = response.getWriter();
-		List<TeamStat> teams = OfyService.myOfy().load().type(TeamStat.class).order("number").list();
-		
-		List <PlayerStat> playerStats = OfyService.myOfy().load().type(PlayerStat.class).order("teamNumber").list();
+		// List<TeamStat> teams =
+		// OfyService.myOfy().load().type(TeamStat.class).order("number").list();
+		//
+		// List<PlayerStat> playerStats =
+		// OfyService.myOfy().load().type(PlayerStat.class).order("teamNumber").list();
 		//
 		// for (TeamStat teamStat : teams)
 		// {
@@ -66,42 +67,61 @@ public class LoadStats extends HttpServlet
 		// TeamStat y =
 		// OfyService.myOfy().load().type(TeamStat.class).id(5348024557502464L).now();
 
-		if (teams == null || teams.isEmpty())
+		Schedule schedule = null;
+
+		// if (teams == null || teams.isEmpty())
+
+		Load l = new Load();
+
+		schedule = l.LoadFromExcel();
+
+		OfyService.myOfy().save().entities(schedule.weeks).now();
+
+		for (Week week : schedule.weeks)
 		{
-			Stats s = new Stats();
+			List<Match> matches = week.getMatches();
 
-			s.load();
+			OfyService.myOfy().save().entities(matches).now();
 
-			teams = s.getTeams();
-
-			OfyService.myOfy().save().entities(teams).now();
-			
-			 playerStats = s.getPlayerStats();
-			
-			OfyService.myOfy().save().entities(playerStats).now();
 		}
-		
-		
+
+		Stats s = new Stats();
+
+		s.load();
+
+		List<TeamStat> teams = s.getTeams();
+
+		OfyService.myOfy().save().entities(teams).now();
+
+		List<PlayerStat> playerStats = s.getPlayerStats();
+
+		PlayerService playersService = new PlayerServiceImpl();
+
+		playersService.Save(playerStats);
+
+		if (schedule != null)
+			for (Week w : schedule.weeks)
+			{
+				writer.println(w.toString());
+
+				for (Match match : w.getMatches())
+				{
+					writer.println(match);
+				}
+			}
+
 		//
-		
-		for (TeamStat x : teams)
+
+		for (TeamStat team : teams)
 		{
-			writer.println("Team Id:" + x.id);
-
-			writer.println("Team name:" + x.name);
-
-			writer.println("Team Number: " + x.number);
+			writer.println(team.toString());
 		}
-		
+
 		for (PlayerStat playerStat : playerStats)
 		{
-			writer.println("Player Id:" + playerStat.id);
-
-			writer.println("Player Team Number:" + playerStat.teamNumber);
-
-			writer.println("Player Full Name: " + playerStat.fullName);
+			writer.println(playerStat.toString());
 		}
-		
+
 		writer.flush();
 
 	}
@@ -119,6 +139,8 @@ public class LoadStats extends HttpServlet
 	{
 		deleteAll(TeamStat.class);
 		deleteAll(PlayerStat.class);
+		deleteAll(Week.class);
+		deleteAll(Match.class);
 	}
 
 	private <T> void deleteAll(Class<T> c)
@@ -130,10 +152,4 @@ public class LoadStats extends HttpServlet
 		// Useful for deleting items
 		OfyService.myOfy().delete().keys(allKeys);
 	}
-	
-//	private String show(TeamStat teamStat)
-//	{
-//		
-//	}
-
 }

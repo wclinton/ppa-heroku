@@ -14,5 +14,10 @@ public class CellHelp {
 	{
 		return sheet.getCell(cell.getColumn(),cell.getRow()+1);
 	}
+	
+	public static Cell getNextTopColumn(Sheet sheet, Cell cell)
+	{
+		return sheet.getCell(cell.getColumn()+1,0);
+	}
 
 }

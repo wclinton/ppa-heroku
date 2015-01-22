@@ -29,4 +29,9 @@ public class TeamStat implements Comparable<TeamStat>
 		
 		return 0;
 	}
+	
+	public String toString()
+	{
+		return "Team:" + number + " " + name;
+	}
 }

@@ -38,6 +38,11 @@ public class PlayerStat {
 		 displayAdjustedAverage = RoundTo1Decimals(adjustedAverage);
 	 }
 	 
+	 public String toString()
+	 {
+		 return "Player:" + fullName + " Team:" + teamNumber;
+	 }
+	 
 	 private static double RoundTo1Decimals(double d)
 	 {
 		 double rounded = Math.round(10* d);
