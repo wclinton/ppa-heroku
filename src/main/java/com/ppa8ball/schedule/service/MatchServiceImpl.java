@@ -3,7 +3,6 @@ package com.ppa8ball.schedule.service;
 import com.googlecode.objectify.Key;
 import com.ppa8ball.OfyService;
 import com.ppa8ball.schedule.Match;
-import com.ppa8ball.schedule.Week;
 
 public class MatchServiceImpl implements MatchService
 {
@@ -26,5 +25,23 @@ public class MatchServiceImpl implements MatchService
 
 		// Useful for deleting items
 		OfyService.myOfy().delete().keys(allKeys);
+	}
+
+	public Iterable<Match> GetByWeek(int week)
+	{
+		return OfyService.myOfy().load().type(Match.class).filter("week", week).list();
+	}
+	
+	public Match GetByTeam(int week, int teamNumber)
+	{
+		Iterable<Match> matches = GetByWeek(week);
+		
+		for (Match match : matches)
+		{
+			if (match.homeTeam == teamNumber || match.awayTeam == teamNumber)
+				return match;
+		}
+		
+		return null;
 	}
 }

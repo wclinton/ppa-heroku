@@ -81,4 +81,14 @@
     <servlet-name>weeks</servlet-name>
     <url-pattern>/weeks</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>matches</display-name>
+    <servlet-name>matches</servlet-name>
+    <servlet-class>com.ppa8ball.servlets.MatchesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>matches</servlet-name>
+    <url-pattern>/matches</url-pattern>
+  </servlet-mapping>
 </web-app>

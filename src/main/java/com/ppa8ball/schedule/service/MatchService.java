@@ -8,4 +8,7 @@ public interface MatchService
 	public void Save(Iterable<Match> matches);
 	
 	public void DeleteAll();
+	
+	public Iterable<Match> GetByWeek(int Week);
+	public Match GetByTeam(int week, int teamNumber);
 }
