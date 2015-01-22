@@ -9,16 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.googlecode.objectify.Key;
 import com.ppa8ball.schedule.Load;
 import com.ppa8ball.schedule.Match;
 import com.ppa8ball.schedule.Schedule;
 import com.ppa8ball.schedule.Week;
+import com.ppa8ball.schedule.service.WeekService;
+import com.ppa8ball.schedule.service.WeekServiceImpl;
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.Stats;
 import com.ppa8ball.stats.TeamStat;
 import com.ppa8ball.stats.service.PlayerService;
 import com.ppa8ball.stats.service.PlayerServiceImpl;
+import com.ppa8ball.stats.service.TeamsImpl;
 
 //import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -49,49 +51,24 @@ public class LoadStats extends HttpServlet
 		response.setContentType("text/plain");
 
 		PrintWriter writer = response.getWriter();
-		// List<TeamStat> teams =
-		// OfyService.myOfy().load().type(TeamStat.class).order("number").list();
-		//
-		// List<PlayerStat> playerStats =
-		// OfyService.myOfy().load().type(PlayerStat.class).order("teamNumber").list();
-		//
-		// for (TeamStat teamStat : teams)
-		// {
-		// writer.println("Team Id:" + teamStat.id);
-		//
-		// writer.println("Team name:" + teamStat.name);
-		//
-		// writer.println("Team Number: " + teamStat.number);
-		// }
-
-		// TeamStat y =
-		// OfyService.myOfy().load().type(TeamStat.class).id(5348024557502464L).now();
-
+	
 		Schedule schedule = null;
-
-		// if (teams == null || teams.isEmpty())
 
 		Load l = new Load();
 
 		schedule = l.LoadFromExcel();
-
-		OfyService.myOfy().save().entities(schedule.weeks).now();
-
-		for (Week week : schedule.weeks)
-		{
-			List<Match> matches = week.getMatches();
-
-			OfyService.myOfy().save().entities(matches).now();
-
-		}
-
+		
+		WeekService weekService = new WeekServiceImpl();
+		
+		weekService.Save(schedule.weeks);
+	
 		Stats s = new Stats();
 
 		s.load();
 
 		List<TeamStat> teams = s.getTeams();
 
-		OfyService.myOfy().save().entities(teams).now();
+		new TeamsImpl().Save(teams);
 
 		List<PlayerStat> playerStats = s.getPlayerStats();
 
@@ -102,7 +79,7 @@ public class LoadStats extends HttpServlet
 		if (schedule != null)
 			for (Week w : schedule.weeks)
 			{
-				writer.println(w.toString());
+				writer.println(w);
 
 				for (Match match : w.getMatches())
 				{
@@ -110,16 +87,14 @@ public class LoadStats extends HttpServlet
 				}
 			}
 
-		//
-
 		for (TeamStat team : teams)
 		{
-			writer.println(team.toString());
+			writer.println(team);
 		}
 
 		for (PlayerStat playerStat : playerStats)
 		{
-			writer.println(playerStat.toString());
+			writer.println(playerStat);
 		}
 
 		writer.flush();
@@ -137,19 +112,8 @@ public class LoadStats extends HttpServlet
 
 	private void dropDatabase()
 	{
-		deleteAll(TeamStat.class);
-		deleteAll(PlayerStat.class);
-		deleteAll(Week.class);
-		deleteAll(Match.class);
-	}
-
-	private <T> void deleteAll(Class<T> c)
-	{
-		// You can query for just keys, which will return Key objects much more
-		// efficiently than fetching whole objects
-		Iterable<Key<T>> allKeys = OfyService.myOfy().load().type(c).keys();
-
-		// Useful for deleting items
-		OfyService.myOfy().delete().keys(allKeys);
+		new PlayerServiceImpl().DeleteAll();
+		new TeamsImpl().DeleteAll();
+		new WeekServiceImpl().DeleteAll();
 	}
 }

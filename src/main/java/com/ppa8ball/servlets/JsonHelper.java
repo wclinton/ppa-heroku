@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.repackaged.com.google.gson.Gson;
+import com.google.gson.Gson;
 
 public class JsonHelper
 {
@@ -35,7 +35,4 @@ public class JsonHelper
 			e.printStackTrace();
 		}
 	}
-
-	
-	
 }

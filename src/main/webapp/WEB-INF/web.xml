@@ -71,4 +71,14 @@
     <servlet-name>GenerateScoreSheet</servlet-name>
     <url-pattern>/GenerateScoreSheet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>weeks</display-name>
+    <servlet-name>weeks</servlet-name>
+    <servlet-class>com.ppa8ball.servlets.WeeksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>weeks</servlet-name>
+    <url-pattern>/weeks</url-pattern>
+  </servlet-mapping>
 </web-app>

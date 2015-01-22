@@ -7,4 +7,10 @@ public interface TeamService
 {
 	public TeamsStat GetAll();	
 	public TeamStat Get(int teamNumber);
+	
+	public void Save(TeamStat team);
+	
+	public void Save(Iterable<TeamStat> teams);
+	
+	public void DeleteAll();
 }

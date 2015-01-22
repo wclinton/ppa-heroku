@@ -2,6 +2,7 @@ package com.ppa8ball.stats.service;
 
 import java.util.List;
 
+import com.googlecode.objectify.Key;
 import com.ppa8ball.OfyService;
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.PlayersStat;
@@ -71,5 +72,11 @@ public class PlayerServiceImpl implements PlayerService
 		{
 			Save(playerStat);
 		}
+	}
+	
+	public void DeleteAll()
+	{
+		Iterable<Key<PlayerStat>> allKeys = OfyService.myOfy().load().type(PlayerStat.class).keys();
+		OfyService.myOfy().delete().keys(allKeys);		
 	}
 }

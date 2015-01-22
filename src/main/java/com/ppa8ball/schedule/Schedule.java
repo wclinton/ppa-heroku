@@ -1,6 +1,5 @@
 package com.ppa8ball.schedule;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,5 +16,4 @@ public class Schedule
 	{
 		weeks = new ArrayList<Week>();
 	}
-	
 }
