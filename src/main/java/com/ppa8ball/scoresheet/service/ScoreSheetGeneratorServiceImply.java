@@ -27,7 +27,7 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-			ScoresheetGenerator.generateScoreSheet(baos, "Dec 10-2014", 8, scoresheet);
+			ScoresheetGenerator.generateScoreSheet(baos, scoresheet);
 
 			resp.setContentType("application/pdf");
 

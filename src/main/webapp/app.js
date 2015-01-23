@@ -261,6 +261,7 @@ app
 						window
 								.open('GenerateScoreSheet?myTeam=' + $scope.selectedTeam
 										+ '&opponentTeam=' + $scope.selectedOpponentTeam
+										+ '&week=' +$scope.selectedWeek
 										+ '&ishome=' + h + '&roster='
 										+ JSON.stringify(roster), '_blank');
 					};

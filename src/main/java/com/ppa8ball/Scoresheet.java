@@ -7,7 +7,7 @@ public class Scoresheet {
 	private TeamRoster awayTeam;
 	
 	private String date;
-	private String week;
+	private int week;
 	
 	public Scoresheet(TeamRoster homeTeam, TeamRoster awayTeam)
 	{
@@ -33,11 +33,11 @@ public class Scoresheet {
 		this.date = date;
 	}
 
-	public String getWeek() {
+	public int getWeek() {
 		return week;
 	}
 
-	public void setWeek(String week) {
+	public void setWeek(int week) {
 		this.week = week;
 	}
 }

@@ -1,4 +1,4 @@
-package com.ppa8ball.scoresheet;
+package com.ppa8ball.servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -38,10 +38,12 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		final String opponentTeamString = req.getParameter("opponentTeam");
 		final String isHomeString = req.getParameter("ishome");
 		final String roster = req.getParameter("roster");
+		final String weekString  = req.getParameter("week");
 		
 		final int myTeam = Integer.parseInt(myTeamString);
 		final int opponentTeam = Integer.parseInt(opponentTeamString);
 		final boolean isHome = Boolean.parseBoolean(isHomeString);
+		final int week = Integer.parseInt(weekString);
 		
 		Gson gson = new Gson();
 		
@@ -84,6 +86,8 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 			 awayTeamRoster = new TeamRoster(awayTeamStat,players);
 		}
 		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
+		
+		scoresheet.setWeek(week);
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);

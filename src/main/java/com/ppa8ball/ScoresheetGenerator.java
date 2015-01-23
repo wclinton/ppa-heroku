@@ -40,7 +40,7 @@ public class ScoresheetGenerator
 
 	static final String PlayerField = "Player";
 
-	static public void generateScoreSheet(OutputStream writer, String date, int week, Scoresheet scoresheet) throws IOException,
+	static public void generateScoreSheet(OutputStream writer, Scoresheet scoresheet) throws IOException,
 			DocumentException
 	{
 		URL url = new URL(ScoreSheetUrl);
@@ -58,8 +58,8 @@ public class ScoresheetGenerator
 		SetHomeFields(form, scoresheet.getHomeTeam());
 		SetAwayFields(form, scoresheet.getAwayTeam());
 
-		form.setField(WeekField, Integer.toString(week));
-		form.setField(DateField, date);
+		form.setField(WeekField, Integer.toString(scoresheet.getWeek()));
+		form.setField(DateField, scoresheet.getDate());
 
 		stamper.close();
 		reader.close();
