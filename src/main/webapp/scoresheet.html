@@ -29,7 +29,7 @@
 			
 			<b>Current Week</b>
 			<select id="activeWeeks"
-				data-ng-model="selectedWeek" 
+				data-ng-model="selectedWeek" data-ng-change="weekSelected();"
 				style="font-size: 11px">
 				<option value="">-- Select Week --</option>
 
@@ -43,12 +43,10 @@
 			<b>Your Team:</b> 
 			<select id="activeTeam"
 				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
-				style="font-size: 11px">
+				style="font-size: 11px" ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
 				<option value="">-- Select Active Team --</option>
 
-				<option data-ng-repeat="team in activeTeam.teams"
-					value="{{team.number}}"><i>{{team.number}}</i> -
-					{{team.name}}
+				
 				</option>
 			</select> 
 			
@@ -68,15 +66,14 @@
 			
 			
 			
-			<br> <b>Your Opponent:</b> <select id="opponentTeam"
-				data-ng-model="selectedOpponentTeam" style="font-size: 11px">
-				<option value="">-- Select Active Team --</option>
+			<br> <b>Your Opponent:</b> 
+			
+			<select id="opponentTeam"
+				data-ng-model="selectedOpponentTeam" style="font-size: 11px"
+				
 				
 
-				<option data-ng-repeat="team in activeTeam.teams"
-					value="{{team.number}}"><i>{{team.number}}</i> -
-					{{team.name}}
-				</option>
+				ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
 			</select> <br> <br>
 			<button ng-click="GenerateScoreSheet()" style="font-size: 16px">Generate
 				Scoresheet</button>

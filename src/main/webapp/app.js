@@ -2,27 +2,62 @@ var app = angular.module('myApp', [ 'ngGrid' ])
 
 .constant('nameColumnSize', 100);
 
-app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
+app
+		.controller(
+				'MyCtrl',
+				function($scope, $q, $http, $timeout) {
 
 					$scope.show = false;
 
 					$scope.position = "home";
 
 					$scope.populateGridData = function() {
-						var myactivevalue = angular.element(
-								document.querySelector('#activeTeam')).val();
-						$http({
+						var sparePlayersUrl = '/players?teamNumber='
+								+ $scope.selectedTeam;
+						var matchUrl = '/matches?teamNumber=' + $scope.selectedTeam
+								+ '&week=' + $scope.selectedWeek;
+
+						var deferred = $q.defer();
+
+						var getSpares = $http({
 							method : 'GET',
-							url : 'players?teamNumber=' + myactivevalue
-						}).success(
-								function(dataBasket, status, headers, config) {
-									$scope.myData = dataBasket;
-									$scope.AddIndex($scope.myData.players);
-								}).error(
-								function(data, status, headers, config) {
-									// called asynchronously if an error occurs
-									// show here
-								});
+							url : sparePlayersUrl,
+							cache : 'false'
+						});
+						var getWeeks = $http({
+							method : 'GET',
+							url : matchUrl,
+							cache : 'false'
+						});
+
+						// anything you want can go here and will safely be run
+						// on the next digest.
+
+						$q.all([ getSpares, getWeeks ]).then(function(results) {
+							// deferred.resolve(console.log(results[0].data,
+							// results[1].data));
+
+							$scope.myData = results[0].data;
+							$scope.match = results[1].data;
+							$scope.AddIndex($scope.myData.players);
+							$scope.setOpponentTeam($scope.match);
+
+						}, function(httperror) {
+							deferred.resolve(console.log('some error'));
+						});
+
+						$scope.setOpponentTeam = function(match) {
+
+							if (match.homeTeam == $scope.selectedTeam) {
+								$scope.selectedOpponentTeam = match.awayTeam;
+							} else {
+								$scope.selectedOpponentTeam = match.homeTeam;
+							}
+							
+							
+
+						};
+
 					};
 					$scope.filterOptions = {
 						filterText : ''
@@ -84,8 +119,8 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						}
 
 					};
-					
-					//configure the player roster grid.
+
+					// configure the player roster grid.
 					$scope.gridOptions = {
 						data : 'myData.players',
 						rowHeight : 22,
@@ -142,38 +177,52 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 
 						]
 					};
-					
-					//Gets the initial data for the form.
-					$scope.getDropDownDataFromServer = function() { 
-						
-						 var deferred = $q.defer();
-						  var getTeams = $http({method: 'GET', url: '/teams', cache: 'false'});
-						  var getSpares = $http({method: 'GET', url: '/players?spares=true', cache: 'false'});
-						  var getWeeks = $http({method: 'GET', url: '/weeks', cache: 'false'});
-						 
-							  // anything you want can go here and will safely be run on the next digest.
-							  
-							  $q.all([getTeams, getSpares,getWeeks])
-							  .then(function(results) {
-								//  deferred.resolve(console.log(results[0].data, results[1].data));
-								 
-								  
-								  console.log(results[0].data);
-								  $scope.activeTeam = results[0].data;
-								  $scope.sparePlayers = results[1].data;
-								  $scope.weeks = results[2].data.weeks;
-								  $scope.show = true;
-								  
-							  },
-							  function(httperror){
-								  deferred.resolve(console.log('some error'));
-							  });
+
+					// Gets the initial data for the form.
+					$scope.getDropDownDataFromServer = function() {
+
+						var deferred = $q.defer();
+						var getTeams = $http({
+							method : 'GET',
+							url : '/teams',
+							cache : 'false'
+						});
+						var getSpares = $http({
+							method : 'GET',
+							url : '/players?spares=true',
+							cache : 'false'
+						});
+						var getWeeks = $http({
+							method : 'GET',
+							url : '/weeks',
+							cache : 'false'
+						});
+
+						// anything you want can go here and will safely be run
+						// on the next digest.
+
+						$q
+								.all([ getTeams, getSpares, getWeeks ])
+								.then(
+										function(results) {
+											// deferred.resolve(console.log(results[0].data,
+											// results[1].data));
+
+											console.log(results[0].data);
+											$scope.activeTeam = results[0].data;
+											$scope.sparePlayers = results[1].data;
+											$scope.weeks = results[2].data.weeks;
+											$scope.show = true;
+
+										},
+										function(httperror) {
+											deferred.resolve(console
+													.log('some error'));
+										});
 					};
-					
-					
-					//Gets a list of all the current spare players.
-					$scope.getSparePlayers = function()
-					{
+
+					// Gets a list of all the current spare players.
+					$scope.getSparePlayers = function() {
 						$http({
 							method : 'GET',
 							url : 'players?team=11'
@@ -187,13 +236,9 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						});
 					}
 
-					//Open a new window and show the generated scoresheet.
+					// Open a new window and show the generated scoresheet.
 					$scope.GenerateScoreSheet = function() {
-						var myTeam = angular.element(
-								document.querySelector('#activeTeam')).val();
-
-						var opponent = angular.element(
-								document.querySelector('#opponentTeam')).val();
+						
 
 						h = true;
 
@@ -214,18 +259,20 @@ app.controller('MyCtrl',function($scope,$q,$http, $timeout) {
 						}
 
 						window
-								.open('GenerateScoreSheet?myTeam=' + myTeam
-										+ '&opponentTeam=' + opponent
+								.open('GenerateScoreSheet?myTeam=' + $scope.selectedTeam
+										+ '&opponentTeam=' + $scope.selectedOpponentTeam
 										+ '&ishome=' + h + '&roster='
 										+ JSON.stringify(roster), '_blank');
 					};
-					
-					
-					
-					// Add the spare player to the list of players on the roster.
-					$scope.addSparePlayer = function()
-					{
-						var p= JSON.parse($scope.selectedSparePlayer);
+
+					// Add the spare player to the list of players on the
+					// roster.
+					$scope.addSparePlayer = function() {
+						var p = JSON.parse($scope.selectedSparePlayer);
 						$scope.myData.players.push(p);
+					};
+
+					$scope.weekSelected = function() {
+
 					};
 				});
