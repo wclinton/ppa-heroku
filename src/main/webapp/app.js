@@ -14,8 +14,9 @@ app
 					$scope.populateGridData = function() {
 						var sparePlayersUrl = '/players?teamNumber='
 								+ $scope.selectedTeam;
-						var matchUrl = '/matches?teamNumber=' + $scope.selectedTeam
-								+ '&week=' + $scope.selectedWeek;
+						var matchUrl = '/matches?teamNumber='
+								+ $scope.selectedTeam + '&week='
+								+ $scope.selectedWeek;
 
 						var deferred = $q.defer();
 
@@ -41,22 +42,27 @@ app
 							$scope.match = results[1].data;
 							$scope.AddIndex($scope.myData.players);
 							$scope.setOpponentTeam($scope.match);
+							$scope.setHome($scope.match);
 
 						}, function(httperror) {
 							deferred.resolve(console.log('some error'));
 						});
+						$scope.setHome = function(match) {
+
+							if (match.homeTeam == $scope.selectedTeam) {
+								$scope.position = "home";
+							} else {
+								$scope.position = "away";
+							}
+						};
 
 						$scope.setOpponentTeam = function(match) {
-
 							if (match.homeTeam == $scope.selectedTeam) {
 								$scope.selectedOpponentTeam = match.awayTeam;
 							} else {
 								$scope.selectedOpponentTeam = match.homeTeam;
 							}
-							
-							
-
-						};
+						}
 
 					};
 					$scope.filterOptions = {
@@ -238,7 +244,6 @@ app
 
 					// Open a new window and show the generated scoresheet.
 					$scope.GenerateScoreSheet = function() {
-						
 
 						h = true;
 
@@ -259,9 +264,11 @@ app
 						}
 
 						window
-								.open('GenerateScoreSheet?myTeam=' + $scope.selectedTeam
-										+ '&opponentTeam=' + $scope.selectedOpponentTeam
-										+ '&week=' +$scope.selectedWeek
+								.open('GenerateScoreSheet?myTeam='
+										+ $scope.selectedTeam
+										+ '&opponentTeam='
+										+ $scope.selectedOpponentTeam
+										+ '&week=' + $scope.selectedWeek
 										+ '&ishome=' + h + '&roster='
 										+ JSON.stringify(roster), '_blank');
 					};
