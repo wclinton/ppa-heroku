@@ -5,7 +5,7 @@ var app = angular.module('myApp', [ 'ngGrid' ])
 app
 		.controller(
 				'MyCtrl',
-				function($scope, $q, $http, $timeout) {
+				function($scope, $filter, $q, $http, $timeout) {
 
 					$scope.show = false;
 
@@ -245,10 +245,10 @@ app
 					// Open a new window and show the generated scoresheet.
 					$scope.GenerateScoreSheet = function() {
 
-						h = true;
+						h = "true";
 
 						if ($scope.position == "away") {
-							h = false;
+							h = "false";
 						}
 
 						var roster = [];
@@ -262,6 +262,9 @@ app
 							obj['average'] = $scope.myData.players[i].displayActualAverage;
 							roster.push(obj);
 						}
+						
+						
+						var date = $filter('date')($scope.weeks[$scope.selectedWeek-1].date, 'MMMM d yyyy', 'UTC');
 
 						window
 								.open('GenerateScoreSheet?myTeam='
@@ -269,8 +272,9 @@ app
 										+ '&opponentTeam='
 										+ $scope.selectedOpponentTeam
 										+ '&week=' + $scope.selectedWeek
-										+ '&ishome=' + h + '&roster='
-										+ JSON.stringify(roster), '_blank');
+										+ '&ishome=' + h  
+										+ '&date=' + date
+										+ '&roster=' +JSON.stringify(roster), '_blank');
 					};
 
 					// Add the spare player to the list of players on the

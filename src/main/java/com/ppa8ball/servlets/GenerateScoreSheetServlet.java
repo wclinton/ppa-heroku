@@ -1,6 +1,8 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		final String isHomeString = req.getParameter("ishome");
 		final String roster = req.getParameter("roster");
 		final String weekString  = req.getParameter("week");
+		final String dateString = req.getParameter("date");
 		
 		final int myTeam = Integer.parseInt(myTeamString);
 		final int opponentTeam = Integer.parseInt(opponentTeamString);
@@ -88,6 +91,7 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
 		
 		scoresheet.setWeek(week);
+		scoresheet.setDate(dateString);
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);
@@ -99,5 +103,4 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
-
 }
