@@ -60,6 +60,8 @@ public class ScoresheetGenerator
 
 		form.setField(WeekField, Integer.toString(scoresheet.getWeek()));
 		form.setField(DateField, scoresheet.getDate());
+		form.setField(HomeTableField, scoresheet.getTable1());
+		form.setField(AwayTableField, scoresheet.getTable2());
 
 		stamper.close();
 		reader.close();
@@ -69,8 +71,6 @@ public class ScoresheetGenerator
 	{
 		form.setField(HomeTeamNameField, teamRoster.name);
 		form.setField(HomeTeamNumberField, Integer.toString(teamRoster.number));
-
-		//form.setField(HomeTableField, "H Tbl");
 
 		int i = 0;
 		for (String s : HomeTeamAverageFields)

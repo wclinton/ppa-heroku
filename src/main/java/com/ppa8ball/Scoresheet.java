@@ -8,6 +8,8 @@ public class Scoresheet {
 	
 	private String date;
 	private int week;
+	private String table1;
+	private String table2;
 	
 	public Scoresheet(TeamRoster homeTeam, TeamRoster awayTeam)
 	{
@@ -39,5 +41,24 @@ public class Scoresheet {
 
 	public void setWeek(int week) {
 		this.week = week;
+	}
+	
+	public String getTable1()
+	{
+		return table1;
+	}
+	
+	public String getTable2()
+	{
+		return table2;
+	}
+	
+	public void setTable1(String table)
+	{
+		table1 = table;
+	}
+	public void setTable2(String table)
+	{
+		table2 = table;
 	}
 }

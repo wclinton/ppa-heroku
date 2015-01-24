@@ -42,6 +42,9 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		final String roster = req.getParameter("roster");
 		final String weekString  = req.getParameter("week");
 		final String dateString = req.getParameter("date");
+		final String table1 = req.getParameter("table1");
+		final String table2 = req.getParameter("table2");
+		
 		
 		final int myTeam = Integer.parseInt(myTeamString);
 		final int opponentTeam = Integer.parseInt(opponentTeamString);
@@ -92,6 +95,8 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		
 		scoresheet.setWeek(week);
 		scoresheet.setDate(dateString);
+		scoresheet.setTable1(table1);
+		scoresheet.setTable2(table2);
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);

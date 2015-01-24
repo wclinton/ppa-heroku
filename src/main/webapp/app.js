@@ -274,6 +274,8 @@ app
 										+ '&week=' + $scope.selectedWeek
 										+ '&ishome=' + h  
 										+ '&date=' + date
+										+ '&table1=' + $scope.match.table1
+										+ '&table2=' + $scope.match.table2
 										+ '&roster=' +JSON.stringify(roster), '_blank');
 					};
 
