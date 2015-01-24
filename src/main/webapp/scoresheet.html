@@ -34,12 +34,12 @@
 				<option value="">-- Select Week --</option>
 
 				<option data-ng-repeat="week in weeks"
-					value="{{week.number}}"> Week {{week.number}} - {{week.date |  date:'MMMM d yyyy' :'UTC'}}
+					value="{{week.number}}"> Week {{week.number}} - {{week.date |  date:'MMMM d, yyyy' :'UTC'}}
 				</option>
 			</select> 
 			
-			<input type="radio" ng-model="position" value="home"> Home <input
-				type="radio" ng-model="position" value="away"> Away <br />
+			<br />
+			
 			<b>Your Team:</b> 
 			<select id="activeTeam"
 				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
@@ -49,6 +49,8 @@
 				
 				</option>
 			</select> 
+			<input type="radio" ng-model="position" value="home"> Home <input
+				type="radio" ng-model="position" value="away"> Away <br />
 			
 				
 			<b>Add Spare Player</b> 
