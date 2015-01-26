@@ -58,8 +58,10 @@
 				data-ng-model="selectedSparePlayer" data-ng-change="addSparePlayer();"
 				style="font-size: 11px">
 				<option value="">-- Select Spare Player --</option>
+				<option value="new">New Spare</option>
+				<option value="_blank"></option>
 				<option data-ng-repeat="player in sparePlayers.players"
-					value="{{player}}"><i>{{player.fullName}}</i> -
+					value="{{player}}">{{player.fullName}} -
 					{{player.displayActualAverage}}
 				</option>
 			</select> 

@@ -133,8 +133,9 @@ app
 						enableRowReordering : true,
 						enableRowSelection : false,
 						multiSelect : false,
-						enableCellEditOnFocus: false,
-						enableCellSelection: true,
+						enableCellEditOnFocus : false,
+	
+					enableCellSelection : true,
 						sortInfo : {
 							fields : [ 'idx' ],
 							directions : [ 'asc' ]
@@ -146,19 +147,19 @@ app
 
 						{
 							field : 'idx',
-							visible: false,
+							visible : false,
 						},
 
 						{
 							field : 'firstName',
 							displayName : 'First Name',
 							width : 100,
-							enableCellEdit:true,
+							enableCellEdit : true,
 						}, {
 							field : 'lastName',
 							displayName : 'Last Name',
 							width : 100,
-							enableCellEdit:true,
+							enableCellEdit : true,
 						},
 
 						{
@@ -167,7 +168,7 @@ app
 							width : 80,
 							format : "c2",
 							cellFilter : 'number: 1',
-							enableCellEdit:true
+							enableCellEdit : true
 						}, {
 							field : 'totalPoints',
 							displayName : 'Points',
@@ -268,28 +269,35 @@ app
 							obj['average'] = $scope.myData.players[i].displayActualAverage;
 							roster.push(obj);
 						}
-						
-						
-						var date = $filter('date')($scope.weeks[$scope.selectedWeek-1].date, 'MMMM d yyyy', 'UTC');
 
-						window
-								.open('GenerateScoreSheet?myTeam='
-										+ $scope.selectedTeam
-										+ '&opponentTeam='
-										+ $scope.selectedOpponentTeam
-										+ '&week=' + $scope.selectedWeek
-										+ '&ishome=' + h  
-										+ '&date=' + date
-										+ '&table1=' + $scope.match.table1
-										+ '&table2=' + $scope.match.table2
-										+ '&roster=' +JSON.stringify(roster), '_blank');
+						var date = $filter('date')(
+								$scope.weeks[$scope.selectedWeek - 1].date,
+								'MMMM d yyyy', 'UTC');
+
+						window.open('GenerateScoreSheet?myTeam='
+								+ $scope.selectedTeam + '&opponentTeam='
+								+ $scope.selectedOpponentTeam + '&week='
+								+ $scope.selectedWeek + '&ishome=' + h
+								+ '&date=' + date + '&table1='
+								+ $scope.match.table1 + '&table2='
+								+ $scope.match.table2 + '&roster='
+								+ JSON.stringify(roster), '_blank');
 					};
 
 					// Add the spare player to the list of players on the
 					// roster.
 					$scope.addSparePlayer = function() {
-						var p = JSON.parse($scope.selectedSparePlayer);
-						$scope.myData.players.push(p);
+
+						if ($scope.selectedSparePlayer == "new") {
+							
+							var len = $scope.myData.players.length
+							
+							$scope.myData.players.push({firstName:"", lastName:"",idx:len})
+						} else {
+							var p = JSON.parse($scope.selectedSparePlayer);
+							$scope.myData.players.push(p);
+						}
+						$scope.selectedSparePlayer ="";
 					};
 
 					$scope.weekSelected = function() {
