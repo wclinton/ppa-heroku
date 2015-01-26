@@ -133,6 +133,8 @@ app
 						enableRowReordering : true,
 						enableRowSelection : false,
 						multiSelect : false,
+						enableCellEditOnFocus: false,
+						enableCellSelection: true,
 						sortInfo : {
 							fields : [ 'idx' ],
 							directions : [ 'asc' ]
@@ -149,11 +151,13 @@ app
 						{
 							field : 'firstName',
 							displayName : 'First Name',
-							width : 100
+							width : 100,
+							enableCellEdit:true,
 						}, {
 							field : 'lastName',
 							displayName : 'Last Name',
-							width : 100
+							width : 100,
+							enableCellEdit:true,
 						},
 
 						{
@@ -161,7 +165,8 @@ app
 							displayName : 'Average',
 							width : 80,
 							format : "c2",
-							cellFilter : 'number: 1'
+							cellFilter : 'number: 1',
+							enableCellEdit:true
 						}, {
 							field : 'totalPoints',
 							displayName : 'Points',
