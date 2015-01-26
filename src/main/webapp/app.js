@@ -146,6 +146,7 @@ app
 
 						{
 							field : 'idx',
+							visible: false,
 						},
 
 						{
