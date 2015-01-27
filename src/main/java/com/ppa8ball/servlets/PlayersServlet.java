@@ -37,26 +37,37 @@ public class PlayersServlet extends HttpServlet
 		final int teamNumber;
 
 		final String sparesString = request.getParameter("spares");
+		final String teamNumberString = request.getParameter("teamNumber");
 
 		if (sparesString != null)
 			getSpares = Boolean.parseBoolean(sparesString);
 		else
 			getSpares = false;
 		
+		PlayerService service = new PlayerServiceImpl();
+		final PlayersStat players;
+		
 		if (getSpares)
 		{
 			teamNumber = 11;
+			players = service.GetPlayerByTeam(teamNumber);
+		}
+		else if (teamNumberString != null)
+		{
+			
+			teamNumber = Integer.parseInt(teamNumberString);
+			players = service.GetPlayerByTeam(teamNumber);
 		}
 		else
 		{
-			final String teamNumberString = request.getParameter("teamNumber");
-			teamNumber = Integer.parseInt(teamNumberString);
+			players = service.GetAllPlayers();
 		}
 
-		PlayerService service = new PlayerServiceImpl();
-		PlayersStat players = service.GetPlayerByTeam(teamNumber);
 		JsonHelper.ReturnJson(response, (Object) players);
 	}
+	
+	
+	//PlayersStat getPlayersByTeam(int team)
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse

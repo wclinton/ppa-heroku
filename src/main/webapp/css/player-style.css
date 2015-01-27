@@ -1,0 +1,17 @@
+body,td,a,div,.p{font-family:arial,sans-serif}
+
+.ngViewport.ng-scope{
+    height: auto !important;
+    overflow-y: hidden;
+}
+
+.ngTopPanel.ng-scope, .ngHeaderContainer{
+    width: auto !important;
+}
+
+/*style.css */
+.gridStyle {
+    position:relative;
+    width: 100%; 
+    height: 100%;
+}

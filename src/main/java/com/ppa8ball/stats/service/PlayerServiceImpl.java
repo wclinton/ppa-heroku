@@ -11,6 +11,10 @@ import com.ppa8ball.stats.TeamStat;
 
 public class PlayerServiceImpl implements PlayerService
 {
+	public PlayersStat GetAllPlayers()
+	{
+		return new PlayersStat(OfyService.myOfy().load().type(PlayerStat.class).list());
+	}
 
 	public PlayerStat GetPlayer(Long id)
 	{
@@ -73,10 +77,11 @@ public class PlayerServiceImpl implements PlayerService
 			Save(playerStat);
 		}
 	}
-	
+
 	public void DeleteAll()
 	{
 		Iterable<Key<PlayerStat>> allKeys = OfyService.myOfy().load().type(PlayerStat.class).keys();
-		OfyService.myOfy().delete().keys(allKeys);		
+		OfyService.myOfy().delete().keys(allKeys);
 	}
+
 }
