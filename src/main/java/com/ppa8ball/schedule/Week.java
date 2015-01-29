@@ -51,9 +51,9 @@ public class Week implements Comparable<Week>
 		String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
 		return "Week:"+number + " " + formattedDate;
 	}
-
-	@Override
-	public int compareTo(Week w)
+	
+	
+	public int CcompareTo(Week w)
 	{
 		if (this.number < w.number)
 			return -1;

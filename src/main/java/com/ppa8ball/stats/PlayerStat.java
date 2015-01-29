@@ -11,6 +11,8 @@ import com.googlecode.objectify.annotation.Unindex;
 public class PlayerStat {
 
 	@Id public Long id;
+	@Index int week;
+	@Index String season;
 	@Index public int teamNumber;
 	@Index public String firstName;
 	public String lastName;
