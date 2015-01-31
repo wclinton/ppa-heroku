@@ -52,8 +52,8 @@ public class Week implements Comparable<Week>
 		return "Week:"+number + " " + formattedDate;
 	}
 	
-	
-	public int CcompareTo(Week w)
+
+	public int compareTo(Week w)
 	{
 		if (this.number < w.number)
 			return -1;
