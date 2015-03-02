@@ -2,6 +2,7 @@ package com.ppa8ball.stats;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import jxl.read.biff.BiffException;
 public class Stats
 {
 
-	private final String StatsUrl = "http://www.ppa8ball.com/stats/2014/week14.xls";
+	private final String StatsUrl = "http://www.ppa8ball.com/stats/";
 
 	private final int genderColumn = ColumnToInt("C");
 	private final int firstNameColumn = ColumnToInt("D");
@@ -62,7 +63,7 @@ public class Stats
 		}
 		return null;
 	}
-	
+
 	public List<TeamStat> getTeams()
 	{
 		return teams;
@@ -83,6 +84,7 @@ public class Stats
 
 		return sortPlayers(teamPlayers, playerOrder);
 	}
+
 	public List<PlayerStat> getPlayerStats()
 	{
 		return players;
@@ -208,7 +210,23 @@ public class Stats
 	{
 		try
 		{
-			return new URL(StatsUrl).openStream();
+
+			final int year = 2014;
+
+			URL url = null;
+
+			for (int i = 20; i > 0; i--)
+			{
+				url = getStatsUrl(year, i);
+
+				if (urlExists(url))
+					break;
+			}
+
+			if (url != null)
+				return url.openStream();
+
+			return null;
 		} catch (MalformedURLException e)
 		{
 			// TODO Auto-generated catch block
@@ -220,5 +238,27 @@ public class Stats
 		}
 
 		return null;
+	}
+
+	private URL getStatsUrl(int year, int week) throws MalformedURLException
+	{
+		return new URL(StatsUrl + year + "/week" + String.format("%02d", week)  + ".xls");
+	}
+
+	static boolean urlExists(URL url)
+	{
+		try
+		{
+			//HttpURLConnection.setFollowRedirects(false);
+			// note : you may also need
+			// HttpURLConnection.setInstanceFollowRedirects(false)
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("HEAD");
+			return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
