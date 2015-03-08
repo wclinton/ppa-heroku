@@ -1,36 +1,72 @@
 package com.ppa8ball.schedule.service;
 
-import java.util.Collections;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.objectify.Key;
-import com.ppa8ball.OfyService;
-import com.ppa8ball.schedule.Match;
+import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.schedule.Week;
 import com.ppa8ball.schedule.Weeks;
 
 public class WeekServiceImpl implements WeekService
 {
 
+	Connection connection = DbDriver.getConnection();
+
+	public WeekServiceImpl()
+	{
+	}
+
 	public Weeks GetAll()
 	{
-		List<Week> weeks = OfyService.myOfy().load().type(Week.class).list();
+		Statement stmt = getStatement();
 
-		Collections.sort(weeks);
-		return new Weeks(weeks);
+		try
+		{
+			List<Week> weeks = new ArrayList<Week>();
+
+			ResultSet rs = stmt.executeQuery("SELECT * FROM week");
+			while (rs.next())
+			{
+				Week week = new Week(rs);
+				weeks.add(week);
+			}
+			
+			return new Weeks(weeks);
+
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	public void Save(Week week)
 	{
-		OfyService.myOfy().save().entity(week).now();
-
-		List<Match> matches = week.getMatches();
-
-		if (matches != null)
+		String stm = "INSERT INTO week (season, number, date) VALUES(?,?,?)";
+		PreparedStatement pst;
+		
+		try
 		{
-			// Save the matches too ..
-			MatchService service = new MatchServiceImpl();
-			service.Save(matches);
+			pst = connection.prepareStatement(stm);
+
+			int idx = 1;
+
+			pst.setString(idx++, week.season);
+			pst.setInt(idx++, week.number);
+			pst.setDate(idx++, week.date);
+		
+			pst.executeUpdate();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -42,14 +78,46 @@ public class WeekServiceImpl implements WeekService
 		}
 	}
 
-	public void DeleteAll()
+	@Override
+	public void CreateTable()
 	{
-		Iterable<Key<Week>> allKeys = OfyService.myOfy().load().type(Week.class).keys();
+		Statement stmt;
+		try
+		{
+			stmt = connection.createStatement();
+			stmt.executeUpdate("CREATE TABLE week (" + " id serial NOT NULL," + "season character varying," + "number integer,"
+					+ "date date," + "CONSTRAINT week_pkey PRIMARY KEY (id)" + ") WITH (OIDS=FALSE);");
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-		// Useful for deleting items
-		OfyService.myOfy().delete().keys(allKeys);
+	@Override
+	public void DropTable()
+	{
+		try
+		{
+			Statement stmt = connection.createStatement();
+			stmt.execute("DROP TABLE week");
+		} catch (Exception e)
+		{
 
-		MatchService service = new MatchServiceImpl();
-		service.DeleteAll();
+		}
+
+	}
+
+	private Statement getStatement()
+	{
+		try
+		{
+			return connection.createStatement();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

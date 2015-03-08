@@ -114,6 +114,12 @@ public class LoadStats extends HttpServlet
 	{
 		new PlayerServiceImpl().DeleteAll();
 		new TeamsImpl().DeleteAll();
-		new WeekServiceImpl().DeleteAll();
+		
+		//Drop all the weeks;
+		
+		WeekService weekService = new WeekServiceImpl();
+		weekService.DropTable();
+		weekService.CreateTable();
+		
 	}
 }

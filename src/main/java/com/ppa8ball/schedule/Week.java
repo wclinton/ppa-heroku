@@ -1,30 +1,25 @@
 package com.ppa8ball.schedule;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Ignore;
-import com.googlecode.objectify.annotation.Index;
-
-@Entity
 public class Week implements Comparable<Week>
 {
-	@Id public Long id;
-	@Index public String season;
-	@Index public int number;
+	public int id;
+	public String season;
+	public int number;
 	public Date date;
-	@Ignore private List<Match> matches;
-	
-	
+	private List<Match> matches;
+
 	public Week()
 	{
 		matches = new ArrayList<Match>();
 	}
-	
+
 	public Week(String season, int number, Date date)
 	{
 		this();
@@ -33,23 +28,40 @@ public class Week implements Comparable<Week>
 		this.date = date;
 	}
 	
+	public Week(ResultSet rs)
+	{
+		try
+		{
+			id = rs.getInt("id");
+			season = rs.getString("season");
+			number = rs.getInt("number");
+			date = rs.getDate("date");
+		
+			
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void setMatches(List<Match> matches)
 	{
 		this.matches = matches;
 	}
-	
+
 	public List<Match> getMatches()
 	{
 		if (matches == null)
 			matches = new ArrayList<Match>();
-		
+
 		return matches;
 	}
-	
+
 	public String toString()
 	{
 		String formattedDate = new SimpleDateFormat("dd/MM/yyyy").format(date);
-		return "Week:"+number + " " + formattedDate;
+		return "Week:" + number + " " + formattedDate;
 	}
 
 	@Override
@@ -57,6 +69,7 @@ public class Week implements Comparable<Week>
 	{
 		if (this.number < w.number)
 			return -1;
-		else return 1;
+		else
+			return 1;
 	}
 }

@@ -2,8 +2,7 @@ package com.ppa8ball.stats.service;
 
 import java.util.List;
 
-import com.googlecode.objectify.Key;
-import com.ppa8ball.OfyService;
+
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.PlayersStat;
 import com.ppa8ball.stats.Stats;
@@ -34,7 +33,9 @@ public class PlayerServiceImpl implements PlayerService
 
 	private List<PlayerStat> getPlayersFromDB(int teamNumber)
 	{
-		return OfyService.myOfy().load().type(PlayerStat.class).filter("teamNumber", teamNumber).list();
+	//	return OfyService.myOfy().load().type(PlayerStat.class).filter("teamNumber", teamNumber).list();
+		
+		return null;
 	}
 
 	// TODO - this method should be moved somewhere else
@@ -45,10 +46,10 @@ public class PlayerServiceImpl implements PlayerService
 		s.load();
 
 		List<PlayerStat> players = s.getPlayerStats();
-		OfyService.myOfy().save().entities(players).now();
+//		OfyService.myOfy().save().entities(players).now();
 
 		List<TeamStat> teams = s.getTeams();
-		OfyService.myOfy().save().entities(teams).now();
+//		OfyService.myOfy().save().entities(teams).now();
 	}
 
 	public PlayersStat GetSparePlayers()
@@ -58,7 +59,7 @@ public class PlayerServiceImpl implements PlayerService
 
 	public void Save(PlayerStat playerStat)
 	{
-		OfyService.myOfy().save().entity(playerStat).now();
+//		OfyService.myOfy().save().entity(playerStat).now();
 	}
 
 	public void Save(PlayersStat playersStat)
@@ -76,7 +77,7 @@ public class PlayerServiceImpl implements PlayerService
 	
 	public void DeleteAll()
 	{
-		Iterable<Key<PlayerStat>> allKeys = OfyService.myOfy().load().type(PlayerStat.class).keys();
-		OfyService.myOfy().delete().keys(allKeys);		
+//		Iterable<Key<PlayerStat>> allKeys = OfyService.myOfy().load().type(PlayerStat.class).keys();
+//		OfyService.myOfy().delete().keys(allKeys);		
 	}
 }

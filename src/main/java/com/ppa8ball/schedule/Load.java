@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -86,8 +86,8 @@ public class Load
 
 					if (match != null)
 					{
-						match.week = week.number;
-						match.season = week.season;
+						//match.week = week.number;
+						//match.season = week.season;
 						match.match = week.getMatches().size();
 						week.getMatches().add(match);
 						
@@ -152,11 +152,13 @@ public class Load
 		if (contents == null || !contents.isEmpty())
 		{
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM");
-			Date date = new Date();
+			 
 			try
 			{
-				date = sdf.parse(contents);
-				return date;
+				java.util.Date utilDate  = sdf.parse(contents);
+				
+				java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+				return sqlDate;
 			} catch (ParseException e)
 			{
 			}

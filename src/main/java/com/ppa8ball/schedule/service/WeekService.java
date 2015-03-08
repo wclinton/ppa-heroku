@@ -9,5 +9,6 @@ public interface WeekService
 	public void Save(Week week);
 	public void Save(Iterable<Week> weeks);
 	
-	public void DeleteAll();
+	public void CreateTable();
+	public void DropTable();
 }

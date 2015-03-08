@@ -32,21 +32,21 @@ public class SearchPlayersServlet extends HttpServlet {
     @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	response.setContentType("text/plain");
-		String searchName =  request.getParameter("name");
-		
-		List<PlayerStat> players = OfyService.myOfy().load().type(PlayerStat.class).filter("fullName >=", searchName).filter("fullName <", searchName + "\uFFFD").list();
-		PrintWriter writer = response.getWriter();
-		for (PlayerStat playerStat : players)
-		{
-			writer.println("Player Id:" + playerStat.id);
-
-			writer.println("Player Team Number:" + playerStat.teamNumber);
-
-			writer.println("Player Full Name: " + playerStat.fullName);
-		}
-		
-		writer.flush();
+//    	response.setContentType("text/plain");
+//		String searchName =  request.getParameter("name");
+//		
+//		List<PlayerStat> players = OfyService.myOfy().load().type(PlayerStat.class).filter("fullName >=", searchName).filter("fullName <", searchName + "\uFFFD").list();
+//		PrintWriter writer = response.getWriter();
+//		for (PlayerStat playerStat : players)
+//		{
+//			writer.println("Player Id:" + playerStat.id);
+//
+//			writer.println("Player Team Number:" + playerStat.teamNumber);
+//
+//			writer.println("Player Full Name: " + playerStat.fullName);
+//		}
+//		
+//		writer.flush();
 		
 		
 	}
