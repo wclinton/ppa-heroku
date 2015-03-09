@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.servlet.http.*;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+
 import com.itextpdf.text.DocumentException;
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.Stats;
@@ -110,4 +113,14 @@ public class ScoresheetServlet extends HttpServlet
 			return;
 		}
 	}
+	
+	public static void main(String[] args) throws Exception{
+        Server server = new Server(Integer.valueOf(System.getenv("PORT")));
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+        server.setHandler(context);
+       // context.addServlet(new ServletHolder(new Main()),"/*");
+        server.start();
+        server.join();
+    }
 }
