@@ -13,6 +13,8 @@ import com.ppa8ball.schedule.Load;
 import com.ppa8ball.schedule.Match;
 import com.ppa8ball.schedule.Schedule;
 import com.ppa8ball.schedule.Week;
+import com.ppa8ball.schedule.service.MatchService;
+import com.ppa8ball.schedule.service.MatchServiceImpl;
 import com.ppa8ball.schedule.service.WeekService;
 import com.ppa8ball.schedule.service.WeekServiceImpl;
 import com.ppa8ball.stats.PlayerStat;
@@ -20,6 +22,7 @@ import com.ppa8ball.stats.Stats;
 import com.ppa8ball.stats.TeamStat;
 import com.ppa8ball.stats.service.PlayerService;
 import com.ppa8ball.stats.service.PlayerServiceImpl;
+import com.ppa8ball.stats.service.TeamService;
 import com.ppa8ball.stats.service.TeamsImpl;
 
 //import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -75,6 +78,8 @@ public class LoadStats extends HttpServlet
 		PlayerService playersService = new PlayerServiceImpl();
 
 		playersService.Save(playerStats);
+		
+		MatchService matchService = new MatchServiceImpl();
 
 		if (schedule != null)
 			for (Week w : schedule.weeks)
@@ -83,6 +88,7 @@ public class LoadStats extends HttpServlet
 
 				for (Match match : w.getMatches())
 				{
+					matchService.Save(match);
 					writer.println(match);
 				}
 			}
@@ -116,14 +122,16 @@ public class LoadStats extends HttpServlet
 		playerService.DropTable();
 		playerService.createTable();
 		
-		
-		new TeamsImpl().DeleteAll();
-		
-		//Drop all the weeks;
+		TeamService teamService = new TeamsImpl();
+		teamService.DropTable();
+		teamService.CreateTable();
 		
 		WeekService weekService = new WeekServiceImpl();
 		weekService.DropTable();
 		weekService.CreateTable();
 		
+		MatchService matchService = new MatchServiceImpl();
+		matchService.DropTable();
+		matchService.CreateTable();
 	}
 }

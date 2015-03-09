@@ -28,7 +28,7 @@ public class MatchServiceImpl implements MatchService
 
 	public void Save(Match match)
 	{
-		String stm = "INSERT INTO authors(weekId, match, homeTeam, awayTeam, table1, table2) VALUES(?, ?,?,?,?,?)";
+		String stm = "INSERT INTO match(weekId, match, homeTeam, awayTeam, table1, table2) VALUES(?, ?,?,?,?,?)";
 		PreparedStatement pst;
 		try
 		{
@@ -76,6 +76,7 @@ public class MatchServiceImpl implements MatchService
 				Match match = new Match(rs);
 				matches.add(match);
 			}
+			return matches;
 
 		} catch (SQLException e)
 		{

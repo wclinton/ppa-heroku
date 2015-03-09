@@ -12,5 +12,7 @@ public interface TeamService
 	
 	public void Save(Iterable<TeamStat> teams);
 	
-	public void DeleteAll();
+	public void DropTable();
+	
+	public void CreateTable();
 }

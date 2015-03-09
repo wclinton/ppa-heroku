@@ -1,8 +1,11 @@
 package com.ppa8ball.stats;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class TeamStat implements Comparable<TeamStat>
 {
-	public Long id;
+	public int id;
 	public int number;
 	public String name;
 	public boolean isSpare;
@@ -12,6 +15,24 @@ public class TeamStat implements Comparable<TeamStat>
 	public TeamStat()
 	{
 
+	}
+
+	public TeamStat(ResultSet rs)
+	{
+		try
+		{
+			id = rs.getInt("id");
+			number = rs.getInt("number");
+			name = rs.getString("name");
+			isSpare = rs.getBoolean("isSpare");
+			isNoPlayer = rs.getBoolean("isNoPlayer");
+			isNormal = rs.getBoolean("isNormal");
+
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int compareTo(TeamStat o)
