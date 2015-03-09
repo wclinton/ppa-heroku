@@ -8,16 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.stats.PlayerStat;
 import com.ppa8ball.stats.PlayersStat;
 
 public class PlayerServiceImpl implements PlayerService
 {
-	Connection connection = DbDriver.getConnection();
+	private Connection connection;
 
-	public PlayerServiceImpl()
+	public PlayerServiceImpl(Connection connection)
 	{
+		this.connection = connection;
 	}
 
 	public PlayerStat GetPlayer(Long id)
@@ -54,6 +54,9 @@ public class PlayerServiceImpl implements PlayerService
 				PlayerStat playerStat = new PlayerStat(rs);
 				players.add(playerStat);
 			}
+			
+			rs.close();
+			stmt.close();
 
 			return players;
 
@@ -107,6 +110,8 @@ public class PlayerServiceImpl implements PlayerService
 			pst.setInt(idx++, playerStat.perfectNights);
 
 			pst.executeUpdate();
+			
+			pst.close();
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -134,6 +139,7 @@ public class PlayerServiceImpl implements PlayerService
 		{
 			Statement stmt = connection.createStatement();
 			stmt.execute("DROP TABLE playerStat");
+			stmt.close();
 		} catch (Exception e)
 		{
 		}
@@ -149,10 +155,10 @@ public class PlayerServiceImpl implements PlayerService
 					+ "fullName character varying," + "gender integer," + "totalPoints integer," + "gamesPlayed integer,"
 					+ "adjustedAverage double precision," + "actualAverage double precision," + "perfectNights integer,"
 					+ "CONSTRAINT playerStat_pkey PRIMARY KEY (id)) WITH ( OIDS=FALSE);");
+			stmt.close();
 		} catch (Exception e)
 		{
-			int i=0;
-			i++;
+		
 		}
 	}
 }

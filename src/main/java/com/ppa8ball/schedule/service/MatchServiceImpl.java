@@ -8,19 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.schedule.Match;
 
 public class MatchServiceImpl implements MatchService
 {
-
-	private final Connection connection;
-
-	public MatchServiceImpl()
-	{
-		this(DbDriver.getConnection());
-	}
-
+	Connection connection;
 	public MatchServiceImpl(Connection connection)
 	{
 		this.connection = connection;
@@ -32,8 +24,6 @@ public class MatchServiceImpl implements MatchService
 		PreparedStatement pst;
 		try
 		{
-			
-			
 			
 			pst = connection.prepareStatement(stm);
 
@@ -47,6 +37,8 @@ public class MatchServiceImpl implements MatchService
 			pst.setString(idx++, match.table2);
 
 			pst.executeUpdate();
+			
+			pst.close();
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -64,10 +56,9 @@ public class MatchServiceImpl implements MatchService
 
 	public Iterable<Match> GetByWeek(int week)
 	{
-		Statement stmt = getStatement();
-
 		try
 		{
+			Statement stmt = connection.createStatement();
 			List<Match> matches = new ArrayList<Match>();
 
 			ResultSet rs = stmt.executeQuery("SELECT * FROM match");
@@ -76,6 +67,8 @@ public class MatchServiceImpl implements MatchService
 				Match match = new Match(rs);
 				matches.add(match);
 			}
+			rs.close();
+			stmt.close();
 			return matches;
 
 		} catch (SQLException e)
@@ -107,6 +100,7 @@ public class MatchServiceImpl implements MatchService
 		{
 			Statement stmt = connection.createStatement();
 			stmt.execute("DROP TABLE match");
+			stmt.close();
 		} catch (Exception e)
 		{
 
@@ -122,22 +116,10 @@ public class MatchServiceImpl implements MatchService
 			stmt.executeUpdate("CREATE TABLE match " + "(  id serial NOT NULL," + "weekId serial NOT NULL," + "homeTeam integer,"
 					+ "awayTeam integer," + "table1 character varying," + "match integer," + "table2 character varying,"
 					+ "CONSTRAINT match_pkey PRIMARY KEY (id)" + ")" + "WITH (  OIDS=FALSE);");
+			stmt.close();
 		} catch (Exception e)
 		{
 		}
 
-	}
-	
-	private Statement getStatement()
-	{
-		try
-		{
-			return connection.createStatement();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 }

@@ -1,6 +1,8 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import com.google.gson.Gson;
 import com.ppa8ball.Player;
 import com.ppa8ball.Scoresheet;
 import com.ppa8ball.TeamRoster;
+import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.scoresheet.service.ScoreSheetGenerator;
 import com.ppa8ball.scoresheet.service.ScoreSheetGeneratorServiceImply;
 import com.ppa8ball.stats.TeamStat;
@@ -51,6 +54,8 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		final boolean isHome = Boolean.parseBoolean(isHomeString);
 		final int week = Integer.parseInt(weekString);
 		
+		Connection connection  = DbDriver.getConnection();
+		
 		Gson gson = new Gson();
 		
 		Player[] players = gson.fromJson(roster, Player[].class);
@@ -70,7 +75,7 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 			away = myTeam;
 		}
 		
-		TeamService teamService = new TeamsImpl();
+		TeamService teamService = new TeamsImpl(connection);
 		
 		
 		TeamStat homeTeamStat = teamService.Get(home);
@@ -100,6 +105,14 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);
+		try
+		{
+			connection.close();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -8,18 +8,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.stats.TeamStat;
 import com.ppa8ball.stats.TeamsStat;
 
 public class TeamsImpl implements TeamService
 {
-	Connection connection = DbDriver.getConnection();
-
-	public TeamsImpl()
+	private Connection connection;
+	
+	public TeamsImpl(Connection connection)
 	{
+		this.connection = connection;
 	}
-
+	
 	public TeamsStat GetAll()
 	{
 		List<TeamStat> teams = getFromDB();
@@ -42,7 +42,14 @@ public class TeamsImpl implements TeamService
 			rs.next();
 
 			TeamStat teamStat = new TeamStat(rs);
+			
+			
+			rs.close();
+			
+			stmt.close();
 			return teamStat;
+			
+			
 
 		} catch (SQLException e)
 		{
@@ -67,6 +74,9 @@ public class TeamsImpl implements TeamService
 				TeamStat teamStat = new TeamStat(rs);
 				teams.add(teamStat);
 			}
+			
+			rs.close();
+			stmt.close();
 
 			return teams;
 
@@ -98,6 +108,7 @@ public class TeamsImpl implements TeamService
 			
 			
 			pst.executeUpdate();
+			pst.close();
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -121,6 +132,7 @@ public class TeamsImpl implements TeamService
 		{
 			Statement stmt = connection.createStatement();
 			stmt.execute("DROP TABLE teamStat");
+			stmt.close();
 		} catch (Exception e)
 		{
 		}
@@ -136,6 +148,7 @@ public class TeamsImpl implements TeamService
 			stmt.execute("CREATE TABLE teamStat"
 					+ "(id serial NOT NULL, number integer, name character varying, isSpare boolean, isNoPlayer boolean, isNormal boolean,"
 					+ "CONSTRAINT teamStat_pkey PRIMARY KEY (id)" + ")WITH ( OIDS=FALSE);");
+			stmt.close();
 		} catch (Exception e)
 		{
 		}

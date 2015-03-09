@@ -2,6 +2,8 @@ package com.ppa8ball;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.schedule.Load;
 import com.ppa8ball.schedule.Match;
 import com.ppa8ball.schedule.Schedule;
@@ -49,7 +52,8 @@ public class LoadStats extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		dropDatabase();
+		Connection connection = DbDriver.getConnection();
+		dropDatabase(connection);
 
 		response.setContentType("text/plain");
 
@@ -61,7 +65,7 @@ public class LoadStats extends HttpServlet
 
 		schedule = l.LoadFromExcel();
 		
-		WeekService weekService = new WeekServiceImpl();
+		WeekService weekService = new WeekServiceImpl(connection);
 		
 		weekService.Save(schedule.weeks);
 	
@@ -71,15 +75,15 @@ public class LoadStats extends HttpServlet
 
 		List<TeamStat> teams = s.getTeams();
 
-		new TeamsImpl().Save(teams);
+		new TeamsImpl(connection).Save(teams);
 
 		List<PlayerStat> playerStats = s.getPlayerStats();
 
-		PlayerService playersService = new PlayerServiceImpl();
+		PlayerService playersService = new PlayerServiceImpl(connection);
 
 		playersService.Save(playerStats);
 		
-		MatchService matchService = new MatchServiceImpl();
+		MatchService matchService = new MatchServiceImpl(connection);
 
 		if (schedule != null)
 			for (Week w : schedule.weeks)
@@ -104,6 +108,15 @@ public class LoadStats extends HttpServlet
 		}
 
 		writer.flush();
+		
+		try
+		{
+			connection.close();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -116,21 +129,21 @@ public class LoadStats extends HttpServlet
 		// TODO Auto-generated method stub
 	}
 
-	private void dropDatabase()
+	private void dropDatabase(Connection connection)
 	{
-		PlayerService playerService = new PlayerServiceImpl();
+		PlayerService playerService = new PlayerServiceImpl(connection);
 		playerService.DropTable();
 		playerService.createTable();
 		
-		TeamService teamService = new TeamsImpl();
+		TeamService teamService = new TeamsImpl(connection);
 		teamService.DropTable();
 		teamService.CreateTable();
 		
-		WeekService weekService = new WeekServiceImpl();
+		WeekService weekService = new WeekServiceImpl(connection);
 		weekService.DropTable();
 		weekService.CreateTable();
 		
-		MatchService matchService = new MatchServiceImpl();
+		MatchService matchService = new MatchServiceImpl(connection);
 		matchService.DropTable();
 		matchService.CreateTable();
 	}

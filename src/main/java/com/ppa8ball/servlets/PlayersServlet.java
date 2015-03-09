@@ -1,12 +1,15 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.stats.PlayersStat;
 import com.ppa8ball.stats.service.PlayerService;
 import com.ppa8ball.stats.service.PlayerServiceImpl;
@@ -35,6 +38,8 @@ public class PlayersServlet extends HttpServlet
 	{
 		final boolean getSpares;
 		final int teamNumber;
+		
+		Connection connection  = DbDriver.getConnection();
 
 		final String sparesString = request.getParameter("spares");
 
@@ -53,9 +58,17 @@ public class PlayersServlet extends HttpServlet
 			teamNumber = Integer.parseInt(teamNumberString);
 		}
 
-		PlayerService service = new PlayerServiceImpl();
+		PlayerService service = new PlayerServiceImpl(connection);
 		PlayersStat players = service.GetPlayerByTeam(teamNumber);
 		JsonHelper.ReturnJson(response, (Object) players);
+		try
+		{
+			connection.close();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

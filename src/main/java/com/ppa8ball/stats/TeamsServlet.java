@@ -2,6 +2,8 @@ package com.ppa8ball.stats;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.stats.service.TeamService;
 import com.ppa8ball.stats.service.TeamsImpl;
 
@@ -34,7 +37,8 @@ public class TeamsServlet extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		TeamService teamService = new TeamsImpl();
+		Connection connection = DbDriver.getConnection();
+		TeamService teamService = new TeamsImpl(connection);
 
 		TeamsStat teams = teamService.GetAll();
 		
@@ -51,6 +55,14 @@ public class TeamsServlet extends HttpServlet
 
 		writer.flush();
 		writer.close();
+		try
+		{
+			connection.close();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -8,25 +8,23 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.schedule.Week;
 import com.ppa8ball.schedule.Weeks;
 
 public class WeekServiceImpl implements WeekService
 {
-
-	Connection connection = DbDriver.getConnection();
-
-	public WeekServiceImpl()
+	private Connection connection;
+	public WeekServiceImpl(Connection connection)
 	{
+		this.connection = connection;
 	}
 
 	public Weeks GetAll()
 	{
-		Statement stmt = getStatement();
-
 		try
 		{
+			
+			Statement stmt = connection.createStatement();
 			List<Week> weeks = new ArrayList<Week>();
 
 			ResultSet rs = stmt.executeQuery("SELECT * FROM week");
@@ -35,6 +33,9 @@ public class WeekServiceImpl implements WeekService
 				Week week = new Week(rs);
 				weeks.add(week);
 			}
+			
+			rs.close();
+			stmt.close();
 			
 			return new Weeks(weeks);
 
@@ -63,6 +64,9 @@ public class WeekServiceImpl implements WeekService
 			pst.setDate(idx++, week.date);
 		
 			pst.executeUpdate();
+			
+			pst.close();
+			
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -87,6 +91,8 @@ public class WeekServiceImpl implements WeekService
 			stmt = connection.createStatement();
 			stmt.executeUpdate("CREATE TABLE week (" + " id serial NOT NULL," + "season character varying," + "number integer,"
 					+ "date date," + "CONSTRAINT week_pkey PRIMARY KEY (id)" + ") WITH (OIDS=FALSE);");
+			
+			stmt.close();
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
@@ -101,23 +107,11 @@ public class WeekServiceImpl implements WeekService
 		{
 			Statement stmt = connection.createStatement();
 			stmt.execute("DROP TABLE week");
+			
+			stmt.close();
 		} catch (Exception e)
 		{
 
 		}
-
-	}
-
-	private Statement getStatement()
-	{
-		try
-		{
-			return connection.createStatement();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 }
