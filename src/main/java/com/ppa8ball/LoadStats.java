@@ -112,7 +112,11 @@ public class LoadStats extends HttpServlet
 
 	private void dropDatabase()
 	{
-		new PlayerServiceImpl().DeleteAll();
+		PlayerService playerService = new PlayerServiceImpl();
+		playerService.DropTable();
+		playerService.createTable();
+		
+		
 		new TeamsImpl().DeleteAll();
 		
 		//Drop all the weeks;

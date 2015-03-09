@@ -15,5 +15,7 @@ public interface PlayerService
 	
 	public void Save(PlayersStat playersStat);
 	
-	public void DeleteAll();
+	public void DropTable();
+	
+	public void createTable();
 }

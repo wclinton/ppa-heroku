@@ -10,11 +10,11 @@ public class TeamsImpl implements TeamService
 	{
 		List<TeamStat> teams = getFromDB();
 
-		if (teams.isEmpty())
-		{
-			PlayerServiceImpl.loadDb();
-			teams = getFromDB();
-		}
+//		if (teams.isEmpty())
+//		{
+//			PlayerServiceImpl.loadDb();
+//			teams = getFromDB();
+//		}
 		return new TeamsStat(teams);
 	}
 
