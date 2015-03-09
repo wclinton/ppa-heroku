@@ -48,11 +48,6 @@
         	<version>2.6.12</version>
         </dependency>
         <dependency>
-        	<groupId>com.itextg</groupId>
-        	<artifactId>itextg</artifactId>
-        	<version>5.5.3</version>
-        </dependency>
-        <dependency>
         	<groupId>com.google.code.gson</groupId>
         	<artifactId>gson</artifactId>
         	<version>2.3.1</version>
@@ -67,15 +62,15 @@
         	<artifactId>jetty-servlet</artifactId>
         	<version>7.6.0.v20120127</version>
         </dependency>
+        <dependency>
+        	<groupId>com.itextpdf</groupId>
+        	<artifactId>itextpdf</artifactId>
+        	<version>5.0.6</version>
+        </dependency>
     </dependencies>
     
     <repositories>
     <!--other repositories if any-->
-    <repository>
-        <id>project.local</id>
-        <name>project</name>
-        <url>file://${basedir}/repo</url>
-    </repository>
     </repositories>
 
     <build>
