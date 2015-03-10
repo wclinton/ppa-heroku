@@ -83,20 +83,6 @@ public class LoadStats extends HttpServlet
 
 		playersService.Save(playerStats);
 		
-		MatchService matchService = new MatchServiceImpl(connection);
-
-		if (schedule != null)
-			for (Week w : schedule.weeks)
-			{
-				writer.println(w);
-
-				for (Match match : w.getMatches())
-				{
-					matchService.Save(match);
-					writer.println(match);
-				}
-			}
-
 		for (TeamStat team : teams)
 		{
 			writer.println(team);
@@ -117,7 +103,6 @@ public class LoadStats extends HttpServlet
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

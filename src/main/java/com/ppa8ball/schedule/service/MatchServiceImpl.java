@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ppa8ball.schedule.Match;
+import com.ppa8ball.schedule.Week;
 
 public class MatchServiceImpl implements MatchService
 {
@@ -25,7 +26,7 @@ public class MatchServiceImpl implements MatchService
 		try
 		{
 			
-			pst = connection.prepareStatement(stm);
+			pst = connection.prepareStatement(stm, Statement.RETURN_GENERATED_KEYS);
 
 			int idx = 1;
 
@@ -37,6 +38,12 @@ public class MatchServiceImpl implements MatchService
 			pst.setString(idx++, match.table2);
 
 			pst.executeUpdate();
+			
+			ResultSet generatedKeys = pst.getGeneratedKeys();
+			if (generatedKeys.next())
+			{
+				match.id = generatedKeys.getInt(1);
+			}
 			
 			pst.close();
 		} catch (SQLException e)
@@ -61,7 +68,7 @@ public class MatchServiceImpl implements MatchService
 			Statement stmt = connection.createStatement();
 			List<Match> matches = new ArrayList<Match>();
 
-			ResultSet rs = stmt.executeQuery("SELECT * FROM match");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM match WHERE weekId ="+week);
 			while (rs.next())
 			{
 				Match match = new Match(rs);
@@ -80,9 +87,14 @@ public class MatchServiceImpl implements MatchService
 		return null;
 	}
 
-	public Match GetByTeam(int week, int teamNumber)
+	public Match GetByTeam(int weekNumber, int teamNumber)
 	{
-		Iterable<Match> matches = GetByWeek(week);
+		
+		WeekService weekService = new WeekServiceImpl(connection);
+		
+		Week week = weekService.Get(weekNumber);
+		
+		Iterable<Match> matches = GetByWeek(week.id);
 
 		for (Match match : matches)
 		{
