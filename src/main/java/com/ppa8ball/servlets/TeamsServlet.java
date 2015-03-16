@@ -1,19 +1,25 @@
-package com.ppa8ball.stats;
+package com.ppa8ball.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
+
 import com.google.gson.Gson;
-import com.ppa8ball.db.DbDriver;
-import com.ppa8ball.stats.service.TeamService;
-import com.ppa8ball.stats.service.TeamsImpl;
+import com.ppa8ball.models.Season;
+import com.ppa8ball.models.Team;
+import com.ppa8ball.service.SeasonService;
+import com.ppa8ball.service.SeasonServiceImpl;
+import com.ppa8ball.service.TeamService;
+import com.ppa8ball.service.TeamServiceImpl;
+import com.ppa8ball.util.HibernateUtil;
+import com.ppa8ball.viewmodel.TeamsView;
 
 /**
  * Servlet implementation class TeamsServlet
@@ -37,13 +43,20 @@ public class TeamsServlet extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Connection connection = DbDriver.getConnection();
-		TeamService teamService = new TeamsImpl(connection);
-
-		TeamsStat teams = teamService.GetAll();
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		//Get the current sesson 
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		Season currentSeason = seasonService.GetCurrent();
+		
+		TeamService teamService = new TeamServiceImpl(session);
+		List<Team> teams = teamService.GetNormalBySeason(currentSeason);
+		
+		TeamsView teamView = new TeamsView(teams);
 		
 		Gson gson = new Gson();
-		String json = gson.toJson(teams);
+		String json = gson.toJson(teamView);
 		
 		response.setContentType("text/javascript");
 		
@@ -55,14 +68,6 @@ public class TeamsServlet extends HttpServlet
 
 		writer.flush();
 		writer.close();
-		try
-		{
-			connection.close();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -73,5 +78,4 @@ public class TeamsServlet extends HttpServlet
 	{
 		// TODO Auto-generated method stub
 	}
-
 }

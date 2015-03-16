@@ -18,7 +18,7 @@
     <description></description>
     <display-name>LoadStats</display-name>
     <servlet-name>LoadStats</servlet-name>
-    <servlet-class>com.ppa8ball.LoadStats</servlet-class>
+    <servlet-class>com.ppa8ball.servlets.LoadStatsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoadStats</servlet-name>
@@ -38,7 +38,7 @@
     <description></description>
     <display-name>Teams</display-name>
     <servlet-name>TeamsServlet</servlet-name>
-    <servlet-class>com.ppa8ball.stats.TeamsServlet</servlet-class>
+    <servlet-class>com.ppa8ball.servlets.TeamsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>TeamsServlet</servlet-name>

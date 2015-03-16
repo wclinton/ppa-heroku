@@ -10,16 +10,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
+
 import com.google.gson.Gson;
 import com.ppa8ball.Player;
 import com.ppa8ball.Scoresheet;
 import com.ppa8ball.TeamRoster;
 import com.ppa8ball.db.DbDriver;
+import com.ppa8ball.models.Season;
+import com.ppa8ball.models.Team;
 import com.ppa8ball.scoresheet.service.ScoreSheetGenerator;
 import com.ppa8ball.scoresheet.service.ScoreSheetGeneratorServiceImply;
+import com.ppa8ball.service.SeasonService;
+import com.ppa8ball.service.SeasonServiceImpl;
+import com.ppa8ball.service.TeamService;
+import com.ppa8ball.service.TeamServiceImpl;
 import com.ppa8ball.stats.TeamStat;
-import com.ppa8ball.stats.service.TeamService;
-import com.ppa8ball.stats.service.TeamsImpl;
+import com.ppa8ball.util.HibernateUtil;
 
 /**
  * Servlet implementation class GenerateScoreSheet
@@ -54,7 +61,8 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		final boolean isHome = Boolean.parseBoolean(isHomeString);
 		final int week = Integer.parseInt(weekString);
 		
-		Connection connection  = DbDriver.getConnection();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+
 		
 		Gson gson = new Gson();
 		
@@ -75,27 +83,30 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 			away = myTeam;
 		}
 		
-		TeamService teamService = new TeamsImpl(connection);
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		Season currentSeason = seasonService.GetCurrent();
+		
+		TeamService teamService = new TeamServiceImpl(session);
 		
 		
-		TeamStat homeTeamStat = teamService.Get(home);
+		Team homeTeamStat = teamService.GetByNumber(currentSeason, home);
 		
-		TeamStat awayTeamStat = teamService.Get(away);
+		Team awayTeamStat = teamService.GetByNumber(currentSeason, away);
 		
-		TeamRoster homeTeamRoster;
-		TeamRoster awayTeamRoster;
+		TeamRoster homeTeamRoster=null;
+		TeamRoster awayTeamRoster=null;
 		
-		if (isHome)
-		{
-		
-		 homeTeamRoster = new TeamRoster(homeTeamStat,players);
-		 awayTeamRoster = new TeamRoster(awayTeamStat);
-		}
-		else
-		{
-			 homeTeamRoster = new TeamRoster(homeTeamStat);
-			 awayTeamRoster = new TeamRoster(awayTeamStat,players);
-		}
+//		if (isHome)
+//		{
+//		
+//		 homeTeamRoster = new TeamRoster(homeTeamStat,players);
+//		 awayTeamRoster = new TeamRoster(awayTeamStat);
+//		}
+//		else
+//		{
+//			 homeTeamRoster = new TeamRoster(homeTeamStat);
+//			 awayTeamRoster = new TeamRoster(awayTeamStat,players);
+//		}
 		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
 		
 		scoresheet.setWeek(week);
@@ -105,14 +116,6 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);
-		try
-		{
-			connection.close();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
