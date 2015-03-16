@@ -1,19 +1,13 @@
 package com.ppa8ball;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-
-import com.itextpdf.text.DocumentException;
-import com.ppa8ball.dataloader.Stats;
-import com.ppa8ball.stats.PlayerStat;
-import com.ppa8ball.stats.TeamStat;
 
 @SuppressWarnings("serial")
 public class ScoresheetServlet extends HttpServlet

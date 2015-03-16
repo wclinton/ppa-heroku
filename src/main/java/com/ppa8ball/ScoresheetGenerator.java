@@ -3,11 +3,14 @@ package com.ppa8ball;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.List;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import com.ppa8ball.models.Team;
+import com.ppa8ball.viewmodel.PlayerView;
 
 public class ScoresheetGenerator
 {
@@ -55,8 +58,8 @@ public class ScoresheetGenerator
 		AcroFields form = stamper.getAcroFields();
 		
 
-		SetHomeFields(form, scoresheet.getHomeTeam());
-		SetAwayFields(form, scoresheet.getAwayTeam());
+		SetHomeFields(form, scoresheet.getHome(), scoresheet.getHomePlayers());
+		SetAwayFields(form, scoresheet.getAway(), scoresheet.getAwayPlayers());
 
 		form.setField(WeekField, Integer.toString(scoresheet.getWeek()));
 		form.setField(DateField, scoresheet.getDate());
@@ -67,44 +70,30 @@ public class ScoresheetGenerator
 		reader.close();
 	}
 
-	static private void SetHomeFields(AcroFields form, TeamRoster teamRoster) throws IOException, DocumentException
+	static private void SetHomeFields(AcroFields form, Team team, List<PlayerView> players ) throws IOException, DocumentException
 	{
-		form.setField(HomeTeamNameField, teamRoster.name);
-		form.setField(HomeTeamNumberField, Integer.toString(teamRoster.number));
-
+		form.setField(HomeTeamNameField, team.getName());
+		form.setField(HomeTeamNumberField, Integer.toString(team.getNumber()));
 		int i = 0;
-		for (String s : HomeTeamAverageFields)
+		for (PlayerView playerView : players)
 		{
-			if (teamRoster.players[i] != null)
-				form.setField(s, Double.toString(teamRoster.players[i++].average));
+			form.setField(HomeTeamAverageFields[i], Double.toString(playerView.getDisplayActualAverage()));
+			form.setField(HomeTeamPlayerFields[i], playerView.getFullName());
+			i++;
 		}
-
-		i = 0;
-		for (String s : HomeTeamPlayerFields)
-		{
-			if (teamRoster.players[i] != null)
-				form.setField(s, teamRoster.players[i++].name);
-		}
-
 	}
 
-	static private void SetAwayFields(AcroFields form, TeamRoster teamRoster) throws IOException, DocumentException
+	static private void SetAwayFields(AcroFields form, Team team, List<PlayerView> players) throws IOException, DocumentException
 	{
-		form.setField(AwayTeamNameField, teamRoster.name);
-		form.setField(AwayTeamNumberField, Integer.toString(teamRoster.number));
+		form.setField(AwayTeamNameField, team.getName());
+		form.setField(AwayTeamNumberField, Integer.toString(team.getNumber()));
 
 		int i = 0;
-		for (String s : AwayTeamAverageFields)
+		for (PlayerView playerView : players)
 		{
-			if (teamRoster.players[i] != null)
-				form.setField(s, Double.toString(teamRoster.players[i++].average));
-		}
-
-		i = 0;
-		for (String s : AwayTeamPlayerFields)
-		{
-			if (teamRoster.players[i] != null)
-				form.setField(s, teamRoster.players[i++].name);
+			form.setField(AwayTeamAverageFields[i], Double.toString(playerView.getDisplayActualAverage()));
+			form.setField(AwayTeamPlayerFields[i], playerView.getFullName());
+			i++;
 		}
 	}
 }

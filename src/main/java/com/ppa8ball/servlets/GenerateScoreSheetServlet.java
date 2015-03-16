@@ -1,9 +1,8 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 
 import com.google.gson.Gson;
-import com.ppa8ball.Player;
 import com.ppa8ball.Scoresheet;
-import com.ppa8ball.TeamRoster;
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.scoresheet.service.ScoreSheetGenerator;
@@ -25,8 +21,8 @@ import com.ppa8ball.service.SeasonService;
 import com.ppa8ball.service.SeasonServiceImpl;
 import com.ppa8ball.service.TeamService;
 import com.ppa8ball.service.TeamServiceImpl;
-import com.ppa8ball.stats.TeamStat;
 import com.ppa8ball.util.HibernateUtil;
+import com.ppa8ball.viewmodel.PlayerView;
 
 /**
  * Servlet implementation class GenerateScoreSheet
@@ -66,7 +62,9 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		
 		Gson gson = new Gson();
 		
-		Player[] players = gson.fromJson(roster, Player[].class);
+		
+		
+		List<PlayerView> players = Arrays.asList(gson.fromJson(roster, PlayerView[].class));
 		
 		
 		final int home,away;
@@ -89,12 +87,12 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		TeamService teamService = new TeamServiceImpl(session);
 		
 		
-		Team homeTeamStat = teamService.GetByNumber(currentSeason, home);
+		Team homeTeam = teamService.GetByNumber(currentSeason, home);
 		
-		Team awayTeamStat = teamService.GetByNumber(currentSeason, away);
+		Team awayTeam = teamService.GetByNumber(currentSeason, away);
 		
-		TeamRoster homeTeamRoster=null;
-		TeamRoster awayTeamRoster=null;
+//		TeamRoster homeTeamRoster=null;
+//		TeamRoster awayTeamRoster=null;
 		
 //		if (isHome)
 //		{
@@ -107,12 +105,17 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 //			 homeTeamRoster = new TeamRoster(homeTeamStat);
 //			 awayTeamRoster = new TeamRoster(awayTeamStat,players);
 //		}
-		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
+		Scoresheet scoresheet = new Scoresheet(homeTeam, awayTeam);
 		
 		scoresheet.setWeek(week);
 		scoresheet.setDate(dateString);
 		scoresheet.setTable1(table1);
 		scoresheet.setTable2(table2);
+		
+		if (isHome)
+			scoresheet.setHomePlayers(players);
+		else
+			scoresheet.setAwayPlayers(players);
 		
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);

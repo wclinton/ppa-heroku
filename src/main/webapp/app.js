@@ -263,11 +263,11 @@ app
 						for (i = 0; i < $scope.myData.players.length; i++)
 
 						{
-							var obj = {};
-							obj['name'] = $scope.myData.players[i].firstName
-									+ ' ' + $scope.myData.players[i].lastName;
-							obj['average'] = $scope.myData.players[i].displayActualAverage;
-							roster.push(obj);
+							//var obj = {};
+							//obj['name'] = $scope.myData.players[i].firstName
+							//		+ ' ' + $scope.myData.players[i].lastName;
+							//obj['average'] = $scope.myData.players[i].displayActualAverage;
+							roster.push($scope.myData.players[i]);
 						}
 
 						var date = $filter('date')(
