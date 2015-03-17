@@ -189,12 +189,12 @@ public class LoadStatsServlet extends HttpServlet
 
 	private void clearDatabases(Session session)
 	{
-		String[] tables =
-		{ "match", "stat", "player", "season", "team", "teamplayer", "teamroster", "week" };
-
-		for (String table : tables)
-		{
-			session.createSQLQuery("truncate table " + table + " cascade").executeUpdate();
-		}
+//		String[] tables =
+//		{ "match", "stat", "player", "season", "team", "teamplayer", "teamroster", "week" };
+//
+//		for (String table : tables)
+//		{
+//			session.createSQLQuery("truncate table " + table + " cascade").executeUpdate();
+//		}
 	}
 }

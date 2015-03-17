@@ -8,11 +8,12 @@
 
 		<!-- The actual database connection properties will be brought in from 
 			the DATABASE_URL environment variable.
-			
-			 <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/heroku</property> 
-			<property name="connection.username">postgres</property> 
-			<property name="connection.password">postgres</property> 
-	    -->
+			-->
+			 <property name="hibernate.connection.url">jdbc:postgresql://ec2-23-23-180-133.compute-1.amazonaws.com:5432/d84o5jhbbkuter?user=ocxtadwkyocndg&amp;password=x0zRxRRxtsUEv9zstzUM69FTod&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory</property> 
+			<property name="connection.username">ocxtadwkyocndg</property> 
+			<property name="connection.password">x0zRxRRxtsUEv9zstzUM69FTod</property> 
+	      <property name="hibernate.connection.requireSSL">true</property>
+    <property name="hibernate.connection.autoReconnect">true</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
 
