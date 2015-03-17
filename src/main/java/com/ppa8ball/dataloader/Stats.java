@@ -16,12 +16,10 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 import com.ppa8ball.models.Player;
-import com.ppa8ball.models.Stat;
 import com.ppa8ball.models.Season;
+import com.ppa8ball.models.Stat;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.TeamType;
-import com.ppa8ball.service.TeamService;
-import com.ppa8ball.service.TeamServiceImpl;
 import com.ppa8ball.stats.CellHelp;
 import com.ppa8ball.stats.Gender;
 
@@ -29,7 +27,7 @@ public class Stats
 {
 	private final String StatsUrl = "http://www.ppa8ball.com/stats/";
 
-	private final int teamNumberColumn = ColumnToInt("A");
+	//private final int teamNumberColumn = ColumnToInt("A");
 	private final int genderColumn = ColumnToInt("C");
 	private final int firstNameColumn = ColumnToInt("D");
 	private final int lastNameColumn = ColumnToInt("E");

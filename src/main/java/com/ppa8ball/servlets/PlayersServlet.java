@@ -1,8 +1,6 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,17 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Session;
 
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.models.Player;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
-import com.ppa8ball.service.PlayerService;
-import com.ppa8ball.service.PlayerServiceImpl;
 import com.ppa8ball.service.SeasonService;
 import com.ppa8ball.service.SeasonServiceImpl;
 import com.ppa8ball.service.TeamService;
 import com.ppa8ball.service.TeamServiceImpl;
-import com.ppa8ball.stats.PlayersStat;
 import com.ppa8ball.util.HibernateUtil;
 import com.ppa8ball.viewmodel.PlayerView;
 import com.ppa8ball.viewmodel.PlayersView;
@@ -49,15 +43,11 @@ public class PlayersServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		final boolean getSpares;
-		final int teamNumber;
-		
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		
 		Season season = seasonService.GetCurrent();
-		
-		PlayerService service = new PlayerServiceImpl(session);
 		TeamService teamService = new TeamServiceImpl(session);
 
 		final String sparesString = request.getParameter("spares");
@@ -87,8 +77,6 @@ public class PlayersServlet extends HttpServlet
 		{
 			players.getPlayers().add(new PlayerView(player));
 		}
-		
-		
 		
 		JsonHelper.ReturnJson(response, (Object) players);
 	}

@@ -19,6 +19,7 @@ public class MatchServiceImpl implements MatchService
 		this.session = session;
 	}
 
+	
 	@Override
 	public Match getMatchByWeekTeam(int weekNumber, int teamNumber)
 	{
@@ -47,6 +48,7 @@ public class MatchServiceImpl implements MatchService
 				.createAlias("home", "H")
 				.add(Restrictions.and(week, team));
 		
+		@SuppressWarnings("unchecked")
 		List<Match> matches = criteria.list();
 		
 		return matches.get(0);

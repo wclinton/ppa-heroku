@@ -6,16 +6,6 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>Scoresheet</display-name>
-    <servlet-name>Scoresheet</servlet-name>
-    <servlet-class>com.ppa8ball.ScoresheetServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Scoresheet</servlet-name>
-    <url-pattern>/scoresheet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>LoadStats</display-name>
     <servlet-name>LoadStats</servlet-name>
     <servlet-class>com.ppa8ball.servlets.LoadStatsServlet</servlet-class>
@@ -28,7 +18,7 @@
     <description></description>
     <display-name>SearchPlayers</display-name>
     <servlet-name>SearchPlayers</servlet-name>
-    <servlet-class>com.ppa8ball.SearchPlayersServlet</servlet-class>
+    <servlet-class>com.ppa8ball.servlets.SearchPlayersServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>SearchPlayers</servlet-name>

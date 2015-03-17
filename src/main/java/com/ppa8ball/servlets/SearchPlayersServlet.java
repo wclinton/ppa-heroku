@@ -1,16 +1,11 @@
-package com.ppa8ball;
+package com.ppa8ball.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ppa8ball.stats.PlayerStat;
-import com.ppa8ball.stats.TeamStat;
 
 /**
  * Servlet implementation class SearchPlayersServlet

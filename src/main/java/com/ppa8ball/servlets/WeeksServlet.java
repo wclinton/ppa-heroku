@@ -1,8 +1,6 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Session;
 
-import com.ppa8ball.db.DbDriver;
 import com.ppa8ball.models.Week;
 import com.ppa8ball.service.WeekService;
 import com.ppa8ball.service.WeekServiceImpl;

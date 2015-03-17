@@ -6,10 +6,13 @@
 	<session-factory>
 
 
-
-		<property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/heroku</property>
-		<property name="connection.username">postgres</property>
-		<property name="connection.password">postgres</property>
+		<!-- The actual database connection properties will be brought in from 
+			the DATABASE_URL environment variable.
+			
+			 <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/heroku</property> 
+			<property name="connection.username">postgres</property> 
+			<property name="connection.password">postgres</property> 
+	    -->
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
 

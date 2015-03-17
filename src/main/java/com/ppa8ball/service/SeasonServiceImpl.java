@@ -31,6 +31,7 @@ public class SeasonServiceImpl implements SeasonService
 		Criteria cr = session.createCriteria(Season.class);
 		cr.addOrder(Order.asc("description"));
 
+		@SuppressWarnings("unchecked")
 		List<Season>  season = cr.list();
 		
 		return season.get(0);

@@ -54,15 +54,10 @@ public class TeamServiceImpl implements TeamService
 
 		cr.add(Restrictions.eq("season.id", season.getId()));
 
-		return cr.list();
+		@SuppressWarnings("unchecked")
+		List<Team> list = cr.list();
+		return list;
 	}
-
-//	@Override
-//	public Team GetByNumber(int number)
-//	{
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 	
 	@Override
 	public List<Team> GetNormalBySeason(Season season)
@@ -72,7 +67,9 @@ public class TeamServiceImpl implements TeamService
 		cr.add(Restrictions.eq("season.id", season.getId()));
 		cr.add(Restrictions.eq("type", TeamType.Normal));
 
-		return cr.list();
+		@SuppressWarnings("unchecked")
+		List<Team> list = cr.list();
+		return list;
 	}
 
 	@Override

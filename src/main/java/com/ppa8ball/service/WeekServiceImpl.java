@@ -6,7 +6,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
 
 public class WeekServiceImpl implements WeekService
@@ -52,7 +51,9 @@ public class WeekServiceImpl implements WeekService
 	{
 		Criteria cr = session.createCriteria(Week.class);
 		
-		return cr.list();
+		@SuppressWarnings("unchecked")
+		List<Week> list = cr.list();
+		return list;
 	}
 
 }

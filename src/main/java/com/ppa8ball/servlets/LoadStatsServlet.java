@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 
 import com.ppa8ball.dataloader.Stats;
-import com.ppa8ball.models.Player;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
@@ -120,7 +119,7 @@ public class LoadStatsServlet extends HttpServlet
 			writer.println(team);
 		}
 		
-		Week savedWeek = weekService.getWeekbyNumber(1);
+		//Week savedWeek = weekService.getWeekbyNumber(1);
 		
 		
 

@@ -4,20 +4,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.sql.Date;
-
-import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
 
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+
+import org.hibernate.Session;
 
 import com.ppa8ball.models.Match;
 import com.ppa8ball.models.Season;
@@ -25,8 +23,8 @@ import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
 import com.ppa8ball.service.SeasonServiceImpl;
 import com.ppa8ball.service.TeamService;
-import com.ppa8ball.stats.CellHelp;
 import com.ppa8ball.service.TeamServiceImpl;
+import com.ppa8ball.stats.CellHelp;
 
 public class Load
 {
@@ -207,6 +205,7 @@ public class Load
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	private Date getDate(Cell cell, int year)
 	{
 		String contents = cell.getContents();

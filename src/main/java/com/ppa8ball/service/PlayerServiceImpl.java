@@ -36,12 +36,12 @@ public class PlayerServiceImpl implements PlayerService
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Player> GetByTeam(Team team)
 	{
 		Criteria cr = session.createCriteria(Team.class);
 		cr.add(Restrictions.eq("team.id", team.getId()));
-
 		return cr.list();
 	}
 
