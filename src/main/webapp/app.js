@@ -292,7 +292,7 @@ app
 							
 							var len = $scope.myData.players.length
 							
-							$scope.myData.players.push({firstName:"", lastName:"",idx:len})
+							$scope.myData.players.push({fullName:"",idx:len})
 						} else {
 							var p = JSON.parse($scope.selectedSparePlayer);
 							$scope.myData.players.push(p);

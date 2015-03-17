@@ -57,6 +57,8 @@ public class LoadStatsServlet extends HttpServlet
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
 
+		clearDatabases(session);
+
 		// Create a season record.
 		Season season = new Season(seasonYear);
 
@@ -78,25 +80,25 @@ public class LoadStatsServlet extends HttpServlet
 		teamService.Save(teams);
 
 		// Load all the Year weeks into the season.
-		List<Week> weeks = new Load(session,season).LoadFromExcel();
-		
-//		MatchService matchService = new MatchServiceImpl(session);
-//		
-//		for (Week week : weeks)
-//		{
-//			matchService.Save(week.getMatches());
-//		}
-		
+		List<Week> weeks = new Load(session, season).LoadFromExcel();
+
+		// MatchService matchService = new MatchServiceImpl(session);
+		//
+		// for (Week week : weeks)
+		// {
+		// matchService.Save(week.getMatches());
+		// }
+
 		WeekService weekService = new WeekServiceImpl(session);
-	    weekService.Save(weeks);
-	    
+		weekService.Save(weeks);
+
 		MatchService matchService = new MatchServiceImpl(session);
-		
+
 		for (Week week : weeks)
 		{
 			matchService.Save(week.getMatches());
 		}
-		
+
 		season.getWeeks().addAll(weeks);
 		seasonService.Save(season);
 
@@ -118,10 +120,8 @@ public class LoadStatsServlet extends HttpServlet
 		{
 			writer.println(team);
 		}
-		
-		//Week savedWeek = weekService.getWeekbyNumber(1);
-		
-		
+
+		// Week savedWeek = weekService.getWeekbyNumber(1);
 
 		writer.flush();
 
@@ -187,22 +187,14 @@ public class LoadStatsServlet extends HttpServlet
 		// TODO Auto-generated method stub
 	}
 
-	// private void dropDatabase(Connection connection)
-	// {
-	// PlayerService playerService = new PlayerServiceImpl(connection);
-	// playerService.DropTable();
-	// playerService.createTable();
-	//
-	// TeamService teamService = new TeamsImpl(connection);
-	// teamService.DropTable();
-	// teamService.CreateTable();
-	//
-	// WeekService weekService = new WeekServiceImpl(connection);
-	// weekService.DropTable();
-	// weekService.CreateTable();
-	//
-	// MatchService matchService = new MatchServiceImpl(connection);
-	// matchService.DropTable();
-	// matchService.CreateTable();
-	// }
+	private void clearDatabases(Session session)
+	{
+		String[] tables =
+		{ "match", "stat", "player", "season", "team", "teamplayer", "teamroster", "week" };
+
+		for (String table : tables)
+		{
+			session.createSQLQuery("truncate table " + table + " cascade").executeUpdate();
+		}
+	}
 }
