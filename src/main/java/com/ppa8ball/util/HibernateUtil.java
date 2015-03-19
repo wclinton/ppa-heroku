@@ -1,8 +1,6 @@
 package com.ppa8ball.util;
 
 import java.net.URI;
-import java.sql.DriverManager;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 

@@ -2,53 +2,63 @@ package com.ppa8ball.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.ppa8ball.viewmodel.RosterViewModel;
 
 @Entity
 @Table
 public class TeamRoster
 {
 	@Id
-    @GeneratedValue
-    private Long id;
-	private Long teamId;
-	private Boolean isHomeRoster;
-	private Long player1Id;
-	private Long player2Id;
-	private Long player3Id;
-	private Long player4Id;
-	private Long player5Id;
-	
-	
+	@GeneratedValue
+	private Long id;
+
+	private boolean isHome;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn
+	private Player player1;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn
+	private Player player2;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn
+	private Player player3;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn
+	private Player player4;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn
+	private Player player5;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn
+	private Team team;
+
 	public TeamRoster()
 	{
-		super();
+		
 	}
-	
-	
-	public TeamRoster(Long teamId, Boolean isHomeRoster, List<Long> playerIds)
+	public TeamRoster(Team team, boolean isHome, List<Player> players)
 	{
-		this.teamId = teamId;
-		this.isHomeRoster = isHomeRoster;
-		
-	//	int i=0;
-		
-//		player1Id = playerIds.get(i++);
-//		player2Id = playerIds.get(i++);
-//		player3Id = playerIds.get(i++);
-//		player4Id = playerIds.get(i++);
-//		player5Id = playerIds.get(i++);
-//		//	setPlayerIds(playerIds);
-		//	setPlayerIds(playerIds);
-		//	setPlayerIds(playerIds);
-		
-		setPlayerIds(playerIds);
+		this.team = team;
+		this.isHome = isHome;
+
+		int index = 0;
+
+		this.player1 = players.get(index++);
+		this.player2 = players.get(index++);
+		this.player3 = players.get(index++);
+		this.player4 = players.get(index++);
+		this.player5 = players.get(index++);
 	}
-	
-	
+
 	public Long getId()
 	{
 		return id;
@@ -59,89 +69,84 @@ public class TeamRoster
 		this.id = id;
 	}
 
-	public Long getTeamId()
+	public Team getTeam()
 	{
-		return teamId;
+		return team;
 	}
 
-	public void setTeamId(Long teamId)
+	public void setTeam(Team team)
 	{
-		this.teamId = teamId;
+		this.team = team;
 	}
 
-	public Boolean getIsHomeRoster()
+	public Boolean getIsHome()
 	{
-		return isHomeRoster;
+		return isHome;
 	}
 
-	public void setIsHomeRoster(Boolean isHomeRoster)
+	public void setIsHome(Boolean isHome)
 	{
-		this.isHomeRoster = isHomeRoster;
+		this.isHome = isHome;
 	}
 
-	public Long getPlayer1Id()
+	public Player getPlayer1()
 	{
-		return player1Id;
+		return player1;
 	}
 
-	public void setPlayer1Id(Long player1Id)
+	public void setPlayer1(Player player1)
 	{
-		this.player1Id = player1Id;
+		this.player1 = player1;
 	}
 
-	public Long getPlayer2Id()
+	public Player getPlayer2()
 	{
-		return player2Id;
+		return player2;
 	}
 
-	public void setPlayer2Id(Long player2Id)
+	public void setPlayer2(Player player2)
 	{
-		this.player2Id = player2Id;
+		this.player2 = player2;
 	}
 
-	public Long getPlayer3Id()
+	public Player getPlayer3()
 	{
-		return player3Id;
+		return player3;
 	}
 
-	public void setPlayer3Id(Long player3Id)
+	public void setPlayer3(Player player3)
 	{
-		this.player3Id = player3Id;
+		this.player3 = player3;
 	}
 
-	public Long getPlayer4Id()
+	public Player getPlayer4()
 	{
-		return player4Id;
+		return player4;
 	}
 
-	public void setPlayer4Id(Long player4Id)
+	public void setPlayer4(Player player4)
 	{
-		this.player4Id = player4Id;
+		this.player4 = player4;
 	}
 
-	public Long getPlayer5Id()
+	public Player getPlayer5()
 	{
-		return player5Id;
+		return player5;
 	}
 
-	public void setPlayer5Id(Long player5Id)
+	public void setPlayer5(Player player5)
 	{
-		this.player5Id = player5Id;
-	}
-//	
-//	
-	private void setPlayerIds(List<Long> playerIds)
-	{
-		int i=0;
-		player1Id = playerIds.get(i++);
-		player2Id = playerIds.get(i++);
-		player3Id = playerIds.get(i++);
-		player4Id = playerIds.get(i++);
-		player5Id = playerIds.get(i++);
+		this.player5 = player5;
 	}
 	
-	
-	
-	
-	
+	public void setPlayers(List<Player> players)
+	{
+		int index = 0;
+
+		this.player1 = players.get(index++);
+		this.player2 = players.get(index++);
+		this.player3 = players.get(index++);
+		this.player4 = players.get(index++);
+		this.player5 = players.get(index++);
+	}
 }

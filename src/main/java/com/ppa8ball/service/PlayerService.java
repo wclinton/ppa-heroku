@@ -10,6 +10,7 @@ public interface PlayerService
 	public void Save(Player player);
 	public void Save(List<Player> players);
 	
+	public Player Get(long id);
 	public List<Player> GetByTeam(Team team);
 	public List<Player>GetSpare();
 }

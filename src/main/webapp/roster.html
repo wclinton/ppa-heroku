@@ -22,27 +22,14 @@
 <body ng-controller="MyCtrl">
 
 
-	<div class='tab' ng-show="show">
+	
 		<div data-ng-init="getDropDownDataFromServer()"
-			class="activeTeamsDropdownStyle">
+			class="activeTeamsDropdownStyle"/>
 			
 			
-			<b>Current Week</b>
-			<select id="activeWeeks"
-				data-ng-model="selectedWeek" data-ng-change="weekSelected();"
-				style="font-size: 11px">
-				<option value="">-- Select Week --</option>
-
-				<option data-ng-repeat="week in weeks"
-					value="{{week.number}}"> Week {{week.number}} - {{week.date |  date:'MMMM d, yyyy' :'UTC'}}
-				</option>
-			</select> 
-			
-			<br />
-			
-			<b>Your Team:</b> 
+			<b>Team:</b> 
 			<select id="activeTeam"
-				data-ng-model="selectedTeam" data-ng-change="populateGridAndMatchData();"
+				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
 				style="font-size: 11px" ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
 				<option value="">-- Select Active Team --</option>
 				</option>
@@ -65,21 +52,15 @@
 			</select> 
 			<div class="gridStyle" ng-grid="gridOptions"></div>
 			
-			<button ng-click="SaveRoster()" style="font-size: 16px">Save Roster as Default</button>
+			
 			
 			
 			<br> <b>Your Opponent:</b> 
 			
-			<select id="opponentTeam"
-				data-ng-model="selectedOpponentTeam" style="font-size: 11px"
-				
-				
-
-				ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
-			</select> <br> <br>
+			
 			<button ng-click="GenerateScoreSheet()" style="font-size: 16px">Generate
 				Scoresheet</button>
-		</div>
+		
 </body>
 
 </html>

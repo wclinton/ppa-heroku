@@ -55,4 +55,10 @@ public class PlayerServiceImpl implements PlayerService
 //		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Player Get(long id)
+	{
+		 return  (Player) session.get(Player.class, id);
+	}
 }

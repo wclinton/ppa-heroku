@@ -11,8 +11,8 @@ app
 
 					$scope.position = "home";
 
-					$scope.populateGridData = function() {
-						var sparePlayersUrl = '/players?teamNumber='
+					$scope.populateGridAndMatchData = function() {
+						var playersUrl = '/players?teamNumber='
 								+ $scope.selectedTeam;
 						var matchUrl = '/matches?teamNumber='
 								+ $scope.selectedTeam + '&week='
@@ -20,9 +20,9 @@ app
 
 						var deferred = $q.defer();
 
-						var getSpares = $http({
+						var getPlayers = $http({
 							method : 'GET',
-							url : sparePlayersUrl,
+							url : playersUrl,
 							cache : 'false'
 						});
 						var getWeeks = $http({
@@ -34,19 +34,26 @@ app
 						// anything you want can go here and will safely be run
 						// on the next digest.
 
-						$q.all([ getSpares, getWeeks ]).then(function(results) {
-							// deferred.resolve(console.log(results[0].data,
-							// results[1].data));
+						$q
+								.all([ getPlayers, getWeeks ])
+								.then(
+										function(results) {
+											// deferred.resolve(console.log(results[0].data,
+											// results[1].data));
 
-							$scope.myData = results[0].data;
-							$scope.match = results[1].data;
-							$scope.AddIndex($scope.myData.players);
-							$scope.setOpponentTeam($scope.match);
-							$scope.setHome($scope.match);
+											$scope.myData = results[0].data;
+											$scope.match = results[1].data;
+											$scope
+													.AddIndex($scope.myData.players);
+											$scope
+													.setOpponentTeam($scope.match);
+											$scope.setHome($scope.match);
 
-						}, function(httperror) {
-							deferred.resolve(console.log('some error'));
-						});
+										},
+										function(httperror) {
+											deferred.resolve(console
+													.log('some error'));
+										});
 						$scope.setHome = function(match) {
 
 							if (match.homeTeam == $scope.selectedTeam) {
@@ -134,8 +141,8 @@ app
 						enableRowSelection : false,
 						multiSelect : false,
 						enableCellEditOnFocus : false,
-	
-					enableCellSelection : true,
+
+						enableCellSelection : true,
 						sortInfo : {
 							fields : [ 'idx' ],
 							directions : [ 'asc' ]
@@ -258,17 +265,7 @@ app
 							h = "false";
 						}
 
-						var roster = [];
-
-						for (i = 0; i < $scope.myData.players.length; i++)
-
-						{
-							//var obj = {};
-							//obj['name'] = $scope.myData.players[i].firstName
-							//		+ ' ' + $scope.myData.players[i].lastName;
-							//obj['average'] = $scope.myData.players[i].displayActualAverage;
-							roster.push($scope.myData.players[i]);
-						}
+						var roster = $scope.getRoster();
 
 						var date = $filter('date')(
 								$scope.weeks[$scope.selectedWeek - 1].date,
@@ -284,20 +281,52 @@ app
 								+ JSON.stringify(roster), '_blank');
 					};
 
+					$scope.SaveRoster = function() {
+						var rosterPlayers = $scope.getRoster();
+						
+						var home = $scope.position != "away";
+						
+				
+						var rosterViewModel = {teamNumber:$scope.selectedTeam, players: rosterPlayers, isHome:home}; 
+						
+						
+						$http.post('/roster', rosterViewModel);
+						success(function(data, status, headers, config) {
+						    // this callback will be called asynchronously
+						    // when the response is available
+						  }).
+						  error(function(data, status, headers, config) {
+						    // called asynchronously if an error occurs
+						    // or server returns response with an error status.
+						  });
+					};
+
+					$scope.getRoster = function() {
+
+						var roster = [];
+						for (i = 0; i < $scope.myData.players.length; i++) {
+							roster.push($scope.myData.players[i]);
+						}
+						return roster;
+					};
+
 					// Add the spare player to the list of players on the
 					// roster.
 					$scope.addSparePlayer = function() {
 
 						if ($scope.selectedSparePlayer == "new") {
-							
+
 							var len = $scope.myData.players.length
-							
-							$scope.myData.players.push({fullName:"",idx:len})
+
+							$scope.myData.players.push({
+								fullName : "",
+								idx : len
+							})
 						} else {
 							var p = JSON.parse($scope.selectedSparePlayer);
 							$scope.myData.players.push(p);
 						}
-						$scope.selectedSparePlayer ="";
+						$scope.selectedSparePlayer = "";
 					};
 
 					$scope.weekSelected = function() {
