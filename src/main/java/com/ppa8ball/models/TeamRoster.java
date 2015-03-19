@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.ppa8ball.viewmodel.RosterViewModel;
-
 @Entity
 @Table
 public class TeamRoster
@@ -43,20 +41,15 @@ public class TeamRoster
 
 	public TeamRoster()
 	{
-		
+
 	}
+
 	public TeamRoster(Team team, boolean isHome, List<Player> players)
 	{
 		this.team = team;
 		this.isHome = isHome;
 
-		int index = 0;
-
-		this.player1 = players.get(index++);
-		this.player2 = players.get(index++);
-		this.player3 = players.get(index++);
-		this.player4 = players.get(index++);
-		this.player5 = players.get(index++);
+		setPlayers(players);
 	}
 
 	public Long getId()
@@ -138,7 +131,7 @@ public class TeamRoster
 	{
 		this.player5 = player5;
 	}
-	
+
 	public void setPlayers(List<Player> players)
 	{
 		int index = 0;
