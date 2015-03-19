@@ -189,12 +189,23 @@ public class LoadStatsServlet extends HttpServlet
 
 	private void clearDatabases(Session session)
 	{
-//		String[] tables =
-//		{ "match", "stat", "player", "season", "team", "teamplayer", "teamroster", "week" };
-//
-//		for (String table : tables)
-//		{
-//			session.createSQLQuery("truncate table " + table + " cascade").executeUpdate();
-//		}
+		Session sess = HibernateUtil.getSessionFactory().openSession();
+		String[] tables =
+		{ "match", "stat", "player", "team", "teamplayer", "teamroster", "week", "season" };
+
+		for (String table : tables)
+		{
+			try
+			{
+				sess.beginTransaction();
+				sess.createSQLQuery("delete from  " + table).executeUpdate();
+				sess.getTransaction().commit();
+			} catch (Exception e)
+			{
+				int i = 0;
+				i++;
+				// swallow the exception.
+			}
+		}
 	}
 }
