@@ -47,7 +47,7 @@ public class RosterServlet extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		
+
 		// Get received JSON data from request
 		BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
 		String json = "";
@@ -57,40 +57,13 @@ public class RosterServlet extends HttpServlet
 		}
 
 		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
-		// Gson gson = new Gson();
-		// String json = gson.toJson(obj);
 
 		RosterViewModel r = gson.fromJson(json, RosterViewModel.class);
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		
-		SeasonService seasonService = new SeasonServiceImpl(session);
-		Season currentSeason = seasonService.GetCurrent();
-		
-		TeamService teamService = new TeamServiceImpl(session);
-		Team team = teamService.GetByNumber(currentSeason, r.teamNumber);
-		
-		PlayerService playerService = new PlayerServiceImpl(session);
-		
-		List<Player> players = new ArrayList<Player>();
-		
-		for (PlayerView player : r.players)
-		{
-			Player p = playerService.Get(player.getId());
-			players.add(p);
-		}
 
+		TeamRoster teamRoster = convert(session, r);
 		TeamRosterService service = new TeamRosterServiceImpl(session);
-		
-		TeamRoster teamRoster = service.GetRosterByTeam(team, r.isHome);
-		
-		if ( teamRoster == null)
-		{
-			teamRoster = new TeamRoster();
-		}
-		teamRoster.setIsHome(r.isHome);
-		teamRoster.setTeam(team);
-		teamRoster.setPlayers(players);
 
 		service.Save(teamRoster);
 	}
@@ -98,47 +71,79 @@ public class RosterServlet extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		
+
 		final String teamNumberString = req.getParameter("teamNumber");
 		final int teamNumber = Integer.parseInt(teamNumberString);
-		
+
 		final boolean isHome = Boolean.parseBoolean(req.getParameter("isHome"));
-		
+
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		
+
 		Season currentSeason = new SeasonServiceImpl(session).GetCurrent();
-		
-		TeamRosterService service = new  TeamRosterServiceImpl(session);
-		
-		Team team = new TeamServiceImpl(session).GetByNumber(currentSeason,teamNumber);
-		
+
+		TeamRosterService service = new TeamRosterServiceImpl(session);
+
+		Team team = new TeamServiceImpl(session).GetByNumber(currentSeason, teamNumber);
+
 		TeamRoster teamRoster = service.GetRosterByTeam(team, isHome);
-		
+
 		RosterViewModel roster = convert(teamRoster);
-		
+
 		JsonHelper.ReturnJson(resp, (Object) roster);
 	}
-	
+
+	private TeamRoster convert(Session session, RosterViewModel rosterViewModel)
+	{
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		Season currentSeason = seasonService.GetCurrent();
+
+		TeamService teamService = new TeamServiceImpl(session);
+		Team team = teamService.GetByNumber(currentSeason, rosterViewModel.teamNumber);
+
+		PlayerService playerService = new PlayerServiceImpl(session);
+
+		List<Player> players = new ArrayList<Player>();
+
+		for (PlayerView player : rosterViewModel.players)
+		{
+			Player p = playerService.Get(player.getId());
+			players.add(p);
+		}
+
+		TeamRosterService service = new TeamRosterServiceImpl(session);
+
+		TeamRoster teamRoster = service.GetRosterByTeam(team, rosterViewModel.isHome);
+
+		if (teamRoster == null)
+		{
+			teamRoster = new TeamRoster();
+		}
+		teamRoster.setIsHome(rosterViewModel.isHome);
+		teamRoster.setTeam(team);
+		teamRoster.setPlayers(players);
+
+		return teamRoster;
+	}
+
 	private RosterViewModel convert(TeamRoster teamRoster)
 	{
 		RosterViewModel rsm = new RosterViewModel();
-		
+
 		rsm.isHome = teamRoster.getIsHome();
 		rsm.teamNumber = teamRoster.getTeam().getNumber();
-		
-		Player[] players = {teamRoster.getPlayer1(), teamRoster.getPlayer2(),teamRoster.getPlayer3(),teamRoster.getPlayer4(),teamRoster.getPlayer5()};
-		
+
+		Player[] players =
+		{ teamRoster.getPlayer1(), teamRoster.getPlayer2(), teamRoster.getPlayer3(), teamRoster.getPlayer4(), teamRoster.getPlayer5() };
+
 		List<PlayerView> playerViews = new ArrayList<PlayerView>();
-		
+
 		for (Player player : players)
 		{
 			playerViews.add(new PlayerView(player));
 		}
-		
+
 		rsm.players = playerViews.toArray(new PlayerView[0]);
-		
+
 		return rsm;
 	}
-	
-	
 }

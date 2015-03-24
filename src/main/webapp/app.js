@@ -286,7 +286,6 @@ app
 						
 						var home = $scope.position != "away";
 						
-				
 						var rosterViewModel = {teamNumber:$scope.selectedTeam, players: rosterPlayers, isHome:home}; 
 						
 						
@@ -300,6 +299,23 @@ app
 						    // or server returns response with an error status.
 						  });
 					};
+					
+					$scope.LoadRoster = function()
+					{
+						var home = $scope.position != "away";
+						
+						$http({
+							method : 'GET',
+							url : 'roster?teamNumber='+ $scope.selectedTeam + '&isHome='+home,
+						}).success(function(data, status, headers, config) {
+
+							$scope.setRoster(data);
+
+						}).error(function(data, status, headers, config) {
+							// called asynchronously if an error occurs show
+							// here
+						});
+					};
 
 					$scope.getRoster = function() {
 
@@ -308,6 +324,22 @@ app
 							roster.push($scope.myData.players[i]);
 						}
 						return roster;
+					};
+					
+					$scope.setRoster = function(roster)
+					{
+						$scope.myData.players.length =0;
+						
+						$scope.myData.players = roster.players;
+			
+						// In order to show the correct sequence we need to
+						// update to idx values to match the array indexs and
+						// re-sort.
+						// Since we are sorting ascending, we must do the sortby
+						// twice.
+						$scope.AddIndex($scope.myData.players);
+						$scope.gridOptions.sortBy('idx');
+						$scope.gridOptions.sortBy('idx');
 					};
 
 					// Add the spare player to the list of players on the

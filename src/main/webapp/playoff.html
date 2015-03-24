@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+
+<head lang="en">
+<meta charset="utf-8">
+<title>Playoff Scoresheet Generation</title>
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
+
+<script src="app.js"></script>
+</head>
+
+<body ng-controller="MyCtrl">
+
+
+
+	<div data-ng-init="getDropDownDataFromServer()"
+		class="activeTeamsDropdownStyle" />
+
+
+	<b>Home Team:</b>
+	<select id="activeTeam" data-ng-model="selectedTeam"
+		data-ng-change="populateGridData();" style="font-size: 11px"
+		ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
+		<option value="">-- Select Home Team --</option>
+		</option>
+	</select>
+	
+	<b>Away Team:</b>
+	<select id="activeTeam" data-ng-model="selectedTeam"
+		data-ng-change="populateGridData();" style="font-size: 11px"
+		ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
+		<option value="">-- Select Home Team --</option>
+		</option>
+	</select>
+	
+	
+	<input type="radio" ng-model="position" value="home"> Home
+	<input type="radio" ng-model="position" value="away"> Away
+	<br />
+
+
+	<b>Add Spare Player</b>
+	<select id="sparePlayers" data-ng-model="selectedSparePlayer"
+		data-ng-change="addSparePlayer();" style="font-size: 11px">
+		<option value="">-- Select Spare Player --</option>
+		<option value="new">New Spare</option>
+		<option value="_blank"></option>
+		<option data-ng-repeat="player in sparePlayers.players"
+			value="{{player}}">{{player.fullName}} -
+			{{player.displayActualAverage}}</option>
+	</select>
+	<div class="gridStyle" ng-grid="gridOptions"></div>
+
+
+
+
+	<br>
+	<b>Your Opponent:</b>
+
+
+	<button ng-click="GenerateScoreSheet()" style="font-size: 16px">Generate
+		Scoresheet</button>
+
+</body>
+
+</html>
