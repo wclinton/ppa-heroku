@@ -85,7 +85,15 @@
     <url-pattern>/roster</url-pattern>
   </servlet-mapping>
   
-  
-  
+  <servlet>
+    <description></description>
+    <display-name>PlayoffScoreSheetGenerator</display-name>
+    <servlet-name>PlayoffScoreSheetGenerator</servlet-name>
+    <servlet-class>com.ppa8ball.servlets.PlayoffScoreSheetGeneratorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PlayoffScoreSheetGenerator</servlet-name>
+    <url-pattern>/PlayoffScoreSheetGenerator</url-pattern>
+  </servlet-mapping>
   
 </web-app>
