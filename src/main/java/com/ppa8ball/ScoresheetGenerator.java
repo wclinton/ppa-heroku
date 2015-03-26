@@ -77,8 +77,19 @@ public class ScoresheetGenerator
 		if (week >0)
 			form.setField(WeekField, Integer.toString(week));
 		form.setField(DateField, scoresheet.getDate());
-		form.setField(HomeTableField, scoresheet.getTable1());
-		form.setField(AwayTableField, scoresheet.getTable2());
+		
+		String table1 = scoresheet.getTable1();
+		String table2 = scoresheet.getTable2();
+		
+		if (table1 != null && table1.compareToIgnoreCase("undefined")!=0)
+			form.setField(HomeTableField, table1);
+		else
+			form.setField(HomeTableField,"");
+		
+		if (table2 !=null && table2.compareToIgnoreCase("undefined")!=0)
+			form.setField(AwayTableField, table2);
+		else
+			form.setField(AwayTableField,"");
 		
 		String awayAverageTotalString = form.getField(AwayAverageTotal).trim();
 		String homeAverageTotalString = form.getField(HomeAverageTotal).trim();
