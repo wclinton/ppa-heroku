@@ -3,6 +3,7 @@ package com.ppa8ball;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import com.itextpdf.text.DocumentException;
@@ -31,7 +32,12 @@ public class ScoresheetGenerator
 	{ "Home_Player1_Average", "Home_Player2_Average", "Home_Player3_Average", "Home_Player4_Average", "Home_Player5_Average", };
 
 	private static final String HomeAverageTotal = "Home_Average_Total";
+	
+	private static final String[] HomeLegHandicaps  = {"Home_Leg1_Handicap","Home_Leg2_Handicap","Home_Leg3_Handicap","Home_Leg4_Handicap","Home_Leg5_Handicap"};
+	
+	private static final String HomeTotalHandicap = "Home_Total_Handicap";
 
+	
 	// Away Team fields
 	private static final String AwayTeamNameField = "Away_Team_Name";
 	private static final String AwayTableField = "Away_Table";
@@ -45,6 +51,9 @@ public class ScoresheetGenerator
 	{ "Away_Player1_Name", "Away_Player2_Name", "Away_Player3_Name", "Away_Player4_Name", "Away_Player5_Name" };
 
 	private static final String AwayAverageTotal = "Away_Average_Total";
+	
+	private static final String[] AwayLegHandicaps  = {"Away_Leg1_Handicap","Away_Leg2_Handicap","Away_Leg3_Handicap","Away_Leg4_Handicap","Away_Leg5_Handicap"};
+	private static final String AwayTotalHandicap = "Away_Total_Handicap";
 
 	static public void generateScoreSheet(OutputStream writer, Scoresheet scoresheet) throws IOException, DocumentException
 	{
@@ -60,11 +69,29 @@ public class ScoresheetGenerator
 
 		SetHomeFields(form, scoresheet.getHome(), scoresheet.getHomePlayers());
 		SetAwayFields(form, scoresheet.getAway(), scoresheet.getAwayPlayers());
+		
+		//if home team has averages && away team has averages ... 
 
-		form.setField(WeekField, Integer.toString(scoresheet.getWeek()));
+		int week = scoresheet.getWeek();
+		
+		if (week >0)
+			form.setField(WeekField, Integer.toString(week));
 		form.setField(DateField, scoresheet.getDate());
 		form.setField(HomeTableField, scoresheet.getTable1());
 		form.setField(AwayTableField, scoresheet.getTable2());
+		
+		String awayAverageTotalString = form.getField(AwayAverageTotal).trim();
+		String homeAverageTotalString = form.getField(HomeAverageTotal).trim();
+		
+		if (!awayAverageTotalString.isEmpty() && !homeAverageTotalString.isEmpty())
+		{
+			Double awayAverageTotal = Double.parseDouble(awayAverageTotalString);
+			Double homeAverageTotal = Double.parseDouble(homeAverageTotalString);
+			
+			calcualteHandicap(form, homeAverageTotal, awayAverageTotal);
+			
+			
+		}
 
 		stamper.close();
 		reader.close();
@@ -92,8 +119,8 @@ public class ScoresheetGenerator
 		}
 
 		if (has5Players(players))
-			form.setField(HomeAverageTotal, Double.toString(totalAverage));
-
+			form.setField(HomeAverageTotal, Double.toString(RoundTo1Decimals(totalAverage)));
+		
 	}
 
 	static private void SetAwayFields(AcroFields form, Team team, List<PlayerView> players) throws IOException, DocumentException
@@ -119,7 +146,37 @@ public class ScoresheetGenerator
 		}
 
 		if (has5Players(players))
-			form.setField(AwayAverageTotal, Double.toString(totalAverage));
+			form.setField(AwayAverageTotal, Double.toString(RoundTo1Decimals(totalAverage)));
+	}
+	
+	private static void calcualteHandicap(AcroFields form,double homeAverage, double awayAverage) throws IOException, DocumentException
+	{
+		final double handicap = Math.round(homeAverage - awayAverage);
+		
+		if (handicap < 0.0)
+			setHomeHandicap(form, -handicap);
+		else if (handicap > 0.0)
+			setAwayHandicap(form, handicap);			
+	}
+	
+	private static void setHomeHandicap(AcroFields form,double handicap) throws IOException, DocumentException
+	{
+		for (String leg : HomeLegHandicaps)
+		{
+			form.setField(leg, roundTo0Decimals(handicap));
+		}
+		
+		form.setField(HomeTotalHandicap, roundTo0Decimals(handicap*5));
+	}
+	
+	private static void setAwayHandicap(AcroFields form,double handicap)throws IOException, DocumentException
+	{
+		for (String leg : AwayLegHandicaps)
+		{
+			form.setField(leg, roundTo0Decimals(handicap));
+		}
+		
+		form.setField(AwayTotalHandicap, roundTo0Decimals(handicap*5));
 	}
 
 	private static boolean has5Players(List<PlayerView> players)
@@ -133,5 +190,18 @@ public class ScoresheetGenerator
 				return false;
 		}
 		return true;
+	}
+	
+	private static double RoundTo1Decimals(double d)
+	{
+		double rounded = Math.round(10 * d);
+		return rounded / 10;
+	}
+	
+	private static String roundTo0Decimals(double d)
+	{
+		DecimalFormat df = new DecimalFormat("#");	
+		return df.format(Math.round(d));
+	
 	}
 }
