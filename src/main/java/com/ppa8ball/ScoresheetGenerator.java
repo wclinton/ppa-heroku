@@ -2,6 +2,8 @@ package com.ppa8ball;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -162,7 +164,14 @@ public class ScoresheetGenerator
 	
 	private static void calcualteHandicap(AcroFields form,double homeAverage, double awayAverage) throws IOException, DocumentException
 	{
-		final double handicap = Math.round(homeAverage - awayAverage);
+		//Mathematical operations on floating points is always an issue.
+		//specifically rounding issues can occur. Using BigDecimal to fix these issues.
+		
+		final BigDecimal difference =  BigDecimal.valueOf(homeAverage).subtract(BigDecimal.valueOf(awayAverage));
+						
+		BigDecimal rounded = difference.setScale(0, RoundingMode.HALF_UP);
+		
+		double handicap = rounded.doubleValue();
 		
 		if (handicap < 0.0)
 			setHomeHandicap(form, -handicap);
