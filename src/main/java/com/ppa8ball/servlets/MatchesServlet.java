@@ -50,6 +50,8 @@ public class MatchesServlet extends HttpServlet
 		 Match match = service.getMatchByWeekTeam(week, teamNumber);
 		 
 		 JsonHelper.ReturnJson(response, (Object) new MatchView(match));
+		 
+		 session.close();
 	}
 
 	/**

@@ -48,6 +48,8 @@ public class WeeksServlet extends HttpServlet
 		WeeksView weeksView = new WeeksView(weeks);
 
 		JsonHelper.ReturnJson(response, (Object) weeksView);
+		
+		session.close();
 	}
 
 	/**

@@ -176,6 +176,8 @@ public class LoadStatsServlet extends HttpServlet
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
+		
+		session.close();
 	}
 
 	/**

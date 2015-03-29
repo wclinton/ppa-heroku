@@ -66,6 +66,8 @@ public class RosterServlet extends HttpServlet
 		TeamRosterService service = new TeamRosterServiceImpl(session);
 
 		service.Save(teamRoster);
+		
+		session.close();
 	}
 
 	@Override
@@ -90,6 +92,7 @@ public class RosterServlet extends HttpServlet
 		RosterViewModel roster = convert(teamRoster);
 
 		JsonHelper.ReturnJson(resp, (Object) roster);
+		session.close();
 	}
 
 	private TeamRoster convert(Session session, RosterViewModel rosterViewModel)

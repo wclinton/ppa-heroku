@@ -79,5 +79,7 @@ public class PlayoffScoreSheetGeneratorServlet extends HttpServlet
 
 		ScoreSheetGenerator generator = new ScoreSheetGeneratorServiceImply();
 		generator.GenerateScoreSheet(response, scoresheet);
+		
+		session.close();
 	}
 }

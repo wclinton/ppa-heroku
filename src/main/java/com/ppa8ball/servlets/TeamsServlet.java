@@ -68,6 +68,8 @@ public class TeamsServlet extends HttpServlet
 
 		writer.flush();
 		writer.close();
+		
+		session.close();
 	}
 
 	/**
