@@ -79,6 +79,8 @@ public class PlayersServlet extends HttpServlet
 		}
 		
 		JsonHelper.ReturnJson(response, (Object) players);
+		
+		session.close();
 	}
 
 	/**
