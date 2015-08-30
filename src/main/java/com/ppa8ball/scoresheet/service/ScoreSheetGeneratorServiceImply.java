@@ -3,22 +3,12 @@ package com.ppa8ball.scoresheet.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.itextpdf.text.DocumentException;
 import com.ppa8ball.Scoresheet;
 import com.ppa8ball.ScoresheetGenerator;
-import com.ppa8ball.TeamRoster;
-import com.ppa8ball.db.DbDriver;
-import com.ppa8ball.stats.PlayersStat;
-import com.ppa8ball.stats.TeamStat;
-import com.ppa8ball.stats.service.PlayerService;
-import com.ppa8ball.stats.service.PlayerServiceImpl;
-import com.ppa8ball.stats.service.TeamService;
-import com.ppa8ball.stats.service.TeamsImpl;
 
 public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 {
@@ -27,11 +17,9 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 	{
 		try
 		{
-
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 			ScoresheetGenerator.generateScoreSheet(baos, scoresheet);
-
 			resp.setContentType("application/pdf");
 
 			resp.setHeader("Content-disposition", "inline; filename='javatpoint.pdf'");
@@ -53,39 +41,39 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 	
 	public void GenerateScoreSheet(HttpServletResponse resp, int homeTeamNumber, int awayTeamNumber, boolean isHome) throws IOException
 	{
-		Connection connection  = DbDriver.getConnection();
-		TeamService teamService =  new TeamsImpl(connection);
-		TeamStat homeTeamStat = teamService.Get(homeTeamNumber);
-		TeamStat awayTeamStat = teamService.Get(awayTeamNumber);
-
-		TeamRoster homeTeamRoster;
-		TeamRoster awayTeamRoster;
-		
-		PlayerService playerService = new PlayerServiceImpl(connection);
-
-		if (isHome)
-		{
-			PlayersStat homePlayersStat = playerService.GetPlayerByTeam(homeTeamNumber);
-			homeTeamRoster = new TeamRoster(homeTeamStat, homePlayersStat);
-			awayTeamRoster = new TeamRoster(awayTeamStat);
-		} else
-		{
-			PlayersStat awayPlayersStats = playerService.GetPlayerByTeam(awayTeamNumber);
-			homeTeamRoster = new TeamRoster(homeTeamStat);
-			awayTeamRoster = new TeamRoster(awayTeamStat, awayPlayersStats);
-		}
-		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
-		
-		GenerateScoreSheet(resp, scoresheet);
-		
-		try
-		{
-			connection.close();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		Connection connection  = DbDriver.getConnection();
+//		TeamService teamService =  new TeamsImpl(connection);
+//		TeamStat homeTeamStat = teamService.Get(homeTeamNumber);
+//		TeamStat awayTeamStat = teamService.Get(awayTeamNumber);
+//
+//		TeamRoster homeTeamRoster;
+//		TeamRoster awayTeamRoster;
+//		
+//		PlayerService playerService = new PlayerServiceImpl(connection);
+//
+//		if (isHome)
+//		{
+//			PlayersStat homePlayersStat = playerService.GetPlayerByTeam(homeTeamNumber);
+//			homeTeamRoster = new TeamRoster(homeTeamStat, homePlayersStat);
+//			awayTeamRoster = new TeamRoster(awayTeamStat);
+//		} else
+//		{
+//			PlayersStat awayPlayersStats = playerService.GetPlayerByTeam(awayTeamNumber);
+//			homeTeamRoster = new TeamRoster(homeTeamStat);
+//			awayTeamRoster = new TeamRoster(awayTeamStat, awayPlayersStats);
+//		}
+//		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
+//		
+//		GenerateScoreSheet(resp, scoresheet);
+//		
+//		try
+//		{
+//			connection.close();
+//		} catch (SQLException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 }

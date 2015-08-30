@@ -16,11 +16,6 @@
 <script type="text/javascript"
 	src="https://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
 	
-	
-	
-
-	
-
 <script src="app.js"></script>
 </head>
 
@@ -47,11 +42,9 @@
 			
 			<b>Your Team:</b> 
 			<select id="activeTeam"
-				data-ng-model="selectedTeam" data-ng-change="populateGridData();"
+				data-ng-model="selectedTeam" data-ng-change="populateGridAndMatchData();"
 				style="font-size: 11px" ng-options="x.number as (x.number+' - '+x.name) for x in activeTeam.teams">
 				<option value="">-- Select Active Team --</option>
-
-				
 				</option>
 			</select> 
 			<input type="radio" ng-model="position" value="home"> Home <input
@@ -72,7 +65,8 @@
 			</select> 
 			<div class="gridStyle" ng-grid="gridOptions"></div>
 			
-			
+			<button ng-click="SaveRoster()" style="font-size: 16px">Save Roster as Default</button>
+			<button ng-click="LoadRoster()" style="font-size: 16px">Load Default Roster</button>
 			
 			
 			<br> <b>Your Opponent:</b> 

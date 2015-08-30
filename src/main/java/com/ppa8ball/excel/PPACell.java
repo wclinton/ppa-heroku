@@ -1,7 +1,6 @@
 package com.ppa8ball.excel;
 import java.sql.Date;
 
-
 public interface PPACell
 {
 	public boolean IsDate();

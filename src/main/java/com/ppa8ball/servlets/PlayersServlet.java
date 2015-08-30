@@ -1,18 +1,24 @@
 package com.ppa8ball.servlets;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ppa8ball.db.DbDriver;
-import com.ppa8ball.stats.PlayersStat;
-import com.ppa8ball.stats.service.PlayerService;
-import com.ppa8ball.stats.service.PlayerServiceImpl;
+import org.hibernate.Session;
+
+import com.ppa8ball.models.Player;
+import com.ppa8ball.models.Season;
+import com.ppa8ball.models.Team;
+import com.ppa8ball.service.SeasonService;
+import com.ppa8ball.service.SeasonServiceImpl;
+import com.ppa8ball.service.TeamService;
+import com.ppa8ball.service.TeamServiceImpl;
+import com.ppa8ball.util.HibernateUtil;
+import com.ppa8ball.viewmodel.PlayerView;
+import com.ppa8ball.viewmodel.PlayersView;
 
 /**
  * Servlet implementation class PlayersServlet
@@ -37,11 +43,16 @@ public class PlayersServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		final boolean getSpares;
-		final int teamNumber;
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		
-		Connection connection  = DbDriver.getConnection();
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		
+		Season season = seasonService.GetCurrent();
+		TeamService teamService = new TeamServiceImpl(session);
 
 		final String sparesString = request.getParameter("spares");
+		
+		Team team;
 
 		if (sparesString != null)
 			getSpares = Boolean.parseBoolean(sparesString);
@@ -50,25 +61,26 @@ public class PlayersServlet extends HttpServlet
 		
 		if (getSpares)
 		{
-			teamNumber = 11;
+			team = teamService.GetSpareBySeason(season);
 		}
 		else
 		{
 			final String teamNumberString = request.getParameter("teamNumber");
-			teamNumber = Integer.parseInt(teamNumberString);
+			team = teamService.GetByNumber(season, Integer.parseInt(teamNumberString));
 		}
-
-		PlayerService service = new PlayerServiceImpl(connection);
-		PlayersStat players = service.GetPlayerByTeam(teamNumber);
+		
+		
+		
+		PlayersView players = new PlayersView();
+		
+		for (Player player : team.getPlayers())
+		{
+			players.getPlayers().add(new PlayerView(player));
+		}
+		
 		JsonHelper.ReturnJson(response, (Object) players);
-		try
-		{
-			connection.close();
-		} catch (SQLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		session.close();
 	}
 
 	/**

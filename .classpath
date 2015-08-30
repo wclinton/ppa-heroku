@@ -23,11 +23,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/shared/appengine-local-runtime-shared.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/shared/el-api.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
@@ -68,37 +63,7 @@
 			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/appengine-tools-api.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/appengine-api-labs/v1/appengine-api-labs.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/appengine-endpoints/v1/appengine-endpoints-deps.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/appengine-endpoints/v1/appengine-endpoints.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/jsr107/v1/appengine-jsr107cache-1.9.17.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/jsr107/v1/jsr107cache-1.1.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/user/appengine-api-1.0-sdk-1.9.17.jar" sourcepath="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/src/user/appengine-api-1.0-sdk-1.9.17-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
 		</attributes>
@@ -111,11 +76,13 @@
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/datanucleus/v1/datanucleus-core-1.1.5.jar" sourcepath="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/src/orm/datanucleus-core-1.1.5-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/datanucleus/v1/datanucleus-jpa-1.1.5.jar" sourcepath="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/src/orm/datanucleus-jpa-1.1.5-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/datanucleus/v1/geronimo-jpa_3.0_spec-1.1.1.jar">
@@ -131,6 +98,16 @@
 	<classpathentry kind="lib" path="/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/lib/opt/user/datanucleus/v1/jdo2-api-2.3-eb.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/Applications/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.9.17/appengine-java-sdk-1.9.17/docs/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/ppa-heroku-1.0-SNAPSHOT/WEB-INF/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="target/ppa-heroku-1.0-SNAPSHOT/WEB-INF/classes"/>

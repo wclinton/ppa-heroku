@@ -6,19 +6,9 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>Scoresheet</display-name>
-    <servlet-name>Scoresheet</servlet-name>
-    <servlet-class>com.ppa8ball.ScoresheetServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Scoresheet</servlet-name>
-    <url-pattern>/scoresheet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>LoadStats</display-name>
     <servlet-name>LoadStats</servlet-name>
-    <servlet-class>com.ppa8ball.LoadStats</servlet-class>
+    <servlet-class>com.ppa8ball.servlets.LoadStatsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoadStats</servlet-name>
@@ -28,7 +18,7 @@
     <description></description>
     <display-name>SearchPlayers</display-name>
     <servlet-name>SearchPlayers</servlet-name>
-    <servlet-class>com.ppa8ball.SearchPlayersServlet</servlet-class>
+    <servlet-class>com.ppa8ball.servlets.SearchPlayersServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>SearchPlayers</servlet-name>
@@ -38,7 +28,7 @@
     <description></description>
     <display-name>Teams</display-name>
     <servlet-name>TeamsServlet</servlet-name>
-    <servlet-class>com.ppa8ball.stats.TeamsServlet</servlet-class>
+    <servlet-class>com.ppa8ball.servlets.TeamsServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>TeamsServlet</servlet-name>
@@ -84,4 +74,26 @@
     <servlet-name>matches</servlet-name>
     <url-pattern>/matches</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>roster</display-name>
+    <servlet-name>roster</servlet-name>
+    <servlet-class>com.ppa8ball.servlets.RosterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>roster</servlet-name>
+    <url-pattern>/roster</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description></description>
+    <display-name>PlayoffScoreSheetGenerator</display-name>
+    <servlet-name>PlayoffScoreSheetGenerator</servlet-name>
+    <servlet-class>com.ppa8ball.servlets.PlayoffScoreSheetGeneratorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PlayoffScoreSheetGenerator</servlet-name>
+    <url-pattern>/PlayoffScoreSheetGenerator</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

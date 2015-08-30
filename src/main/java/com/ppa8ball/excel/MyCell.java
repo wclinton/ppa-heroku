@@ -1,16 +1,14 @@
 package com.ppa8ball.excel;
-import java.sql.Date;
 
+import java.sql.Date;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
-
 public class MyCell implements PPACell
 {
-
 	private XSSFCell cell;
-	
+
 	public MyCell(XSSFCell xssfCell)
 	{
 		this.cell = xssfCell;
@@ -25,20 +23,13 @@ public class MyCell implements PPACell
 	@Override
 	public boolean IsString()
 	{
-		if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING)
-			return true;
-		return false;
-			
+		return (cell.getCellType() == XSSFCell.CELL_TYPE_STRING);
 	}
-
-	
 
 	@Override
 	public boolean IsNumeric()
 	{
-		if (cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
-			return true;
-		return false;
+		return (cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC);
 	}
 
 	@Override
@@ -66,19 +57,19 @@ public class MyCell implements PPACell
 	{
 		int rowNum = cell.getRowIndex();
 		int cellNum = cell.getColumnIndex();
-		
+
 		XSSFSheet sheet = cell.getSheet();
-		
-		XSSFCell newCell = sheet.getRow(rowNum +1).getCell(cellNum);
-		
+
+		XSSFCell newCell = sheet.getRow(rowNum + 1).getCell(cellNum);
+
 		return new MyCell(newCell);
 	}
 
 	@Override
 	public PPACell getNextTopColumn()
 	{
-		int column = getColumnIndex() +1;
-		return new MyCell(cell.getSheet().getRow(0).getCell(column));	
+		int column = getColumnIndex() + 1;
+		return new MyCell(cell.getSheet().getRow(0).getCell(column));
 	}
 
 	@Override
@@ -96,6 +87,6 @@ public class MyCell implements PPACell
 	@Override
 	public int getIntValue()
 	{
-		return (int)cell.getNumericCellValue();
+		return (int) cell.getNumericCellValue();
 	}
 }

@@ -14,7 +14,7 @@ public class ExcelTests
 	@Test
 	public void CanLoadExcelFile()
 	{
-		InputStream stream = this.getClass().getResourceAsStream("ExcelTests.xlsx");
+		InputStream stream = getTestInputStream();
 		assertTrue(stream != null);
 		try
 		{
@@ -29,21 +29,14 @@ public class ExcelTests
 	@Test 
 	public void CanLoadSheet()
 	{
-		InputStream stream = this.getClass().getResourceAsStream("ExcelTests.xlsx");
-		assertNotNull(stream);
-		
-		Sheet sheet = new MySheet(stream, 0);
-		
+		Sheet sheet = getTestWorksheet();	
 		assertNotNull(sheet);
 	}
 	
 	@Test 
 	public void CanGetNumericCell()
-	{
-		InputStream stream = this.getClass().getResourceAsStream("ExcelTests.xlsx");
-		assertNotNull(stream);
-		
-		Sheet sheet = new MySheet(stream, 0);
+	{	
+		Sheet sheet = getTestWorksheet();	
 		
 		PPACell cell = sheet.getCell(0,0);
 		
@@ -56,10 +49,7 @@ public class ExcelTests
 	@Test
 	public void CanGetStringCell()
 	{
-		InputStream stream = this.getClass().getResourceAsStream("ExcelTests.xlsx");
-		assertNotNull(stream);
-		
-		Sheet sheet = new MySheet(stream, 0);
+		Sheet sheet = getTestWorksheet();	
 		
 		PPACell cell = sheet.getCell(0,1);
 		
@@ -72,10 +62,7 @@ public class ExcelTests
 	@Test
 	public void canGetDateCell()
 	{
-		InputStream stream = this.getClass().getResourceAsStream("ExcelTests.xlsx");
-		assertNotNull(stream);
-		
-		Sheet sheet = new MySheet(stream, 0);
+		Sheet sheet = getTestWorksheet();	
 		
 		PPACell cell = sheet.getCell(0,2);
 		
@@ -86,5 +73,42 @@ public class ExcelTests
 		Date expectedDate = new Date(2001-1900,8,15);
 		
 		assertEquals(expectedDate, v);
+	}
+	
+	@Test
+	public void canGetCellBelow()
+	{
+		Sheet sheet = getTestWorksheet();	
+		
+		PPACell cell = sheet.getCell(0,0);
+		
+		PPACell cell2 = cell.getCellBelow();
+		
+		int v = cell2.getIntValue();
+		
+		assertEquals(2, v);
+	}
+	
+	@Test
+	public void canGetCellNextRow()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(0,0);
+		
+		PPACell cell2 = cell.getNextTopColumn();
+		
+		String v = cell2.getStringValue();
+		
+		assertEquals("a",v);
+	}
+	
+	private Sheet getTestWorksheet()
+	{
+		return new MySheet(getTestInputStream(), 0);
+	}
+	
+	private InputStream getTestInputStream()
+	{
+		return this.getClass().getResourceAsStream("ExcelTests.xlsx");
 	}
 }
