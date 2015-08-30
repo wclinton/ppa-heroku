@@ -25,32 +25,28 @@ import com.ppa8ball.stats.Gender;
 
 public class Stats
 {
-	private final String StatsUrl = "http://www.ppa8ball.com/stats/";
+	private final static String StatsUrl = "http://www.ppa8ball.com/stats/";
 
 	//private final int teamNumberColumn = ColumnToInt("A");
-	private final int genderColumn = ColumnToInt("C");
-	private final int firstNameColumn = ColumnToInt("D");
-	private final int lastNameColumn = ColumnToInt("E");
-	private final int fullNameColumn = ColumnToInt("F");
-	private final int totalPointsColumn = ColumnToInt("Z");
-	private final int adjustedAverageColumn = ColumnToInt("AA");
-	private final int actualAverageColumn = ColumnToInt("AC");
-	private final int gamesPlayedColumn = ColumnToInt("AB");
-	private final int perfectNightsColumn = ColumnToInt("AD");
+	private final static int genderColumn = ColumnToInt("C");
+	private final static int firstNameColumn = ColumnToInt("D");
+	private final static int lastNameColumn = ColumnToInt("E");
+	private final static int fullNameColumn = ColumnToInt("F");
+	private final static int totalPointsColumn = ColumnToInt("Z");
+	private final static int adjustedAverageColumn = ColumnToInt("AA");
+	private final static int actualAverageColumn = ColumnToInt("AC");
+	private final static int gamesPlayedColumn = ColumnToInt("AB");
+	private final static int perfectNightsColumn = ColumnToInt("AD");
 
-	
-	private final Season season;
-	private  Sheet sheet;
-
-	public Stats(Season season)
+	public static List<Team> LoadSeasonStats(Season season)
 	{
-		this.season = season;
 		Workbook workbook;
 		try
 		{
 			workbook = Workbook.getWorkbook(getExcelSpreadSheet());
-			sheet = workbook.getSheet(1);
-			return;
+			Sheet sheet = workbook.getSheet(1);
+			
+			return loadTeamsAndPlayers(season, sheet);
 		} catch (BiffException e)
 		{
 			// TODO Auto-generated catch block
@@ -61,79 +57,10 @@ public class Stats
 			e.printStackTrace();
 			
 		}
-		
+		return null;
 	}
 
-//	public void load()
-//	{
-//		try
-//		{
-//			
-//			Workbook workbook = Workbook.getWorkbook(getExcelSpreadSheet());
-//
-//			Sheet sheet = workbook.getSheet(1);
-//
-//			getStats(sheet);
-//
-//		} catch (BiffException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	public TeamStat getTeam(int number)
-//	{
-//		for (TeamStat team : teams)
-//		{
-//			if (team.number == number)
-//				return team;
-//		}
-//		return null;
-//	}
-
-	
-
-//	public List<PlayerStat> getPlayerStat(int teamNumber, int[] playerOrder)
-//	{
-//		List<PlayerStat> teamPlayers = new ArrayList<PlayerStat>();
-//
-//		for (PlayerStat playerStat : players)
-//		{
-//			if (playerStat.teamNumber == teamNumber)
-//				teamPlayers.add(playerStat);
-//		}
-//
-//		if (playerOrder == null)
-//			return teamPlayers;
-//
-//		return sortPlayers(teamPlayers, playerOrder);
-//	}
-
-//	public List<PlayerStat> getPlayerStats()
-//	{
-//		return players;
-//	}
-//
-//	private List<PlayerStat> sortPlayers(List<PlayerStat> players, int[] playerOrder)
-//	{
-//
-//		List<PlayerStat> sortedPlayers = new ArrayList<PlayerStat>();
-//
-//		for (int index : playerOrder)
-//		{
-//			sortedPlayers.add(players.get(index - 1));
-//		}
-//
-//		return sortedPlayers;
-//
-//	}
-
-	public List<Team> loadTeams()
+	private static List<Team> loadTeamsAndPlayers(Season season, Sheet sheet)
 	{
 		List<Team> teams = new ArrayList<Team>();
 
@@ -142,9 +69,9 @@ public class Stats
 
 		while (cell.getContents() == null || cell.getContents() != "")
 		{
-			Player player = getPlayerStat(sheet, cell.getRow());
+			Player player = getPlayerStat(season, sheet, cell.getRow());
 			
-			Team team = getTeam(sheet, cell);
+			Team team = getTeam(season, sheet, cell);
 			
 			if (lastTeam == null || lastTeam.getNumber() != team.getNumber())
 			{
@@ -159,26 +86,9 @@ public class Stats
 		return teams;
 	}
 	
-//	public List<Player> loadPlayersAndStats(List<Team> teams)
-//	{
-//		
-//		List<Player> players = new ArrayList<Player>();
-//		
-//		Cell cell = sheet.getCell("A2");
-//
-//		while (cell.getContents() == null || cell.getContents() != "")
-//		{			
-//			Player player = getPlayerStat(teams,sheet, cell.getRow());
-//
-//			players.add(player);
-//
-//			cell = sheet.getCell(cell.getColumn(), cell.getRow() + 1);
-//		}
-//		
-//		return players;
-//	}
 
-	private Team getTeam(Sheet sheet, Cell cell)
+
+	private static Team getTeam(Season season, Sheet sheet, Cell cell)
 	{
 		int number = Integer.parseInt(cell.getContents());
 		String name = CellHelp.getCellToRight(sheet, cell).getContents();
@@ -197,56 +107,11 @@ public class Stats
 		return new Team(season, name, number, type);
 	}
 	
-//	List<Player> getPlayersAndStats()
-//	{
-//		private List<Player> getPlayersAndStats(Sheet sheet)
-////		{
-////			Cell cell = sheet.getCell("A2");
-//	}
 
-//	private List<Player> getPlayersAndStats(Sheet sheet)
-//	{
-//		Cell cell = sheet.getCell("A2");
-//
-//		while (cell.getContents() == null || cell.getContents() != "")
-//		{
-//
-//			TeamStat team = getTeamStat(sheet, cell);
-//			if (!teams.isEmpty())
-//			{
-//				TeamStat lastTeam = teams.get(teams.size() - 1);
-//				if (lastTeam.number != team.number)
-//					teams.add(team);
-//			}
-//
-//			else
-//				teams.add(team);
-//
-//			PlayerStat player = getPlayerStat(sheet, cell.getRow(), team.number);
-//
-//			players.add(player);
-//
-//			cell = sheet.getCell(cell.getColumn(), cell.getRow() + 1);
-//		}
-//	}
 
-//	private TeamStat getTeamStat(Sheet sheet, Cell cell)
-//	{
-//		TeamStat team = new TeamStat();
-//		team.number = Integer.parseInt(cell.getContents());
-//		Cell nameCell = CellHelp.getCellToRight(sheet, cell);
-//		team.name = nameCell.getContents();
-//		team.isSpare = team.name.equalsIgnoreCase("spare");
-//		team.isNoPlayer = team.name.equalsIgnoreCase("No Player");
-//		team.isNormal = (!team.isNoPlayer && !team.isSpare);
-//		return team;
-//	}
-
-	private Player getPlayerStat(Sheet sheet, int row)
+	private static Player getPlayerStat(Season season, Sheet sheet, int row)
 	{
-		
-		
-		
+			
 		String firstName = sheet.getCell(firstNameColumn, row).getContents().trim();
 		String lastName = sheet.getCell(lastNameColumn, row).getContents().trim();
 		String fullName = sheet.getCell(fullNameColumn, row).getContents().trim();
@@ -283,7 +148,7 @@ public class Stats
 		return ColumnToInt("Z") + 1 + c - 'A';
 	}
 
-	private double getDecimalValue(Cell cell)
+	private static double getDecimalValue(Cell cell)
 	{
 		CellType type = cell.getType();
 
@@ -297,7 +162,7 @@ public class Stats
 
 	}
 
-	private Gender getGender(String s)
+	private static Gender getGender(String s)
 	{
 
 		if (s.compareToIgnoreCase("M") == 0 || s.compareToIgnoreCase("male") == 0)
@@ -310,7 +175,7 @@ public class Stats
 		return Gender.Unknown;
 	}
 
-	private InputStream getExcelSpreadSheet()
+	private static InputStream getExcelSpreadSheet()
 	{
 		try
 		{
@@ -344,12 +209,12 @@ public class Stats
 		return null;
 	}
 
-	private URL getStatsUrl(int year, int week) throws MalformedURLException
+	private static URL getStatsUrl(int year, int week) throws MalformedURLException
 	{
 		return new URL(StatsUrl + year + "/week" + String.format("%02d", week) + ".xls");
 	}
 
-	static boolean urlExists(URL url)
+	private static boolean urlExists(URL url)
 	{
 		try
 		{
@@ -364,15 +229,5 @@ public class Stats
 			e.printStackTrace();
 			return false;
 		}
-	}
-	
-	static Team getTeamByNumber(List<Team>teams, int teamNumber)
-	{
-		for (Team team : teams)
-		{
-			if (team.getNumber() == teamNumber)
-				return team;
-		}
-		return null;
 	}
 }

@@ -17,6 +17,8 @@ import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
 import com.ppa8ball.schedule.Load;
+import com.ppa8ball.service.DataProcessService;
+import com.ppa8ball.service.DataProcessServiceImpl;
 import com.ppa8ball.service.MatchService;
 import com.ppa8ball.service.MatchServiceImpl;
 import com.ppa8ball.service.PlayerService;
@@ -45,7 +47,9 @@ public class LoadStatsServlet extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		Season season = new Season(seasonYear);
-		processData(season);
+		DataProcessService service = new DataProcessServiceImpl();
+		
+		service.Process(season);
 		
 		String info = getDataInfo(season);
 		response.setContentType("text/plain");
@@ -54,6 +58,15 @@ public class LoadStatsServlet extends HttpServlet
 		writer.flush();
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// TODO Auto-generated method stub
+	}
+	
 	private String getDataInfo(Season season) throws IOException
 	{
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -73,76 +86,5 @@ public class LoadStatsServlet extends HttpServlet
 		session.close();
 		
 		return s;
-	}
-
-	private void processData(Season season) 
-	{
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		clearDatabases(session);
-
-		SeasonService seasonService = new SeasonServiceImpl(session);
-		seasonService.Save(season);
-
-		// Load all the teams and players
-		Stats stats = new Stats(season);
-		List<Team> teams = stats.loadTeams();
-
-		PlayerService playerService = new PlayerServiceImpl(session);
-		for (Team team : teams)
-		{
-			playerService.Save(team.getPlayers());
-		}
-
-		TeamService teamService = new TeamServiceImpl(session);
-		teamService.Save(teams);
-
-		// Load all the Year weeks into the season.
-		List<Week> weeks = new Load(session, season).LoadFromExcel();
-
-		WeekService weekService = new WeekServiceImpl(session);
-		weekService.Save(weeks);
-
-		MatchService matchService = new MatchServiceImpl(session);
-		for (Week week : weeks)
-		{
-			matchService.Save(week.getMatches());
-		}
-
-		season.getWeeks().addAll(weeks);
-		seasonService.Save(season);
-		
-		session.close();
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		// TODO Auto-generated method stub
-	}
-
-	private void clearDatabases(Session session)
-	{
-		Session sess = HibernateUtil.getSessionFactory().openSession();
-		String[] tables =
-		{ "match", "stat", "player", "team", "teamplayer", "teamroster", "week", "season" };
-
-		for (String table : tables)
-		{
-			try
-			{
-				sess.beginTransaction();
-				sess.createSQLQuery("delete from  " + table).executeUpdate();
-				sess.getTransaction().commit();
-			} catch (Exception e)
-			{
-				int i = 0;
-				i++;
-				// swallow the exception.
-			}
-		}
 	}
 }

@@ -11,10 +11,8 @@ import com.ppa8ball.models.Team;
 
 public class PlayerServiceImpl implements PlayerService
 {
-	
 	private Session session;
 	
-
 	public PlayerServiceImpl(Session session)
 	{
 		super();

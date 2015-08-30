@@ -20,6 +20,7 @@ public class Season
 	@GeneratedValue
 	private Long id;
 	private String description;
+	//private Week lastWeekPlayed;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn
