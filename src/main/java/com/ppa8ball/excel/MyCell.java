@@ -17,19 +17,40 @@ public class MyCell implements PPACell
 	@Override
 	public boolean IsDate()
 	{
+		if (IsString())
+			return false;
 		return HSSFDateUtil.isCellDateFormatted(cell);
 	}
 
 	@Override
 	public boolean IsString()
 	{
+		if (cell == null)
+			return false;
+		if (cell.getCellType() == XSSFCell.CELL_TYPE_FORMULA)
+			return cell.getCachedFormulaResultType() == XSSFCell.CELL_TYPE_STRING;
+		
 		return (cell.getCellType() == XSSFCell.CELL_TYPE_STRING);
 	}
 
 	@Override
 	public boolean IsNumeric()
 	{
+		if (cell == null)
+			return false;
+		
+		if (cell.getCellType() == XSSFCell.CELL_TYPE_FORMULA)
+			return cell.getCachedFormulaResultType() == XSSFCell.CELL_TYPE_NUMERIC;
+		
 		return (cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC);
+	}
+
+	@Override
+	public boolean hasData()
+	{
+		if (cell == null)
+			return false;
+		return (IsDate() || IsString() || IsNumeric());
 	}
 
 	@Override
@@ -88,5 +109,19 @@ public class MyCell implements PPACell
 	public int getIntValue()
 	{
 		return (int) cell.getNumericCellValue();
+	}
+
+	@Override
+	public PPACell getCellToRight()
+	{
+		int column = getColumnIndex() + 1;
+		int row = getRowIndex();
+		return new MyCell(cell.getSheet().getRow(row).getCell(column));
+	}
+
+	@Override
+	public double getDoubleValue()
+	{
+		return cell.getNumericCellValue();
 	}
 }

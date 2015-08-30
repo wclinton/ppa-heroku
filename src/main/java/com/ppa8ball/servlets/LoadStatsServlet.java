@@ -79,8 +79,9 @@ public class LoadStatsServlet extends HttpServlet
 		List<Player> players = playerService.Get();
 		
 		String s= "Data uploaded for season:"+season.getDescription();
-		
+		s+="\n";
 		s+="Teams:"+savedTeams.size();
+		s+="\n";
 		s+="Players:"+ players.size();
 		
 		session.close();

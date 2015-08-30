@@ -8,26 +8,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import jxl.Cell;
-import jxl.CellType;
-import jxl.NumberCell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-
+import com.ppa8ball.excel.MySheet;
+import com.ppa8ball.excel.PPACell;
+import com.ppa8ball.excel.Sheet;
 import com.ppa8ball.models.Player;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Stat;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.TeamType;
-import com.ppa8ball.stats.CellHelp;
 import com.ppa8ball.stats.Gender;
 
 public class Stats
 {
 	private final static String StatsUrl = "http://www.ppa8ball.com/stats/";
 
-	//private final int teamNumberColumn = ColumnToInt("A");
+	// private final int teamNumberColumn = ColumnToInt("A");
 	private final static int genderColumn = ColumnToInt("C");
 	private final static int firstNameColumn = ColumnToInt("D");
 	private final static int lastNameColumn = ColumnToInt("E");
@@ -40,58 +35,45 @@ public class Stats
 
 	public static List<Team> LoadSeasonStats(Season season)
 	{
-		Workbook workbook;
-		try
-		{
-			workbook = Workbook.getWorkbook(getExcelSpreadSheet());
-			Sheet sheet = workbook.getSheet(1);
-			
-			return loadTeamsAndPlayers(season, sheet);
-		} catch (BiffException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		}
-		return null;
+		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
+		return loadTeamsAndPlayers(season, sheet);
 	}
 
 	private static List<Team> loadTeamsAndPlayers(Season season, Sheet sheet)
 	{
 		List<Team> teams = new ArrayList<Team>();
 
-		Team lastTeam=null;
-		Cell cell = sheet.getCell("A2");
+		Team lastTeam = null;
+		PPACell cell = sheet.getCell(1,0);
+		
+		
 
-		while (cell.getContents() == null || cell.getContents() != "")
+		while (cell.getIntValue() != 12)
 		{
-			Player player = getPlayerStat(season, sheet, cell.getRow());
-			
+			Player player = getPlayerStat(season, sheet, cell.getRowIndex());
+
 			Team team = getTeam(season, sheet, cell);
-			
+
 			if (lastTeam == null || lastTeam.getNumber() != team.getNumber())
 			{
 				teams.add(team);
 				lastTeam = team;
 			}
-			
+
 			lastTeam.getPlayers().add(player);
-			cell = sheet.getCell(cell.getColumn(), cell.getRow() + 1);
+			cell = cell.getCellBelow();
 		}
 		
+		Team noPlayer = getTeam(season,sheet,cell);
+		
+		teams.add(noPlayer);
 		return teams;
 	}
-	
 
-
-	private static Team getTeam(Season season, Sheet sheet, Cell cell)
+	private static Team getTeam(Season season, Sheet sheet, PPACell cell)
 	{
-		int number = Integer.parseInt(cell.getContents());
-		String name = CellHelp.getCellToRight(sheet, cell).getContents();
+		int number = cell.getIntValue();
+		String name = cell.getCellToRight().getStringValue();
 
 		final TeamType type;
 
@@ -106,28 +88,25 @@ public class Stats
 
 		return new Team(season, name, number, type);
 	}
-	
-
 
 	private static Player getPlayerStat(Season season, Sheet sheet, int row)
 	{
-			
-		String firstName = sheet.getCell(firstNameColumn, row).getContents().trim();
-		String lastName = sheet.getCell(lastNameColumn, row).getContents().trim();
-		String fullName = sheet.getCell(fullNameColumn, row).getContents().trim();
-		Gender gender = getGender(sheet.getCell(genderColumn, row).getContents());
-		Player player = new Player(firstName, lastName, fullName, gender);
-	
-		double actualAverage = getDecimalValue(sheet.getCell(actualAverageColumn, row));
-		double adjustedAverage = getDecimalValue(sheet.getCell(adjustedAverageColumn, row));
 
-		int totalPoints = Integer.parseInt(sheet.getCell(totalPointsColumn, row).getContents());
-		int gamesPlayed = Integer.parseInt(sheet.getCell(gamesPlayedColumn, row).getContents());
-		int perfectNights = Integer.parseInt(sheet.getCell(perfectNightsColumn, row).getContents());
-		
+		String firstName = sheet.getCell(row,firstNameColumn).getStringValue();
+		String lastName = sheet.getCell(row, lastNameColumn).getStringValue().trim();
+		String fullName = sheet.getCell(row, fullNameColumn).getStringValue().trim();
+		Gender gender = getGender(sheet.getCell(row, genderColumn).getStringValue());
+		Player player = new Player(firstName, lastName, fullName, gender);
+
+		double actualAverage = sheet.getCell(row, actualAverageColumn).getDoubleValue();
+		double adjustedAverage = sheet.getCell(row, adjustedAverageColumn).getDoubleValue();
+
+		int totalPoints = sheet.getCell(row, totalPointsColumn).getIntValue();
+		int gamesPlayed = sheet.getCell(row, gamesPlayedColumn).getIntValue();
+		int perfectNights = sheet.getCell(row, perfectNightsColumn).getIntValue();
+
 		Stat stat = new Stat(totalPoints, gamesPlayed, adjustedAverage, actualAverage, perfectNights, season);
-		
-		
+
 		player.getStats().add(stat);
 
 		return player;
@@ -148,19 +127,7 @@ public class Stats
 		return ColumnToInt("Z") + 1 + c - 'A';
 	}
 
-	private static double getDecimalValue(Cell cell)
-	{
-		CellType type = cell.getType();
-
-		if (type != CellType.NUMBER_FORMULA && type != CellType.NUMBER)
-		{
-			return 0.0;
-		}
-
-		NumberCell nc = (NumberCell) cell;
-		return nc.getValue();
-
-	}
+	
 
 	private static Gender getGender(String s)
 	{
@@ -211,7 +178,7 @@ public class Stats
 
 	private static URL getStatsUrl(int year, int week) throws MalformedURLException
 	{
-		return new URL(StatsUrl + year + "/week" + String.format("%02d", week) + ".xls");
+		return new URL(StatsUrl + year + "/week" + String.format("%02d", week) + ".xlsx");
 	}
 
 	private static boolean urlExists(URL url)

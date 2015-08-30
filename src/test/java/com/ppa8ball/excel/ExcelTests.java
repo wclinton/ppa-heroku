@@ -59,6 +59,18 @@ public class ExcelTests
 		
 		assertEquals("a", v);
 	}
+	
+	
+	@Test
+	public void CanDetermineTextCellIsNotDate()
+	{
+		Sheet sheet = getTestWorksheet();	
+		
+		PPACell cell = sheet.getCell(0,1);
+		assertFalse(cell.IsDate());
+	}
+	
+	
 	@Test
 	public void canGetDateCell()
 	{
@@ -100,6 +112,69 @@ public class ExcelTests
 		String v = cell2.getStringValue();
 		
 		assertEquals("a",v);
+	}
+	
+	@Test
+	public void canDetermineIntCellHasData()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(0,0);
+		
+		assertTrue(cell.hasData());
+	}
+	
+	@Test
+	public void canDetermineTexttCellHasData()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(0,1);
+		
+		assertTrue(cell.hasData());
+	}
+	
+	@Test
+	public void canDetermineDateCellHasData()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(0,2);
+		
+		assertTrue(cell.hasData());
+	}
+	
+	@Test
+	public void canDetermineNullCellHasNoData()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(0,3);
+		
+		assertFalse(cell.hasData());
+	}
+	
+	@Test
+	public void canDetermineEmptyCellHasNoData()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(1,3);
+		
+		assertFalse(cell.hasData());
+	}
+	
+	@Test
+	public void CanDetermineIntegerFormula()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(7,0);
+		
+		assertTrue(cell.IsNumeric());
+	}
+	
+	@Test
+	public void CanDetermineStringFormula()
+	{
+		Sheet sheet = getTestWorksheet();	
+		PPACell cell = sheet.getCell(7,1);
+		
+		assertTrue(cell.IsString());
 	}
 	
 	private Sheet getTestWorksheet()
