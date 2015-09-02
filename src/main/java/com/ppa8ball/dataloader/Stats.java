@@ -22,7 +22,7 @@ public class Stats
 {
 	private final static String StatsUrl = "http://www.ppa8ball.com/stats/";
 
-	// private final int teamNumberColumn = ColumnToInt("A");
+	private final static int teamNumberColumn = ColumnToInt("A");
 	private final static int genderColumn = ColumnToInt("C");
 	private final static int firstNameColumn = ColumnToInt("D");
 	private final static int lastNameColumn = ColumnToInt("E");
@@ -44,9 +44,7 @@ public class Stats
 		List<Team> teams = new ArrayList<Team>();
 
 		Team lastTeam = null;
-		PPACell cell = sheet.getCell(1,0);
-		
-		
+		PPACell cell = sheet.getCell(1, teamNumberColumn);
 
 		while (cell.getIntValue() != 12)
 		{
@@ -63,9 +61,9 @@ public class Stats
 			lastTeam.getPlayers().add(player);
 			cell = cell.getCellBelow();
 		}
-		
-		Team noPlayer = getTeam(season,sheet,cell);
-		
+
+		Team noPlayer = getTeam(season, sheet, cell);
+
 		teams.add(noPlayer);
 		return teams;
 	}
@@ -92,7 +90,7 @@ public class Stats
 	private static Player getPlayerStat(Season season, Sheet sheet, int row)
 	{
 
-		String firstName = sheet.getCell(row,firstNameColumn).getStringValue();
+		String firstName = sheet.getCell(row, firstNameColumn).getStringValue();
 		String lastName = sheet.getCell(row, lastNameColumn).getStringValue().trim();
 		String fullName = sheet.getCell(row, fullNameColumn).getStringValue().trim();
 		Gender gender = getGender(sheet.getCell(row, genderColumn).getStringValue());
@@ -126,8 +124,6 @@ public class Stats
 
 		return ColumnToInt("Z") + 1 + c - 'A';
 	}
-
-	
 
 	private static Gender getGender(String s)
 	{
