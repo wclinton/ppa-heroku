@@ -27,8 +27,7 @@ public class Stat
 	@JoinColumn
 	private Season season;
 	
-	
-	
+
 	public Stat()
 	{
 	}

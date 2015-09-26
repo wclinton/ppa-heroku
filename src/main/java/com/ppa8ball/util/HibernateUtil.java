@@ -19,7 +19,7 @@ public class HibernateUtil
 			dbUrl += "?user=" + username;
 			dbUrl += "&password=" + password;
 
-			//only add the ssl if we are running in production.
+			// only add the ssl if we are running in production.
 			if (!dbUri.getHost().contains("localhost"))
 			{
 				dbUrl += "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";

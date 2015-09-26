@@ -12,16 +12,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table
+
 public class Season
 {
 	@Id
 	@GeneratedValue
 	private Long id;
 	private String description;
+	//private Week lastWeekPlayed;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	
 	@JoinColumn
 	private List<Week> weeks;
 	

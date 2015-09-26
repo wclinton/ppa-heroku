@@ -11,10 +11,8 @@ import com.ppa8ball.models.Team;
 
 public class PlayerServiceImpl implements PlayerService
 {
-	
 	private Session session;
 	
-
 	public PlayerServiceImpl(Session session)
 	{
 		super();
@@ -60,5 +58,24 @@ public class PlayerServiceImpl implements PlayerService
 	public Player Get(long id)
 	{
 		 return  (Player) session.get(Player.class, id);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Player> Get()
+	{
+		return (List<Player>) session.createCriteria(Player.class).list();
+	}
+	
+	@Override
+	public Player GetByName(String firstName, String lastName)
+	{
+		Criteria cr = session.createCriteria(Player.class);
+		cr.add(Restrictions.eq("player.firstname", firstName));
+		cr.add(Restrictions.eq("player.lastname", lastName));
+		
+		cr.setMaxResults(1);
+		
+		return (Player) cr.uniqueResult();
 	}
 }
