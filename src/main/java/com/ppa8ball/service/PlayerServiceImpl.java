@@ -66,4 +66,16 @@ public class PlayerServiceImpl implements PlayerService
 	{
 		return (List<Player>) session.createCriteria(Player.class).list();
 	}
+	
+	@Override
+	public Player GetByName(String firstName, String lastName)
+	{
+		Criteria cr = session.createCriteria(Player.class);
+		cr.add(Restrictions.eq("player.firstname", firstName));
+		cr.add(Restrictions.eq("player.lastname", lastName));
+		
+		cr.setMaxResults(1);
+		
+		return (Player) cr.uniqueResult();
+	}
 }

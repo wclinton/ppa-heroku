@@ -14,4 +14,5 @@ public interface PlayerService
 	public List<Player> GetByTeam(Team team);
 	public List<Player>GetSpare();
 	public List<Player>Get();
+	public Player GetByName(String firstName, String lastName);
 }

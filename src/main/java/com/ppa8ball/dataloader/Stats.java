@@ -32,6 +32,37 @@ public class Stats
 	private final static int actualAverageColumn = ColumnToInt("AC");
 	private final static int gamesPlayedColumn = ColumnToInt("AB");
 	private final static int perfectNightsColumn = ColumnToInt("AD");
+	
+	private List<Team> teams;
+	private List<Player> players;
+	private List<Stat> stats;
+	
+	
+	public Stats()
+	{
+		teams = new ArrayList<Team>();
+		players = new ArrayList<Player>();
+	}
+	
+	public void Process(Season season)
+	{
+		LoadSeasonStats(season);
+	}
+	
+	public List<Team> GetTeams()
+	{
+		return teams;
+	}
+	
+	public List<Player> GetPlayers()
+	{
+		return players;
+	}
+	
+	public List<Stat> GetStats()
+	{
+		return stats;
+	}
 
 	public static List<Team> LoadSeasonStats(Season season)
 	{
@@ -142,7 +173,6 @@ public class Stats
 	{
 		try
 		{
-
 			final int year = 2014;
 
 			URL url = null;

@@ -59,14 +59,14 @@ public class DataProcessServiceImpl implements DataProcessService
 	{
 		Session sess = HibernateUtil.getSessionFactory().openSession();
 		String[] tables =
-		{ "match", "stat", "player", "team", "teamplayer", "teamroster", "week", "season" };
+		{ "team","season","match", "stat","player", "teamplayer", "teamroster", "week" };
 
 		for (String table : tables)
 		{
 			try
 			{
 				sess.beginTransaction();
-				sess.createSQLQuery("delete from  " + table).executeUpdate();
+				sess.createSQLQuery("TRUNCATE TABLE " + table + " CASCADE").executeUpdate();
 				sess.getTransaction().commit();
 			} catch (Exception e)
 			{
