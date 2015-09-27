@@ -28,8 +28,6 @@
 		<mapping class="com.ppa8ball.models.Stat" />
 		<mapping class="com.ppa8ball.models.Season" />
 		<mapping class="com.ppa8ball.models.Team" />
-		<mapping class="com.ppa8ball.models.TeamPlayer" />
-		<mapping class="com.ppa8ball.models.TeamRoster" />
 		<mapping class="com.ppa8ball.models.Week" />
 		<mapping class="com.ppa8ball.models.Match" />
 

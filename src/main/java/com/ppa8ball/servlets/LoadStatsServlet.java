@@ -37,7 +37,7 @@ import com.ppa8ball.util.HibernateUtil;
 public class LoadStatsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private static final String seasonYear = "2014-2015";
+	private static final int seasonStartYear = 2014;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -46,7 +46,7 @@ public class LoadStatsServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		Season season = new Season(seasonYear);
+		Season season = new Season(seasonStartYear);
 		DataProcessService service = new DataProcessServiceImpl();
 		
 		service.Process(season);

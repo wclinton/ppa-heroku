@@ -73,18 +73,7 @@
   <servlet-mapping>
     <servlet-name>matches</servlet-name>
     <url-pattern>/matches</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>roster</display-name>
-    <servlet-name>roster</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.RosterServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>roster</servlet-name>
-    <url-pattern>/roster</url-pattern>
-  </servlet-mapping>
-  
+  </servlet-mapping> 
   <servlet>
     <description></description>
     <display-name>PlayoffScoreSheetGenerator</display-name>
