@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,9 +39,17 @@ public class Team
 	@JoinColumn
 	private Season season;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn
-	List<Player> players;
+//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinColumn (name = "TEAM_ID")
+//	List<Player> players;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "team_player", 
+	joinColumns = { 
+		@JoinColumn(name = "TEAM_ID", nullable = false, updatable = false) }, 
+		inverseJoinColumns = { @JoinColumn(name = "PLAYER_ID", 
+				nullable = false, updatable = false) })
+	private List<Player> players;
 
 	public Team()
 	{

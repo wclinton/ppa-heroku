@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -22,7 +24,6 @@ import com.ppa8ball.stats.Gender;
 
 @Entity
 @Table
-
 public class Player
 {
 	@Id
@@ -37,13 +38,16 @@ public class Player
 	private Gender gender;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn
+	@JoinColumn (name = "PLAYER_ID")
 	private List<Stat> stats;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TEAM_ID", nullable = false)
-	private Team team;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "TEAM_ID", nullable = false)
+//	private Team team;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "players")
+	private List<Team> teams;
 	
 	
 	
