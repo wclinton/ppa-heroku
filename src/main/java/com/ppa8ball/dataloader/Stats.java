@@ -6,7 +6,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ppa8ball.excel.MySheet;
 import com.ppa8ball.excel.PPACell;
@@ -33,41 +35,76 @@ public class Stats
 	private final static int gamesPlayedColumn = ColumnToInt("AB");
 	private final static int perfectNightsColumn = ColumnToInt("AD");
 	
-	private List<Team> teams;
-	private List<Player> players;
-	private List<Stat> stats;
-	
-	
-	public Stats()
-	{
-		teams = new ArrayList<Team>();
-		players = new ArrayList<Player>();
-	}
-	
 	public void Process(Season season)
 	{
 		LoadSeasonStats(season);
 	}
 	
-	public List<Team> GetTeams()
-	{
-		return teams;
-	}
-	
-	public List<Player> GetPlayers()
-	{
-		return players;
-	}
-	
-	public List<Stat> GetStats()
-	{
-		return stats;
-	}
-
 	public static List<Team> LoadSeasonStats(Season season)
 	{
 		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
 		return loadTeamsAndPlayers(season, sheet);
+	}
+	
+	public static List<Team> LoadTeams(Season season)
+	{
+		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
+		return loadTeams(season, sheet);
+	}
+	
+	public static Map<Player, Integer> LoadPlayers(Season season)
+	{
+		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
+		return loadPlayers(season,sheet);
+	}
+	
+	private static List<Team> loadTeams(Season season, Sheet sheet)
+	{
+		List<Team> teams = new ArrayList<Team>();
+
+		Team lastTeam = null;
+		PPACell cell = sheet.getCell(1, teamNumberColumn);
+
+		while (cell.getIntValue() != 12)
+		{
+			//Player player = getPlayerStat(season, sheet, cell.getRowIndex());
+
+			Team team = getTeam(season, sheet, cell);
+
+			if (lastTeam == null || lastTeam.getNumber() != team.getNumber())
+			{
+				teams.add(team);
+				lastTeam = team;
+			}
+
+			//lastTeam.getPlayers().add(player);
+			cell = cell.getCellBelow();
+		}
+
+		Team noPlayer = getTeam(season, sheet, cell);
+
+		teams.add(noPlayer);
+		return teams;
+	}
+	
+	private static Map<Player, Integer> loadPlayers(Season season, Sheet sheet)
+	{
+		Map<Player,Integer> map= new HashMap<Player,Integer>();
+		
+		PPACell cell = sheet.getCell(1, teamNumberColumn);
+
+		while (cell.getIntValue() != 12)
+		{
+			Player player = getPlayerStat(season, sheet, cell.getRowIndex());
+
+			Team team = getTeam(season, sheet, cell);
+			
+			map.put(player, team.getNumber());
+
+					
+			cell = cell.getCellBelow();
+		}
+		return map;
 	}
 
 	private static List<Team> loadTeamsAndPlayers(Season season, Sheet sheet)

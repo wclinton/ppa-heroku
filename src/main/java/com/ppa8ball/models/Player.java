@@ -125,6 +125,13 @@ public class Player
 	{
 		this.stats = stats;
 	}
+	
+	public List<Team> getTeams()
+	{
+		if (teams == null)
+			teams = new ArrayList<Team>();
+		return teams;
+	}
 
 	@Override
 	public String toString()

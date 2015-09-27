@@ -29,7 +29,7 @@ public class SeasonServiceImpl implements SeasonService
 	public Season GetCurrent()
 	{
 		Criteria cr = session.createCriteria(Season.class);
-		cr.addOrder(Order.asc("description"));
+		cr.addOrder(Order.asc("startYear"));
 
 		@SuppressWarnings("unchecked")
 		List<Season>  season = cr.list();

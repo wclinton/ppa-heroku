@@ -71,8 +71,8 @@ public class PlayerServiceImpl implements PlayerService
 	public Player GetByName(String firstName, String lastName)
 	{
 		Criteria cr = session.createCriteria(Player.class);
-		cr.add(Restrictions.eq("player.firstname", firstName));
-		cr.add(Restrictions.eq("player.lastname", lastName));
+		cr.add(Restrictions.eq("firstName", firstName));
+		cr.add(Restrictions.eq("lastName", lastName));
 		
 		cr.setMaxResults(1);
 		
