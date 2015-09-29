@@ -48,6 +48,17 @@ public class DataProcessServiceImpl implements DataProcessService
 		//get all the players and the stats
 		PlayerService playerService = new PlayerServiceImpl(session);
 		
+		int lastStatWeek = Stats.GetLatestStatWeek(season);
+		
+		if (lastStatWeek != -1)
+		{
+			WeekService weekService = new WeekServiceImpl(session);
+			Week lastWeek = weekService.getWeekbyNumber(lastStatWeek);
+			season.setLastStatWeek(lastWeek);
+			seasonService.Save(season);
+		}
+		
+		
 		Map<Player,Integer> playerMap = Stats.LoadPlayers(season);
 		
 		for (Map.Entry<Player, Integer> entry : playerMap.entrySet()) 

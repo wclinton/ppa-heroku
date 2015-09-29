@@ -42,20 +42,45 @@ public class Stats
 	
 	public static List<Team> LoadSeasonStats(Season season)
 	{
-		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
+		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
 		return loadTeamsAndPlayers(season, sheet);
 	}
 	
 	public static List<Team> LoadTeams(Season season)
 	{
-		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
+		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
 		return loadTeams(season, sheet);
 	}
 	
 	public static Map<Player, Integer> LoadPlayers(Season season)
 	{
-		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
+		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
 		return loadPlayers(season,sheet);
+	}
+	
+	public static int GetLatestStatWeek(Season season)
+	{
+		try
+		{
+			URL url = null;
+
+			for (int i = 20; i > 0; i--)
+			{
+				url = getStatsUrl(season, i);
+
+				if (urlExists(url))
+					return i;
+			}
+		} catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
 	}
 	
 	private static List<Team> loadTeams(Season season, Sheet sheet)
@@ -206,7 +231,7 @@ public class Stats
 		return Gender.Unknown;
 	}
 
-	private static InputStream getExcelSpreadSheet()
+	private static InputStream getExcelSpreadSheet(Season season)
 	{
 		try
 		{
@@ -216,7 +241,7 @@ public class Stats
 
 			for (int i = 20; i > 0; i--)
 			{
-				url = getStatsUrl(year, i);
+				url = getStatsUrl(season, i);
 
 				if (urlExists(url))
 					break;
@@ -239,9 +264,9 @@ public class Stats
 		return null;
 	}
 
-	private static URL getStatsUrl(int year, int week) throws MalformedURLException
+	private static URL getStatsUrl(Season season, int week) throws MalformedURLException
 	{
-		return new URL(StatsUrl + year + "/week" + String.format("%02d", week) + ".xlsx");
+		return new URL(StatsUrl + season.getStartYear() + "/week" + String.format("%02d", week) + ".xlsx");
 	}
 
 	private static boolean urlExists(URL url)

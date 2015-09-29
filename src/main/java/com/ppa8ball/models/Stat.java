@@ -26,7 +26,6 @@ public class Stat
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn
 	private Season season;
-	
 
 	public Stat()
 	{
