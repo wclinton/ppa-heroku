@@ -11,7 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,6 +28,8 @@ public class Season
 	private int startYear;
 	private int endYear;
 	private String description;
+	private boolean complete;
+	private Week lastStatWeek;
 	private List<Week> weeks;
 	
 	//Default constructor
@@ -112,6 +116,30 @@ public class Season
 	{
 		this.description = description;
 	}
+	
+	@Transient
+	public boolean isComplete()
+	{
+		return false;
+	}
+	
+	public void setComplete(boolean complete)
+	{
+		this.complete = complete;
+	}
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn
+	public Week getLastStatWeek()
+	{
+		return lastStatWeek;
+	}
+	
+	public void setLastStatWeek(Week week)
+	{
+		this.lastStatWeek = week;
+	}
+	
 
 	@Override
 	public String toString()

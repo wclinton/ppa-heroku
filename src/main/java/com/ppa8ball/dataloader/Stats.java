@@ -6,7 +6,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ppa8ball.excel.MySheet;
 import com.ppa8ball.excel.PPACell;
@@ -33,41 +35,101 @@ public class Stats
 	private final static int gamesPlayedColumn = ColumnToInt("AB");
 	private final static int perfectNightsColumn = ColumnToInt("AD");
 	
-	private List<Team> teams;
-	private List<Player> players;
-	private List<Stat> stats;
-	
-	
-	public Stats()
-	{
-		teams = new ArrayList<Team>();
-		players = new ArrayList<Player>();
-	}
-	
 	public void Process(Season season)
 	{
 		LoadSeasonStats(season);
 	}
 	
-	public List<Team> GetTeams()
+	public static List<Team> LoadSeasonStats(Season season)
 	{
+		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
+		return loadTeamsAndPlayers(season, sheet);
+	}
+	
+	public static List<Team> LoadTeams(Season season)
+	{
+		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
+		return loadTeams(season, sheet);
+	}
+	
+	public static Map<Player, Integer> LoadPlayers(Season season)
+	{
+		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
+		return loadPlayers(season,sheet);
+	}
+	
+	public static int GetLatestStatWeek(Season season)
+	{
+		try
+		{
+			URL url = null;
+
+			for (int i = 20; i > 0; i--)
+			{
+				url = getStatsUrl(season, i);
+
+				if (urlExists(url))
+					return i;
+			}
+		} catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	private static List<Team> loadTeams(Season season, Sheet sheet)
+	{
+		List<Team> teams = new ArrayList<Team>();
+
+		Team lastTeam = null;
+		PPACell cell = sheet.getCell(1, teamNumberColumn);
+
+		while (cell.getIntValue() != 12)
+		{
+			//Player player = getPlayerStat(season, sheet, cell.getRowIndex());
+
+			Team team = getTeam(season, sheet, cell);
+
+			if (lastTeam == null || lastTeam.getNumber() != team.getNumber())
+			{
+				teams.add(team);
+				lastTeam = team;
+			}
+
+			//lastTeam.getPlayers().add(player);
+			cell = cell.getCellBelow();
+		}
+
+		Team noPlayer = getTeam(season, sheet, cell);
+
+		teams.add(noPlayer);
 		return teams;
 	}
 	
-	public List<Player> GetPlayers()
+	private static Map<Player, Integer> loadPlayers(Season season, Sheet sheet)
 	{
-		return players;
-	}
-	
-	public List<Stat> GetStats()
-	{
-		return stats;
-	}
+		Map<Player,Integer> map= new HashMap<Player,Integer>();
+		
+		PPACell cell = sheet.getCell(1, teamNumberColumn);
 
-	public static List<Team> LoadSeasonStats(Season season)
-	{
-		Sheet sheet = new MySheet(getExcelSpreadSheet(), 1);
-		return loadTeamsAndPlayers(season, sheet);
+		while (cell.getIntValue() != 12)
+		{
+			Player player = getPlayerStat(season, sheet, cell.getRowIndex());
+
+			Team team = getTeam(season, sheet, cell);
+			
+			map.put(player, team.getNumber());
+
+					
+			cell = cell.getCellBelow();
+		}
+		return map;
 	}
 
 	private static List<Team> loadTeamsAndPlayers(Season season, Sheet sheet)
@@ -169,7 +231,7 @@ public class Stats
 		return Gender.Unknown;
 	}
 
-	private static InputStream getExcelSpreadSheet()
+	private static InputStream getExcelSpreadSheet(Season season)
 	{
 		try
 		{
@@ -179,7 +241,7 @@ public class Stats
 
 			for (int i = 20; i > 0; i--)
 			{
-				url = getStatsUrl(year, i);
+				url = getStatsUrl(season, i);
 
 				if (urlExists(url))
 					break;
@@ -202,9 +264,9 @@ public class Stats
 		return null;
 	}
 
-	private static URL getStatsUrl(int year, int week) throws MalformedURLException
+	private static URL getStatsUrl(Season season, int week) throws MalformedURLException
 	{
-		return new URL(StatsUrl + year + "/week" + String.format("%02d", week) + ".xlsx");
+		return new URL(StatsUrl + season.getStartYear() + "/week" + String.format("%02d", week) + ".xlsx");
 	}
 
 	private static boolean urlExists(URL url)

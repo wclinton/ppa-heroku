@@ -29,8 +29,6 @@ import com.ppa8ball.stats.CellHelp;
 public class Load
 {
 	private final String PPAUrl = "http://www.ppa8ball.com";
-	private final int FirstHalfYear = 2014;
-	private final int SecondHalfYear = 2015;
 	private final TeamService teamService;
 	private final Season currentSeason;
 
@@ -48,13 +46,13 @@ public class Load
 
 			Sheet sheet = workbook.getSheet(0);
 
-			List<Week> firstHalfWeeks = getWeeks(sheet, FirstHalfYear);
+			List<Week> firstHalfWeeks = getWeeks(sheet, currentSeason.getStartYear());
 
 			workbook = Workbook.getWorkbook(getExcelSpreadSheet(getSecondHalfScheduleUrl(currentSeason)));
 
 			sheet = workbook.getSheet(0);
 
-			List<Week> SecondHalfWeeks = getWeeks(sheet, SecondHalfYear);
+			List<Week> SecondHalfWeeks = getWeeks(sheet, currentSeason.getEndYear());
 
 			firstHalfWeeks.addAll(SecondHalfWeeks);
 

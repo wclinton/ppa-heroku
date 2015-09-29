@@ -122,6 +122,9 @@ public class MyCell implements PPACell
 	@Override
 	public double getDoubleValue()
 	{
-		return cell.getNumericCellValue();
+		if (IsNumeric())
+			return cell.getNumericCellValue();
+		else
+			return 0;
 	}
 }
