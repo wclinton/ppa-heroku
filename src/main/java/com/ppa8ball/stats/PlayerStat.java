@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 public class PlayerStat
 {
-
 	public int id;
 	public int teamNumber;
 	public String firstName;

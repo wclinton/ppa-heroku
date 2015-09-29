@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 
 import com.ppa8ball.dataloader.Stats;
+import com.ppa8ball.models.Player;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
 import com.ppa8ball.schedule.Load;
+import com.ppa8ball.service.DataProcessService;
+import com.ppa8ball.service.DataProcessServiceImpl;
 import com.ppa8ball.service.MatchService;
 import com.ppa8ball.service.MatchServiceImpl;
 import com.ppa8ball.service.PlayerService;
@@ -28,24 +31,13 @@ import com.ppa8ball.service.WeekService;
 import com.ppa8ball.service.WeekServiceImpl;
 import com.ppa8ball.util.HibernateUtil;
 
-//import static com.googlecode.objectify.ObjectifyService.ofy;
-
 /**
  * Servlet implementation class LoadStats
  */
 public class LoadStatsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-
-	private static final String seasonYear = "2014-2015";
-
-	// /**
-	// * @see HttpServlet#HttpServlet()
-	// */
-	// public LoadStats() {
-	// super();
-	// // TODO Auto-generated constructor stub
-	// }
+	private static final int seasonStartYear = 2014;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -54,130 +46,16 @@ public class LoadStatsServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		clearDatabases(session);
-
-		// Create a season record.
-		Season season = new Season(seasonYear);
-
-		SeasonService seasonService = new SeasonServiceImpl(session);
-		seasonService.Save(season);
-
-		// Load all the teams and players
-		Stats stats = new Stats(season);
-		List<Team> teams = stats.loadTeams();
-
-		PlayerService playerService = new PlayerServiceImpl(session);
-
-		for (Team team : teams)
-		{
-			playerService.Save(team.getPlayers());
-		}
-
-		TeamService teamService = new TeamServiceImpl(session);
-		teamService.Save(teams);
-
-		// Load all the Year weeks into the season.
-		List<Week> weeks = new Load(session, season).LoadFromExcel();
-
-		// MatchService matchService = new MatchServiceImpl(session);
-		//
-		// for (Week week : weeks)
-		// {
-		// matchService.Save(week.getMatches());
-		// }
-
-		WeekService weekService = new WeekServiceImpl(session);
-		weekService.Save(weeks);
-
-		MatchService matchService = new MatchServiceImpl(session);
-
-		for (Week week : weeks)
-		{
-			matchService.Save(week.getMatches());
-		}
-
-		season.getWeeks().addAll(weeks);
-		seasonService.Save(season);
-
-		// Load the players and stats
-
-		// List<Player> players = stats.loadPlayersAndStats();
-		//
-		// PlayerService playerService = new
-		// com.ppa8ball.service.PlayerServiceImpl(session);
-		// playerService.Save(players);
-		//
-
-		List<Team> savedTeams = teamService.GetBySeason(season);
-		response.setContentType("text/plain");
-
-		PrintWriter writer = response.getWriter();
-
-		for (Team team : savedTeams)
-		{
-			writer.println(team);
-		}
-
-		// Week savedWeek = weekService.getWeekbyNumber(1);
-
-		writer.flush();
-
-		// Connection connection = DbDriver.getConnection();
-		// dropDatabase(connection);
-		//
-		// response.setContentType("text/plain");
-		//
-
-		//
-		// Schedule schedule = null;
-		//
-		// Load l = new Load();
-		//
-		// schedule = l.LoadFromExcel();
-		//
-		// WeekService weekService = new WeekServiceImpl(connection);
-		//
-		// weekService.Save(schedule.weeks);
-		//
-		// Stats s = new Stats();
-		//
-		// s.load();
-		//
-		// List<TeamStat> teams = s.getTeams();
-		//
-		// new TeamsImpl(connection).Save(teams);
-		//
-		// List<PlayerStat> playerStats = s.getPlayerStats();
-		//
-		// PlayerService playersService = new PlayerServiceImpl(connection);
-		//
-		// playersService.Save(playerStats);
-		//
-		// for (TeamStat team : teams)
-		// {
-		// writer.println(team);
-		// }
-		//
-		// for (PlayerStat playerStat : playerStats)
-		// {
-		// writer.println(playerStat);
-		// }
-		//
-		// writer.flush();
-		//
-		// try
-		// {
-		// connection.close();
-		// } catch (SQLException e)
-		// {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		Season season = new Season(seasonStartYear);
+		DataProcessService service = new DataProcessServiceImpl();
 		
-		session.close();
+		service.Process(season);
+		
+		String info = getDataInfo(season);
+		response.setContentType("text/plain");
+		PrintWriter writer = response.getWriter();
+		writer.print(info);
+		writer.flush();
 	}
 
 	/**
@@ -188,26 +66,26 @@ public class LoadStatsServlet extends HttpServlet
 	{
 		// TODO Auto-generated method stub
 	}
-
-	private void clearDatabases(Session session)
+	
+	private String getDataInfo(Season season) throws IOException
 	{
-		Session sess = HibernateUtil.getSessionFactory().openSession();
-		String[] tables =
-		{ "match", "stat", "player", "team", "teamplayer", "teamroster", "week", "season" };
-
-		for (String table : tables)
-		{
-			try
-			{
-				sess.beginTransaction();
-				sess.createSQLQuery("delete from  " + table).executeUpdate();
-				sess.getTransaction().commit();
-			} catch (Exception e)
-			{
-				int i = 0;
-				i++;
-				// swallow the exception.
-			}
-		}
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		TeamService teamService = new TeamServiceImpl(session);
+		List<Team> savedTeams = teamService.GetBySeason(season);
+		
+		PlayerService playerService = new PlayerServiceImpl(session);
+		
+		List<Player> players = playerService.Get();
+		
+		String s= "Data uploaded for season:"+season.getDescription();
+		s+="\n";
+		s+="Teams:"+savedTeams.size();
+		s+="\n";
+		s+="Players:"+ players.size();
+		
+		session.close();
+		
+		return s;
 	}
 }

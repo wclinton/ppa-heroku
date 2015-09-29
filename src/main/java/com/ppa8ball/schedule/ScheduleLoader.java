@@ -10,13 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-
 import org.hibernate.Session;
 
+import com.ppa8ball.excel.MySheet;
+import com.ppa8ball.excel.PPACell;
+import com.ppa8ball.excel.Sheet;
 import com.ppa8ball.models.Match;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
@@ -24,51 +22,41 @@ import com.ppa8ball.models.Week;
 import com.ppa8ball.service.SeasonServiceImpl;
 import com.ppa8ball.service.TeamService;
 import com.ppa8ball.service.TeamServiceImpl;
-import com.ppa8ball.stats.CellHelp;
 
-public class Load
+public class ScheduleLoader implements DataLoader
 {
+
+	// private final String PPAUrl = "http://www.ppa8ball.com";
+	//
+	// private final String FirstHalfSchedule = PPAUrl +
+	// "/schedule/2014-2015_First_Half_Schedule.xls";
+	// private final String SecondHalfSchedule = PPAUrl +
+	// "/schedule/2014-2015_Second_Half_Schedule.xls";
+
 	private final String PPAUrl = "http://www.ppa8ball.com";
+	private final int FirstHalfYear = 2014;
+	private final int SecondHalfYear = 2015;
 	private final TeamService teamService;
 	private final Season currentSeason;
 
-	public Load(Session session, Season season)
+	public ScheduleLoader(Session session, Season season)
 	{
 		teamService = new TeamServiceImpl(session);
 		currentSeason = new SeasonServiceImpl(session).GetCurrent();
 	}
 
-	public List<Week> LoadFromExcel()
+	public List<Week> Load()
 	{
-		try
-		{
-			Workbook workbook = Workbook.getWorkbook(getExcelSpreadSheet(getFirstHalfScheduleUrl(currentSeason)));
 
-			Sheet sheet = workbook.getSheet(0);
+		Sheet sheet = new MySheet(getExcelSpreadSheet(getFirstHalfScheduleUrl(currentSeason)), 0);
+		List<Week> firstHalfWeeks = getWeeks(sheet, FirstHalfYear);
 
-			List<Week> firstHalfWeeks = getWeeks(sheet, currentSeason.getStartYear());
+		sheet = new MySheet(getExcelSpreadSheet(getSecondHalfScheduleUrl(currentSeason)), 0);
+		List<Week> SecondHalfWeeks = getWeeks(sheet, SecondHalfYear);
 
-			workbook = Workbook.getWorkbook(getExcelSpreadSheet(getSecondHalfScheduleUrl(currentSeason)));
+		firstHalfWeeks.addAll(SecondHalfWeeks);
 
-			sheet = workbook.getSheet(0);
-
-			List<Week> SecondHalfWeeks = getWeeks(sheet, currentSeason.getEndYear());
-
-			firstHalfWeeks.addAll(SecondHalfWeeks);
-
-			return firstHalfWeeks;
-
-		} catch (BiffException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
+		return firstHalfWeeks;
 	}
 
 	private String getSecondHalfScheduleUrl(Season season)
@@ -83,20 +71,20 @@ public class Load
 
 	private List<Week> getWeeks(Sheet sheet, int year)
 	{
-		Cell startCell = sheet.getCell("B1");
-		Cell cell = startCell;
+		PPACell startCell = sheet.getCell(0, 2);
+		PPACell cell = startCell;
 
 		List<Week> weeks = new ArrayList<>();
 
 		while (weeks.size() < 9)
 		{
-			Week week = getWeek(sheet, cell, year);
+			Week week = getWeek(cell, year);
 
 			if (week != null)
 			{
 				while (week.getMatches().size() < 5)
 				{
-					cell = CellHelp.getCellBelow(sheet, cell);
+					cell = cell.getCellBelow();
 					Match match = getMatch(week.getMatches().size() + 1, sheet, cell);
 
 					if (match != null)
@@ -107,7 +95,7 @@ public class Load
 				}
 				weeks.add(week);
 			}
-			cell = CellHelp.getNextTopColumn(sheet, cell);
+			cell = cell.getNextTopColumn();
 		}
 
 		return weeks;
@@ -164,9 +152,9 @@ public class Load
 	// return schedule;
 	// }
 
-	private Match getMatch(int number, Sheet sheet, Cell cell)
+	private Match getMatch(int number, Sheet sheet, PPACell cell)
 	{
-		String contents = cell.getContents();
+		String contents = cell.getStringValue();
 
 		if (contents.contains("at"))
 		{
@@ -178,7 +166,7 @@ public class Load
 			Team home = teamService.GetByNumber(currentSeason, homeTeamNumber);
 			Team away = teamService.GetByNumber(currentSeason, awayTeamNumber);
 
-			cell = CellHelp.getCellBelow(sheet, cell);
+			cell = cell.getCellBelow();
 
 			String[] tables = getTables(cell);
 
@@ -187,9 +175,9 @@ public class Load
 		return null;
 	}
 
-	private String[] getTables(Cell cell)
+	private String[] getTables(PPACell cell)
 	{
-		String contents = cell.getContents();
+		String contents = cell.getStringValue();
 
 		if (contents.contains("Table"))
 		{
@@ -204,9 +192,9 @@ public class Load
 	}
 
 	@SuppressWarnings("deprecation")
-	private Date getDate(Cell cell, int year)
+	private Date getDate(PPACell cell, int year)
 	{
-		String contents = cell.getContents();
+		String contents = cell.getStringValue();
 		if (contents == null || !contents.isEmpty())
 		{
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM");
@@ -225,9 +213,13 @@ public class Load
 		return null;
 	}
 
-	private int getWeekDate(Cell cell)
+	private int getWeekDate(PPACell cell)
 	{
-		String contents = cell.getContents();
+
+		if (!cell.IsString())
+			return -1;
+
+		String contents = cell.getStringValue();
 
 		if (contents == null || !contents.startsWith("Week"))
 			return -1;
@@ -239,7 +231,7 @@ public class Load
 		return week;
 	}
 
-	private Week getWeek(Sheet sheet, Cell cell, int year)
+	private Week getWeek(PPACell cell, int year)
 	{
 		Week week = null;
 		Date date = null;
@@ -248,17 +240,18 @@ public class Load
 		{
 			// look for a column with dates
 
-			date = getDate(cell, year);
-
-			if (date != null)
+			if (cell.IsDate())
+			{
+				date = cell.getDateValue();
 				break;
+			}
 
-			cell = CellHelp.getCellBelow(sheet, cell);
+			cell = cell.getCellBelow();
 		}
 
 		if (date != null)
 		{
-			Cell weekCell = CellHelp.getCellBelow(sheet, cell);
+			PPACell weekCell = cell.getCellBelow();
 
 			int weekNumber = getWeekDate(weekCell);
 

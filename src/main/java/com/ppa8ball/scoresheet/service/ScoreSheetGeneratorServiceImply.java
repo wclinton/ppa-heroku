@@ -17,11 +17,9 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 	{
 		try
 		{
-
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 			ScoresheetGenerator.generateScoreSheet(baos, scoresheet);
-
 			resp.setContentType("application/pdf");
 
 			resp.setHeader("Content-disposition", "inline; filename='javatpoint.pdf'");

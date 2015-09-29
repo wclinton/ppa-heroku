@@ -11,12 +11,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table
+
 public class Team
 {
 	@GeneratedValue
@@ -29,12 +35,21 @@ public class Team
 	private TeamType type;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn
 	private Season season;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn
-	List<Player> players;
+//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinColumn (name = "TEAM_ID")
+//	List<Player> players;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "team_player", 
+	joinColumns = { 
+		@JoinColumn(name = "TEAM_ID", nullable = false, updatable = false) }, 
+		inverseJoinColumns = { @JoinColumn(name = "PLAYER_ID", 
+				nullable = false, updatable = false) })
+	private List<Player> players;
 
 	public Team()
 	{

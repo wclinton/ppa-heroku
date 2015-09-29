@@ -11,8 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.ppa8ball.stats.Gender;
 
@@ -32,8 +38,17 @@ public class Player
 	private Gender gender;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn
+	@JoinColumn (name = "PLAYER_ID")
 	private List<Stat> stats;
+	
+	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "TEAM_ID", nullable = false)
+//	private Team team;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "players")
+	private List<Team> teams;
+	
 	
 	
 	public Player()
@@ -100,7 +115,6 @@ public class Player
 
 	public List<Stat> getStats()
 	{
-
 		if (stats == null)
 			stats = new ArrayList<Stat>();
 
@@ -110,6 +124,13 @@ public class Player
 	public void setStats(List<Stat> stats)
 	{
 		this.stats = stats;
+	}
+	
+	public List<Team> getTeams()
+	{
+		if (teams == null)
+			teams = new ArrayList<Team>();
+		return teams;
 	}
 
 	@Override

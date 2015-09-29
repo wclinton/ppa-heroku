@@ -24,20 +24,16 @@ public class TeamServiceImpl implements TeamService
 	@Override
 	public void Save(List<Team> teams)
 	{
-		
 		for (Team team : teams)
 		{
 			Store(team);
-		}
-		
+		}	
 	}
 
 	@Override
 	public void Save(Team team)
 	{
-		
 		Store(team);
-		
 	}
 
 	@Override
@@ -83,13 +79,7 @@ public class TeamServiceImpl implements TeamService
 		return (Team) cr.uniqueResult();
 	}
 	
-	private void Store(Team team)
-	{
-		session.beginTransaction();
-		session.saveOrUpdate(team);
-		session.getTransaction().commit();
-	}
-
+	
 	@Override
 	public Team GetByNumber(Season season, int number)
 	{
@@ -99,5 +89,12 @@ public class TeamServiceImpl implements TeamService
 		cr.add(Restrictions.eq("number", number));
 
 		return (Team) cr.uniqueResult();
+	}
+	
+	private void Store(Team team)
+	{
+		session.beginTransaction();
+		session.saveOrUpdate(team);
+		session.getTransaction().commit();
 	}
 }

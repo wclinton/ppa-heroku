@@ -20,3 +20,5 @@ hs_err_pid*
 
 /target/
 /target/
+
+src/test/java/com/ppa8ball/excel/~$ExcelTests.xlsx
