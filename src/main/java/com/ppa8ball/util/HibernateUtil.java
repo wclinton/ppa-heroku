@@ -1,8 +1,11 @@
 package com.ppa8ball.util;
 
 import java.net.URI;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 
 public class HibernateUtil
 {
@@ -33,8 +36,9 @@ public class HibernateUtil
 			cfg.setProperty("connection.password", password);
 
 			cfg.setProperty("hibernate.connection.requireSSL", "true");
+			final ServiceRegistry serviceRegistry =  new ServiceRegistryBuilder().buildServiceRegistry();
 
-			SessionFactory sessionFactory = cfg.buildSessionFactory();
+			SessionFactory sessionFactory = cfg.buildSessionFactory(serviceRegistry);
 
 			return sessionFactory;
 
