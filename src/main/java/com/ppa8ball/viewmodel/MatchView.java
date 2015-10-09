@@ -19,7 +19,7 @@ public class MatchView
 	
 	public MatchView(Match match)
 	{
-		weekId = match.getWeek().number;
+		weekId = match.getWeek().getNumber();
 		this.match = match.getNumber();
 		homeTeam = match.getHome().getNumber();
 		awayTeam = match.getAway().getNumber();

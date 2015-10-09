@@ -36,9 +36,8 @@ public class HibernateUtil
 			cfg.setProperty("connection.password", password);
 
 			cfg.setProperty("hibernate.connection.requireSSL", "true");
-			final ServiceRegistry serviceRegistry =  new ServiceRegistryBuilder().buildServiceRegistry();
-
-			SessionFactory sessionFactory = cfg.buildSessionFactory(serviceRegistry);
+			
+			SessionFactory sessionFactory = cfg.buildSessionFactory();
 
 			return sessionFactory;
 

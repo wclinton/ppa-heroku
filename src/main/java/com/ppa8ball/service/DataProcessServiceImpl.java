@@ -50,10 +50,16 @@ public class DataProcessServiceImpl implements DataProcessService
 		
 		int lastStatWeek = Stats.GetLatestStatWeek(season);
 		
+		WeekService weekService = new WeekServiceImpl(session);
+		Week lastweek = weekService.getWeekbyNumber(season, lastStatWeek);
+		lastweek.setHasStats(true);
+		weekService.Save(lastweek);
+		
+		
 		if (lastStatWeek != -1)
 		{
-			WeekService weekService = new WeekServiceImpl(session);
-			Week lastWeek = weekService.getWeekbyNumber(lastStatWeek);
+		    weekService = new WeekServiceImpl(session);
+			Week lastWeek = weekService.getWeekbyNumber(season,lastStatWeek);
 			season.setLastStatWeek(lastWeek);
 			seasonService.Save(season);
 		}

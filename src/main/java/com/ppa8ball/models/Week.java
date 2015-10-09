@@ -17,10 +17,12 @@ public class Week
 {
 	@Id
 	@GeneratedValue
-	public Long id;
-	public int number;
-	public Date date;
+	private Long id;
+	private int number;
+	private Date date;
+	private Boolean hasStats = false;
 	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="week")
 	private List<Match> matches;
 	
@@ -84,5 +86,15 @@ public class Week
 	public void setMatches(List<Match> matches)
 	{
 		this.matches = matches;
+	}
+	
+	public Boolean getHasStats()
+	{
+		return hasStats;
+	}
+
+	public void setHasStats(Boolean hasStats)
+	{
+		this.hasStats = hasStats;
 	}
 }
