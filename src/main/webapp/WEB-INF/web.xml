@@ -4,85 +4,29 @@
   <welcome-file-list>
     <welcome-file>scoresheet.html</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>LoadStats</display-name>
-    <servlet-name>LoadStats</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.LoadStatsServlet</servlet-class>
+  
+  
+   <servlet>
+    <servlet-name>PPA-Rest-Service</servlet-name>
+    <servlet-class>
+                     com.sun.jersey.spi.container.servlet.ServletContainer
+   </servlet-class>
+
+    <init-param>
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>com.ppa8ball.rest</param-value>
+    </init-param>
+
+    <init-param>
+        <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+        <param-value>true</param-value>
+    </init-param>
+ 
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>LoadStats</servlet-name>
-    <url-pattern>/LoadStats</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>SearchPlayers</display-name>
-    <servlet-name>SearchPlayers</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.SearchPlayersServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>SearchPlayers</servlet-name>
-    <url-pattern>/searchplayers</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>Teams</display-name>
-    <servlet-name>TeamsServlet</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.TeamsServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>TeamsServlet</servlet-name>
-    <url-pattern>/teams</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>PlayersServlet</display-name>
-    <servlet-name>PlayersServlet</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.PlayersServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PlayersServlet</servlet-name>
-    <url-pattern>/players</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>GenerateScoreSheet</display-name>
-    <servlet-name>GenerateScoreSheet</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.GenerateScoreSheetServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>GenerateScoreSheet</servlet-name>
-    <url-pattern>/GenerateScoreSheet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>weeks</display-name>
-    <servlet-name>weeks</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.WeeksServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>weeks</servlet-name>
-    <url-pattern>/weeks</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>matches</display-name>
-    <servlet-name>matches</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.MatchesServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>matches</servlet-name>
-    <url-pattern>/matches</url-pattern>
-  </servlet-mapping> 
-  <servlet>
-    <description></description>
-    <display-name>PlayoffScoreSheetGenerator</display-name>
-    <servlet-name>PlayoffScoreSheetGenerator</servlet-name>
-    <servlet-class>com.ppa8ball.servlets.PlayoffScoreSheetGeneratorServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PlayoffScoreSheetGenerator</servlet-name>
-    <url-pattern>/PlayoffScoreSheetGenerator</url-pattern>
+    <servlet-name>PPA-Rest-Service</servlet-name>
+    <url-pattern>/*</url-pattern>
   </servlet-mapping>
   
 </web-app>
