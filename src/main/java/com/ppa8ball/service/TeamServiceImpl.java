@@ -81,11 +81,11 @@ public class TeamServiceImpl implements TeamService
 	
 	
 	@Override
-	public Team GetByNumber(Season season, int number)
+	public Team GetByNumber(long seasonId, int number)
 	{
 		Criteria cr = session.createCriteria(Team.class);
 
-		cr.add(Restrictions.eq("season.id", season.getId()));
+		cr.add(Restrictions.eq("season.id", seasonId));
 		cr.add(Restrictions.eq("number", number));
 
 		return (Team) cr.uniqueResult();

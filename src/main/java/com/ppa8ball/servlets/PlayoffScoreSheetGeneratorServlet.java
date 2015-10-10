@@ -58,9 +58,9 @@ public class PlayoffScoreSheetGeneratorServlet extends HttpServlet
 
 		TeamService teamService = new TeamServiceImpl(session);
 
-		Team homeTeam = teamService.GetByNumber(currentSeason, homeTeamNumber);
+		Team homeTeam = teamService.GetByNumber(currentSeason.getId(), homeTeamNumber);
 
-		Team awayTeam = teamService.GetByNumber(currentSeason, awayTeamNumber);
+		Team awayTeam = teamService.GetByNumber(currentSeason.getId(), awayTeamNumber);
 
 		Scoresheet scoresheet = new Scoresheet(homeTeam, awayTeam);
 

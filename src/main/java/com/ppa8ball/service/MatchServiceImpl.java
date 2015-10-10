@@ -21,7 +21,7 @@ public class MatchServiceImpl implements MatchService
 
 	
 	@Override
-	public Match getMatchByWeekTeam(int weekNumber, int teamNumber)
+	public Match getMatchByWeekTeam(long seasonId, int weekNumber, int teamNumber)
 	{
 //		Criterion week = Restrictions.eq("week.number", weekNumber);
 //		Criterion awayTeam = Restrictions.eq("away.number", teamNumber);
@@ -41,12 +41,15 @@ public class MatchServiceImpl implements MatchService
 		Criterion homeTeam = Restrictions.eq("H.number", teamNumber);
 		
 		Criterion team = Restrictions.or(awayTeam, homeTeam);
+		Criterion season = Restrictions.eq("S.id",seasonId);
 		
 		Criteria criteria = session.createCriteria(Match.class)
 				.createAlias("week", "W")
 				.createAlias("away", "A")
 				.createAlias("home", "H")
-				.add(Restrictions.and(week, team));
+				.createAlias("W.season", "S")
+				.add(Restrictions.and(week, team))
+				.add(season);
 		
 		@SuppressWarnings("unchecked")
 		List<Match> matches = criteria.list();

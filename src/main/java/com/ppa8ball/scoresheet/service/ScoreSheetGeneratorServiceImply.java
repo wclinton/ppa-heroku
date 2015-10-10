@@ -37,43 +37,9 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 			return;
 		}
 	}
-
 	
-	public void GenerateScoreSheet(HttpServletResponse resp, int homeTeamNumber, int awayTeamNumber, boolean isHome) throws IOException
-	{
-//		Connection connection  = DbDriver.getConnection();
-//		TeamService teamService =  new TeamsImpl(connection);
-//		TeamStat homeTeamStat = teamService.Get(homeTeamNumber);
-//		TeamStat awayTeamStat = teamService.Get(awayTeamNumber);
-//
-//		TeamRoster homeTeamRoster;
-//		TeamRoster awayTeamRoster;
+//	public OutputStream GenerateScoreSheetPdf(Scoresheet scoresheet)
+//	{
 //		
-//		PlayerService playerService = new PlayerServiceImpl(connection);
-//
-//		if (isHome)
-//		{
-//			PlayersStat homePlayersStat = playerService.GetPlayerByTeam(homeTeamNumber);
-//			homeTeamRoster = new TeamRoster(homeTeamStat, homePlayersStat);
-//			awayTeamRoster = new TeamRoster(awayTeamStat);
-//		} else
-//		{
-//			PlayersStat awayPlayersStats = playerService.GetPlayerByTeam(awayTeamNumber);
-//			homeTeamRoster = new TeamRoster(homeTeamStat);
-//			awayTeamRoster = new TeamRoster(awayTeamStat, awayPlayersStats);
-//		}
-//		Scoresheet scoresheet = new Scoresheet(homeTeamRoster, awayTeamRoster);
-//		
-//		GenerateScoreSheet(resp, scoresheet);
-//		
-//		try
-//		{
-//			connection.close();
-//		} catch (SQLException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-	}
+//	}
 }

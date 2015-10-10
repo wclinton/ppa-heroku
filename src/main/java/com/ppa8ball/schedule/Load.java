@@ -175,8 +175,8 @@ public class Load
 			int homeTeamNumber = Integer.parseInt(teams[1].trim());
 			int awayTeamNumber = Integer.parseInt(teams[0].trim());
 
-			Team home = teamService.GetByNumber(currentSeason, homeTeamNumber);
-			Team away = teamService.GetByNumber(currentSeason, awayTeamNumber);
+			Team home = teamService.GetByNumber(currentSeason.getId(), homeTeamNumber);
+			Team away = teamService.GetByNumber(currentSeason.getId(), awayTeamNumber);
 
 			cell = CellHelp.getCellBelow(sheet, cell);
 

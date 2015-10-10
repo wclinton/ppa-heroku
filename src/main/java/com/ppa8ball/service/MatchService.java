@@ -8,5 +8,5 @@ public interface MatchService
 {
 	public void Save(List<Match> matches);
 	public void Save(Match match);
-	public Match getMatchByWeekTeam(int weekNumber, int TeamNumber);
+	public Match getMatchByWeekTeam(long seasonId, int weekNumber, int TeamNumber);
 }

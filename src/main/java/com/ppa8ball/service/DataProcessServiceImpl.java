@@ -72,7 +72,7 @@ public class DataProcessServiceImpl implements DataProcessService
 		   Player p = entry.getKey();
 		   
 		   int teamNo = entry.getValue();
-		   Team t = teamService.GetByNumber(season,teamNo);
+		   Team t = teamService.GetByNumber(season.getId(),teamNo);
 		   
 		   Player existingPlayer = playerService.GetByName(p.getFirstName(), p.getLastName());
 		   
