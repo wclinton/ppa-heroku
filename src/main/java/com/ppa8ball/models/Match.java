@@ -1,5 +1,6 @@
 package com.ppa8ball.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -8,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table
@@ -31,14 +35,30 @@ public class Match
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Week week;
+	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn
+	private Season season;
+
+	public Season getSeason()
+	{
+		return season;
+	}
+
+	public void setSeason(Season season)
+	{
+		this.season = season;
+	}
 
 	public Match()
 	{
 	}
 
-	public Match(int number, String table1, String table2, Team home, Team away)
+	public Match(Season season, int number, String table1, String table2, Team home, Team away)
 	{
 		super();
+		this.season = season;
 		this.number = number;
 		this.table1 = table1;
 		this.table2 = table2;

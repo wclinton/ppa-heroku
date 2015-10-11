@@ -12,11 +12,13 @@ app
 					$scope.position = "home";
 
 					$scope.populateGridAndMatchData = function() {
-						var playersUrl = '/players?teamNumber='
+						var playersUrl = 'rest/teamPlayers/'
 								+ $scope.selectedTeam;
-						var matchUrl = '/matches?teamNumber='
-								+ $scope.selectedTeam + '&week='
-								+ $scope.selectedWeek;
+						
+						var matchUrl = 'rest/matches/'
+							+ $scope.selectedWeek +'/'+
+							+ $scope.selectedTeam;
+								
 
 						var deferred = $q.defer();
 
@@ -204,17 +206,17 @@ app
 						var deferred = $q.defer();
 						var getTeams = $http({
 							method : 'GET',
-							url : '/teams',
+							url : 'rest/teams',
 							cache : 'false'
 						});
 						var getSpares = $http({
 							method : 'GET',
-							url : '/players?spares=true',
+							url : 'rest/sparePlayers',
 							cache : 'false'
 						});
 						var getWeeks = $http({
 							method : 'GET',
-							url : '/weeks',
+							url : 'rest/weeks',
 							cache : 'false'
 						});
 
@@ -245,7 +247,7 @@ app
 					$scope.getSparePlayers = function() {
 						$http({
 							method : 'GET',
-							url : 'players?team=11'
+							url : 'rest/sparePlayers'
 						}).success(function(data, status, headers, config) {
 
 							$scope.sparePlayers = data;
@@ -271,7 +273,7 @@ app
 								$scope.weeks[$scope.selectedWeek - 1].date,
 								'MMMM d yyyy', 'UTC');
 
-						window.open('GenerateScoreSheet?myTeam='
+						window.open('rest/generateScoreSheet?myTeam='
 								+ $scope.selectedTeam + '&opponentTeam='
 								+ $scope.selectedOpponentTeam + '&week='
 								+ $scope.selectedWeek + '&ishome=' + h

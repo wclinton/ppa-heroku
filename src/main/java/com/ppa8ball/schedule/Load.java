@@ -182,7 +182,7 @@ public class Load
 
 			String[] tables = getTables(cell);
 
-			return new Match(number, tables[0], tables[1], home, away);
+			return new Match(currentSeason, number, tables[0], tables[1], home, away);
 		}
 		return null;
 	}
