@@ -1,6 +1,5 @@
 package com.ppa8ball.rest;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.hibernate.Session;
@@ -51,18 +49,8 @@ import com.ppa8ball.viewmodel.WeeksView;
 @Path("")
 public class RestService
 {
-	@GET
-	@Path("/{param}")
-	public Response getMsg(@PathParam("param") String msg)
-	{
-
-		String output = "Jersey say : " + msg;
-
-		return Response.status(200).entity(output).build();
-
-	}
-
-	private static final int seasonStartYear = 2014;
+	private static final int seasons2014Year = 2014;
+	private static final int seasons2015Year = 2015;
 
 	@GET
 	@Path("/currentSeason")
@@ -81,53 +69,42 @@ public class RestService
 	@Path("/loadStats")
 	public Response loadStats() throws ServletException, IOException
 	{
-		Season season = new Season(seasonStartYear);
+		Season season = new Season(seasons2014Year);
 		DataProcessService service = new DataProcessServiceImpl();
+
+		// clear all the data from the database.
+		service.Clear();
 
 		service.Process(season);
 
 		String info = getDataInfo(season);
+
+		Season season2015 = new Season(seasons2015Year);
+		service.Process(season2015);
+
+		info = "<br>" + getDataInfo(season2015);
 		return Response.status(200).entity(info).build();
 	}
 
-	// @GET
-	// @Path("/matches/{seasonId}/{weekNumber}/{teamNumber}")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// public MatchView getMatch(@PathParam("seasonId") long seasonId,
-	// @PathParam("weekNumber") int week,
-	//
-
 	@GET
-	@Path("/matches/{weekNumber}/{teamNumber}")
+	@Path("/matches/{seasonId}/{weekNumber}/{teamNumber}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public MatchView getMatch(@PathParam("weekNumber") int week, @PathParam("teamNumber") int teamNumber)
+	public MatchView getMatch(@PathParam("weekNumber") long seasonId, @PathParam("weekNumber") int week,
+			@PathParam("teamNumber") int teamNumber)
 	{
 		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		SeasonService seasonService = new SeasonServiceImpl(session);
-		Season currentSeason = seasonService.GetCurrent();
-
 		MatchService service = new MatchServiceImpl(session);
-		Match match = service.getMatchByWeekTeam(currentSeason.getId(), week, teamNumber);
+		Match match = service.getMatchByWeekTeam(seasonId, week, teamNumber);
 
 		return new MatchView(match);
 	}
 
-	// @GET
-	// @Path("teamPlayers/{seasonId}/{teamNumber}")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// public PlayersView getTeamlayers(@PathParam("seasonId") long seasonId,
-	// @PathParam("teamNumber") int teamNumber)
-	// {
-	// return getPlayers(seasonId, teamNumber);
-	// }
-
 	@GET
-	@Path("teamPlayers/{teamNumber}")
+	@Path("/teamPlayers/{seasonId}/{teamNumber}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PlayersView getTeamPlayers(@PathParam("teamNumber") int teamNumber)
+	public PlayersView getTeamlayers(@PathParam("seasonId") long seasonId, @PathParam("teamNumber") int teamNumber)
 	{
-		return getPlayers(teamNumber);
+		return getPlayers(seasonId, teamNumber);
 	}
 
 	@GET
@@ -135,26 +112,17 @@ public class RestService
 	@Produces(MediaType.APPLICATION_JSON)
 	public PlayersView getSparePlayers(@PathParam("seasonId") long seasonId)
 	{
-		return getPlayers(seasonId, 12);
+		return getPlayers(seasonId, 11);
 	}
 
 	@GET
-	@Path("/sparePlayers")
-	@Produces(MediaType.APPLICATION_JSON)
-	public PlayersView getSparePlayers()
-	{
-		return getPlayers(11);
-	}
-
-	@GET
-	@Path("/generateScoreSheet")
+	@Path("generateScoreSheet/{seasonId}")
 	@Produces("application/pdf")
-	public Response generateScoreSheet(@QueryParam("myTeam") final int myTeamNumber, @QueryParam("opponentTeam") final int opponentTeamNumber,
-			@QueryParam("ishome") final boolean isHome, @QueryParam("roster") final String roster, @QueryParam("week") final int week,
-			@QueryParam("date") final String date, @QueryParam("table1") final String table1, @QueryParam("table1") final String table2) throws Exception
+	public Response generateScoreSheet(@PathParam("seasonId") final long seasonId, @QueryParam("myTeam") final int myTeamNumber,
+			@QueryParam("opponentTeam") final int opponentTeamNumber, @QueryParam("ishome") final boolean isHome,
+			@QueryParam("roster") final String roster, @QueryParam("week") final int week, @QueryParam("date") final String date,
+			@QueryParam("table1") final String table1, @QueryParam("table1") final String table2) throws Exception
 	{
-		
-		
 		StreamingOutput stream = new StreamingOutput()
 		{
 			@Override
@@ -176,17 +144,11 @@ public class RestService
 						home = opponentTeamNumber;
 						away = myTeamNumber;
 					}
-
+					
 					Session session = getSession();
-					SeasonService seasonService = new SeasonServiceImpl(session);
-					Season currentSeason = seasonService.GetCurrent();
-
 					TeamService teamService = new TeamServiceImpl(session);
-
-					Team homeTeam = teamService.GetByNumber(currentSeason.getId(), home);
-
-					Team awayTeam = teamService.GetByNumber(currentSeason.getId(), away);
-
+					Team homeTeam = teamService.GetByNumber(seasonId, home);
+					Team awayTeam = teamService.GetByNumber(seasonId, away);
 					Scoresheet scoresheet = new Scoresheet(homeTeam, awayTeam);
 
 					scoresheet.setWeek(week);
@@ -199,71 +161,43 @@ public class RestService
 					else
 						scoresheet.setAwayPlayers(players);
 
-				
 					ScoresheetGenerator.generateScoreSheet(output, scoresheet);
 
 				} catch (Exception e)
 				{
 					throw new WebApplicationException(e);
 				}
-				
-				
 			}
 
 		};
-		
-		return Response.ok(stream).header("content-disposition","inline; filename='javatpoint.pdf'").build();
 
+		return Response.ok(stream).header("content-disposition", "inline; filename='javatpoint.pdf'").build();
 	}
 
-
-
-	// @GET
-	// @Path("Teams/{seasonId}")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// public TeamsView getTeams(@PathParam("seasonId") long seasonId)
 	@GET
-	@Path("/teams")
+	@Path("/teams/{seasonId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TeamsView getTeams()
+	public TeamsView getTeams(@PathParam("seasonId") long seasonId)
 	{
 		Session session = getSession();
-
 		SeasonService seasonService = new SeasonServiceImpl(session);
-		Season currentSeason = seasonService.GetCurrent();
-
+		Season season = seasonService.Get(seasonId);
 		TeamService teamService = new TeamServiceImpl(session);
-		List<Team> teams = teamService.GetNormalBySeason(currentSeason);
-
+		List<Team> teams = teamService.GetNormalBySeason(season);
 		TeamsView teamView = new TeamsView(teams);
-
 		return teamView;
 	}
 
-	// @GET
-	// @Path("Weeks/{seasonId}")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// public WeeksView getWeeks(@PathParam("seasonId") long seasonId)
-
 	@GET
-	@Path("/weeks")
+	@Path("/weeks/{seasonId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public WeeksView getWeeks()
+	public WeeksView getWeeks(@PathParam("seasonId") long seasonId)
 	{
-		Session session = HibernateUtil.getSessionFactory().openSession();
-
+		Session session = getSession();
 		WeekService service = new WeekServiceImpl(session);
-
 		List<Week> weeks = service.getAll();
-
 		WeeksView weeksView = new WeeksView(weeks);
-
 		return weeksView;
-	}
-
-	private PlayersView getPlayers(int teamNumber)
-	{
-		return getPlayers(getCurrentSeason().getId(), teamNumber);
 	}
 
 	private PlayersView getPlayers(long seasonID, int teamNumber)

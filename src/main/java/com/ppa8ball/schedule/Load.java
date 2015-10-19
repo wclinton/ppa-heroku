@@ -35,7 +35,7 @@ public class Load
 	public Load(Session session, Season season)
 	{
 		teamService = new TeamServiceImpl(session);
-		currentSeason = new SeasonServiceImpl(session).GetCurrent();
+		currentSeason = season;
 	}
 
 	public List<Week> LoadFromExcel()
@@ -88,7 +88,7 @@ public class Load
 
 		List<Week> weeks = new ArrayList<>();
 
-		while (weeks.size() < 9)
+		while (cell != null)
 		{
 			Week week = getWeek(sheet, cell, year);
 
@@ -244,7 +244,7 @@ public class Load
 		Week week = null;
 		Date date = null;
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 19; i++)
 		{
 			// look for a column with dates
 

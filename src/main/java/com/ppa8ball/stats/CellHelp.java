@@ -17,6 +17,9 @@ public class CellHelp {
 	
 	public static Cell getNextTopColumn(Sheet sheet, Cell cell)
 	{
+		if (cell.getColumn() +1 >=  sheet.getColumns())
+			return null;
+		
 		return sheet.getCell(cell.getColumn()+1,0);
 	}
 
