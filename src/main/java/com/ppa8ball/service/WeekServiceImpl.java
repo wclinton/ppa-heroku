@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Week;
 
 public class WeekServiceImpl implements WeekService
@@ -37,13 +38,19 @@ public class WeekServiceImpl implements WeekService
 	}
 
 	@Override
-	public Week getWeekbyNumber(int number)
+	public Week getWeekbyNumber(Season season, int number)
 	{
-		Criteria cr = session.createCriteria(Week.class);
-
-		cr.add(Restrictions.eq("number", number));
-
-		return (Week) cr.uniqueResult();
+		Criteria cr = session.createCriteria(Season.class);
+		cr.add(Restrictions.eq("id",season.getId()));
+		
+		Season s = (Season) cr.uniqueResult();
+		
+		for (Week week : s.getWeeks())
+		{
+			if (week.getNumber() == number)
+				return week;
+		}
+		return null;
 	}
 
 	@Override

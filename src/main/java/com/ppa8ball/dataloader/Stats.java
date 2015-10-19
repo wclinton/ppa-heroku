@@ -235,8 +235,6 @@ public class Stats
 	{
 		try
 		{
-			final int year = 2014;
-
 			URL url = null;
 
 			for (int i = 20; i > 0; i--)

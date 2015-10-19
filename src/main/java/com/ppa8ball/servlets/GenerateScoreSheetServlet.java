@@ -87,9 +87,9 @@ public class GenerateScoreSheetServlet extends HttpServlet {
 		TeamService teamService = new TeamServiceImpl(session);
 		
 		
-		Team homeTeam = teamService.GetByNumber(currentSeason, home);
+		Team homeTeam = teamService.GetByNumber(currentSeason.getId(), home);
 		
-		Team awayTeam = teamService.GetByNumber(currentSeason, away);
+		Team awayTeam = teamService.GetByNumber(currentSeason.getId(), away);
 		
 //		TeamRoster homeTeamRoster=null;
 //		TeamRoster awayTeamRoster=null;

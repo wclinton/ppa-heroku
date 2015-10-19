@@ -15,13 +15,18 @@ import com.ppa8ball.util.HibernateUtil;
 
 public class DataProcessServiceImpl implements DataProcessService
 {
+	
+	@Override
+	public void Clear()
+	{
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		clearDatabases(session);
+	}
 
 	@Override
 	public void Process(Season season)
 	{
 		Session session = HibernateUtil.getSessionFactory().openSession();
-
-		clearDatabases(session);
 
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		seasonService.Save(season);
@@ -50,10 +55,16 @@ public class DataProcessServiceImpl implements DataProcessService
 		
 		int lastStatWeek = Stats.GetLatestStatWeek(season);
 		
+		WeekService weekService = new WeekServiceImpl(session);
+		Week lastweek = weekService.getWeekbyNumber(season, lastStatWeek);
+		lastweek.setHasStats(true);
+		weekService.Save(lastweek);
+		
+		
 		if (lastStatWeek != -1)
 		{
-			WeekService weekService = new WeekServiceImpl(session);
-			Week lastWeek = weekService.getWeekbyNumber(lastStatWeek);
+		    weekService = new WeekServiceImpl(session);
+			Week lastWeek = weekService.getWeekbyNumber(season,lastStatWeek);
 			season.setLastStatWeek(lastWeek);
 			seasonService.Save(season);
 		}
@@ -66,7 +77,7 @@ public class DataProcessServiceImpl implements DataProcessService
 		   Player p = entry.getKey();
 		   
 		   int teamNo = entry.getValue();
-		   Team t = teamService.GetByNumber(season,teamNo);
+		   Team t = teamService.GetByNumber(season.getId(),teamNo);
 		   
 		   Player existingPlayer = playerService.GetByName(p.getFirstName(), p.getLastName());
 		   

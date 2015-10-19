@@ -47,8 +47,8 @@ public class WeekView
 
 	public WeekView(Week week)
 	{
-		this.id = week.id;
-		this.number = week.number;
-		this.date = week.date;
+		this.setId(week.getId());
+		this.setNumber(week.getNumber());
+		this.setDate(week.getDate());
 	}
 }
