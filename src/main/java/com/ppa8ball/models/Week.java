@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-public class Week
+public class Week implements Comparable<Week>
 {
 	@Id
 	@GeneratedValue
@@ -112,5 +112,11 @@ public class Week
 	public void setHasStats(Boolean hasStats)
 	{
 		this.hasStats = hasStats;
+	}
+
+	@Override
+	public int compareTo(Week o)
+	{
+		return this.number > o.number ? 1 : -1;
 	}
 }

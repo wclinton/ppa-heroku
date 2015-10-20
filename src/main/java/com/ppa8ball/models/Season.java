@@ -1,6 +1,7 @@
 package com.ppa8ball.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -17,10 +18,9 @@ import javax.persistence.Transient;
 
 @Entity
 @Table
-
 public class Season
 {
-	
+
 	private Long id;
 	private int startYear;
 	private int endYear;
@@ -28,12 +28,12 @@ public class Season
 	private boolean complete;
 	private Week lastStatWeek;
 	private List<Week> weeks;
-	
-	//Default constructor
+
+	// Default constructor
 	public Season()
 	{
 	}
-	
+
 	public Season(int startYear)
 	{
 		this(startYear, null);
@@ -42,14 +42,15 @@ public class Season
 	public Season(int startYear, List<Week> weeks)
 	{
 		super();
-		
+
 		this.startYear = startYear;
-	
+
 		if (weeks == null)
 			this.weeks = new ArrayList<Week>();
 		else
 			this.weeks = weeks;
 	}
+
 	@Id
 	@GeneratedValue
 	@Column
@@ -62,13 +63,13 @@ public class Season
 	{
 		this.id = id;
 	}
-	
+
 	@Column
 	public int getStartYear()
 	{
 		return startYear;
 	}
-	
+
 	public void setStartYear(int startYear)
 	{
 		this.startYear = startYear;
@@ -79,7 +80,7 @@ public class Season
 	{
 		if (endYear == 0)
 		{
-			endYear = startYear+1;
+			endYear = startYear + 1;
 		}
 		return endYear;
 	}
@@ -90,9 +91,10 @@ public class Season
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn (name = "SEASON_ID")
+	@JoinColumn(name = "SEASON_ID")
 	public List<Week> getWeeks()
 	{
+		Collections.sort(weeks);
 		return weeks;
 	}
 
@@ -105,7 +107,7 @@ public class Season
 	public String getDescription()
 	{
 		if (description == null)
-			description =  getStartYear() + "-" + getEndYear();
+			description = getStartYear() + "-" + getEndYear();
 		return description;
 	}
 
@@ -113,34 +115,33 @@ public class Season
 	{
 		this.description = description;
 	}
-	
+
 	@Transient
 	public boolean isComplete()
 	{
 		return false;
 	}
-	
+
 	public void setComplete(boolean complete)
 	{
 		this.complete = complete;
 	}
-	
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	public Week getLastStatWeek()
 	{
 		return lastStatWeek;
 	}
-	
+
 	public void setLastStatWeek(Week week)
 	{
 		this.lastStatWeek = week;
 	}
-	
 
 	@Override
 	public String toString()
 	{
-		return "Season:"+ description;
+		return "Season:" + description;
 	}
 }
