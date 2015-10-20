@@ -89,7 +89,7 @@ public class RestService
 	@GET
 	@Path("/matches/{seasonId}/{weekNumber}/{teamNumber}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public MatchView getMatch(@PathParam("weekNumber") long seasonId, @PathParam("weekNumber") int week,
+	public MatchView getMatch(@PathParam("seasonId") long seasonId, @PathParam("weekNumber") int week,
 			@PathParam("teamNumber") int teamNumber)
 	{
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -121,7 +121,7 @@ public class RestService
 	public Response generateScoreSheet(@PathParam("seasonId") final long seasonId, @QueryParam("myTeam") final int myTeamNumber,
 			@QueryParam("opponentTeam") final int opponentTeamNumber, @QueryParam("ishome") final boolean isHome,
 			@QueryParam("roster") final String roster, @QueryParam("week") final int week, @QueryParam("date") final String date,
-			@QueryParam("table1") final String table1, @QueryParam("table1") final String table2) throws Exception
+			@QueryParam("table1") final String table1, @QueryParam("table2") final String table2) throws Exception
 	{
 		StreamingOutput stream = new StreamingOutput()
 		{
@@ -194,8 +194,12 @@ public class RestService
 	public WeeksView getWeeks(@PathParam("seasonId") long seasonId)
 	{
 		Session session = getSession();
+		
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		Season season = seasonService.Get(seasonId);
+		
 		WeekService service = new WeekServiceImpl(session);
-		List<Week> weeks = service.getAll();
+		List<Week> weeks = service.getAll(season);
 		WeeksView weeksView = new WeeksView(weeks);
 		return weeksView;
 	}

@@ -7,11 +7,24 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
   $scope.show = false;
 
   $scope.position = "home";
+  
+  $scope.getCurrentSeason = function (){
+    $http({ method : 'GET',
+      url : 'rest/currentSeason',
+      }).success(function(data, status, headers, config) {
+        $scope.currentSeason = data;
+        $scope.getDropDownDataFromServer();
 
+      }).error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // show
+        // here
+      });
+  }
+  
   $scope.populateGridAndMatchData = function() {
-    var playersUrl = 'rest/teamPlayers/' + $scope.selectedTeam;
-
-    var matchUrl = 'rest/matches/' + $scope.selectedWeek + '/' + +$scope.selectedTeam;
+    var playersUrl = 'rest/teamPlayers/' + $scope.currentSeason.id + '/'+ $scope.selectedTeam;
+    var matchUrl = 'rest/matches/' + $scope.currentSeason.id + '/' + $scope.selectedWeek + '/' +$scope.selectedTeam;
 
     var deferred = $q.defer();
 
@@ -176,15 +189,15 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
 
     var deferred = $q.defer();
     var getTeams = $http({ method : 'GET',
-    url : 'rest/teams',
+    url : 'rest/teams/'+ $scope.currentSeason.id,
     cache : 'false'
     });
     var getSpares = $http({ method : 'GET',
-    url : 'rest/sparePlayers',
+    url : 'rest/sparePlayers/' + $scope.currentSeason.id,
     cache : 'false'
     });
     var getWeeks = $http({ method : 'GET',
-    url : 'rest/weeks',
+    url : 'rest/weeks/'+ $scope.currentSeason.id,
     cache : 'false'
     });
 
@@ -233,7 +246,7 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
 
     var date = $filter('date')($scope.weeks[$scope.selectedWeek - 1].date, 'MMMM d yyyy', 'UTC');
 
-    window.open('rest/generateScoreSheet?myTeam=' + $scope.selectedTeam + '&opponentTeam=' + $scope.selectedOpponentTeam + '&week='
+    window.open('rest/generateScoreSheet/'+$scope.currentSeason.id+'?myTeam=' + $scope.selectedTeam + '&opponentTeam=' + $scope.selectedOpponentTeam + '&week='
         + $scope.selectedWeek + '&ishome=' + h + '&date=' + date + '&table1=' + $scope.match.table1 + '&table2=' + $scope.match.table2 + '&roster='
         + JSON.stringify(roster), '_blank');
   };
