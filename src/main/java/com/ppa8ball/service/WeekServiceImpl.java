@@ -68,9 +68,6 @@ public class WeekServiceImpl implements WeekService
 	{
 		Criteria cr = session.createCriteria(Season.class);
 		cr.add(Restrictions.eq("id",season.getId()));
-		@SuppressWarnings("unchecked")
-		List<Week> list = cr.list();
-	
 		Season s = (Season) cr.uniqueResult();
 		return s.getWeeks();
 	}

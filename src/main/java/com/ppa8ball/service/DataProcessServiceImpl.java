@@ -65,6 +65,7 @@ public class DataProcessServiceImpl implements DataProcessService
 		{
 		    weekService = new WeekServiceImpl(session);
 			Week lastWeek = weekService.getWeekbyNumber(season,lastStatWeek);
+			lastWeek.setSeason(season);
 			season.setLastStatWeek(lastWeek);
 			seasonService.Save(season);
 		}
