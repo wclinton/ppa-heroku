@@ -8,7 +8,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import com.ppa8ball.models.Match;
-import com.ppa8ball.models.Player;
 
 public class MatchServiceImpl implements MatchService
 {

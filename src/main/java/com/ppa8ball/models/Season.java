@@ -20,7 +20,6 @@ import javax.persistence.Transient;
 @Table
 public class Season
 {
-
 	private Long id;
 	private int startYear;
 	private int endYear;

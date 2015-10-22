@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.ppa8ball.models.Roster;
-import com.ppa8ball.models.Team;
 
 public class RosterServiceImpl implements RosterService
 {

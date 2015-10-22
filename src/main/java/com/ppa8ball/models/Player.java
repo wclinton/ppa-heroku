@@ -52,10 +52,10 @@ public class Player
 
 	public Player(String firstName, String lastName, String fullName, Gender gender)
 	{
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
-		this.gender = gender;
+		setFirstName(firstName);
+		setLastName(lastName); 
+		setFullName(fullName);
+		setGender(gender);
 	}
 
 	public Long getId()
@@ -75,7 +75,7 @@ public class Player
 
 	public void setFirstName(String firstName)
 	{
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 	}
 
 	public String getLastName()
@@ -85,7 +85,7 @@ public class Player
 
 	public void setLastName(String lastName)
 	{
-		this.lastName = lastName;
+		this.lastName = lastName.trim();
 	}
 
 	public String getFullName()
@@ -95,7 +95,7 @@ public class Player
 
 	public void setFullName(String fullName)
 	{
-		this.fullName = fullName;
+		this.fullName = fullName.replaceAll("  "," ").trim();
 	}
 
 	public Gender getGender()

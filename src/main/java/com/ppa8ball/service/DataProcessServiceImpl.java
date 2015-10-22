@@ -115,8 +115,6 @@ public class DataProcessServiceImpl implements DataProcessService
 				sess.getTransaction().commit();
 			} catch (Exception e)
 			{
-				int i = 0;
-				i++;
 				// swallow the exception.
 			}
 		}
