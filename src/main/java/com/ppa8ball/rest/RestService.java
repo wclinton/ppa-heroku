@@ -24,6 +24,7 @@ import com.ppa8ball.ScoresheetGenerator;
 import com.ppa8ball.models.Match;
 import com.ppa8ball.models.Player;
 import com.ppa8ball.models.Season;
+import com.ppa8ball.models.Stat;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
 import com.ppa8ball.service.DataProcessService;
@@ -206,14 +207,18 @@ public class RestService
 
 	private PlayersView getPlayers(long seasonID, int teamNumber)
 	{
+		
 		TeamService service = new TeamServiceImpl(getSession());
 		Team team = service.GetByNumber(seasonID, teamNumber);
+		
+		Season season = new SeasonServiceImpl(getSession()).Get(seasonID);
 
 		PlayersView players = new PlayersView();
 
 		for (Player player : team.getPlayers())
 		{
-			players.getPlayers().add(new PlayerView(player));
+			Stat stat = player.getStats(season);
+			players.getPlayers().add(new PlayerView(player,stat));
 		}
 
 		return players;

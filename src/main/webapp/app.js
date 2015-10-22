@@ -161,7 +161,7 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
   enableCellEdit : true,
   },
 
-  { field : 'displayActualAverage',
+  { field : 'displayAdjustedAverage',
   displayName : 'Average',
   width : 80,
   format : "c2",

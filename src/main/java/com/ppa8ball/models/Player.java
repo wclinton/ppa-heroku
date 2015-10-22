@@ -115,6 +115,21 @@ public class Player
 
 		return stats;
 	}
+	
+	public Stat getStats(Season season)
+	{
+		List<Stat> stats = getStats();
+		
+		if (stats != null)
+			for (Stat stat : stats)
+			{
+				if (stat.getSeason().getId().longValue() == season.getId().longValue())
+					return stat;
+			}
+		
+		return null;
+		
+	}
 
 	public void setStats(List<Stat> stats)
 	{
