@@ -21,7 +21,7 @@ app
 						var deferred = $q.defer();
 						var getTeams = $http({
 							method : 'GET',
-							url : '/teams',
+							url : '/rest/teams',
 							cache : 'false'
 						});
 

@@ -21,7 +21,6 @@ import com.ppa8ball.models.Match;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Team;
 import com.ppa8ball.models.Week;
-import com.ppa8ball.service.SeasonServiceImpl;
 import com.ppa8ball.service.TeamService;
 import com.ppa8ball.service.TeamServiceImpl;
 import com.ppa8ball.stats.CellHelp;
@@ -35,7 +34,7 @@ public class Load
 	public Load(Session session, Season season)
 	{
 		teamService = new TeamServiceImpl(session);
-		currentSeason = new SeasonServiceImpl(session).GetCurrent();
+		currentSeason = season;
 	}
 
 	public List<Week> LoadFromExcel()
@@ -88,7 +87,7 @@ public class Load
 
 		List<Week> weeks = new ArrayList<>();
 
-		while (weeks.size() < 9)
+		while (cell != null)
 		{
 			Week week = getWeek(sheet, cell, year);
 
@@ -175,14 +174,14 @@ public class Load
 			int homeTeamNumber = Integer.parseInt(teams[1].trim());
 			int awayTeamNumber = Integer.parseInt(teams[0].trim());
 
-			Team home = teamService.GetByNumber(currentSeason, homeTeamNumber);
-			Team away = teamService.GetByNumber(currentSeason, awayTeamNumber);
+			Team home = teamService.GetByNumber(currentSeason.getId(), homeTeamNumber);
+			Team away = teamService.GetByNumber(currentSeason.getId(), awayTeamNumber);
 
 			cell = CellHelp.getCellBelow(sheet, cell);
 
 			String[] tables = getTables(cell);
 
-			return new Match(number, tables[0], tables[1], home, away);
+			return new Match(currentSeason, number, tables[0], tables[1], home, away);
 		}
 		return null;
 	}
@@ -244,7 +243,7 @@ public class Load
 		Week week = null;
 		Date date = null;
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 19; i++)
 		{
 			// look for a column with dates
 

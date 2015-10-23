@@ -14,5 +14,5 @@ public interface TeamService
 	public List<Team> GetBySeason(Season season);
 	public List<Team> GetNormalBySeason(Season season);
 	public Team GetSpareBySeason(Season season);
-	public Team GetByNumber(Season season, int number);
+	public Team GetByNumber(long seasonId, int number);
 }

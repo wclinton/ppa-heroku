@@ -7,40 +7,40 @@ import com.ppa8ball.models.Stat;
 
 public class PlayerView
 {
-	
+
 	private long id;
-	//private int teamNumber;
+	// private int teamNumber;
 	private String firstName;
 	private String lastName;
 	private String fullName;
 	private String gender;
-	private int totalPoints;
-	private int gamesPlayed;
-	private double adjustedAverage;
-	private double actualAverage;
-	private int perfectNights;
-	private double displayAdjustedAverage;
-	private double displayActualAverage;
-	
-	public PlayerView(Player player)
+	private int totalPoints = 0;
+	private int gamesPlayed = 0;
+	private double adjustedAverage = 0;
+	private double actualAverage = 0;
+	private int perfectNights = 0;
+	private double displayAdjustedAverage = 0;
+	private double displayActualAverage = 0;
+
+	public PlayerView(Player player, Stat stat)
 	{
 		id = player.getId();
 		firstName = player.getFirstName();
 		lastName = player.getLastName();
 		fullName = player.getFullName();
 		gender = player.getGender().toString();
-		
-		Stat stat = getCurrentPlayerStat(player.getStats());
-		
-		totalPoints = stat.getTotalPoints();
-		gamesPlayed = stat.getGamesPlayed();
-		adjustedAverage = stat.getAdjustedAverage();
-		actualAverage = stat.getActualAverage();
-		perfectNights = stat.getPerfectNights();
-		displayActualAverage = stat.getDisplayActualAverage();
-		displayAdjustedAverage = stat.getDisplayAdjustedAverage();
+		if (stat != null)
+		{
+			totalPoints = stat.getTotalPoints();
+			gamesPlayed = stat.getGamesPlayed();
+			adjustedAverage = stat.getAdjustedAverage();
+			actualAverage = stat.getActualAverage();
+			perfectNights = stat.getPerfectNights();
+			displayActualAverage = stat.getDisplayActualAverage();
+			displayAdjustedAverage = stat.getDisplayAdjustedAverage();
+		}
 	}
-	
+
 	public long getId()
 	{
 		return id;
@@ -99,10 +99,5 @@ public class PlayerView
 	public double getDisplayActualAverage()
 	{
 		return displayActualAverage;
-	}
-
-	private static Stat getCurrentPlayerStat(List<Stat> stats)
-	{
-		return stats.get(0);
 	}
 }

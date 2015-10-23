@@ -62,5 +62,14 @@ public class WeekServiceImpl implements WeekService
 		List<Week> list = cr.list();
 		return list;
 	}
+	
+	@Override
+	public List<Week> getAll(Season season)
+	{
+		Criteria cr = session.createCriteria(Season.class);
+		cr.add(Restrictions.eq("id",season.getId()));
+		Season s = (Season) cr.uniqueResult();
+		return s.getWeeks();
+	}
 
 }

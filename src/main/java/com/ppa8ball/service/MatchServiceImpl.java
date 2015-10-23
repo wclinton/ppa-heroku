@@ -19,39 +19,27 @@ public class MatchServiceImpl implements MatchService
 		this.session = session;
 	}
 
-	
 	@Override
-	public Match getMatchByWeekTeam(int weekNumber, int teamNumber)
+	public Match getMatchByWeekTeam(long seasonId, int weekNumber, int teamNumber)
 	{
-//		Criterion week = Restrictions.eq("week.number", weekNumber);
-//		Criterion awayTeam = Restrictions.eq("away.number", teamNumber);
-//		Criterion homeTeam = Restrictions.eq("home.number", teamNumber);
-//
-//		Criterion team = Restrictions.or(awayTeam, homeTeam);
-//
-//		Criteria criteria = session.createCriteria(Match.class);
-//
-//		criteria.add(Restrictions.and(week, team));
-//
-//		return (Match) criteria.uniqueResult();
-		
-		
 		Criterion week = Restrictions.eq("W.number", weekNumber);
 		Criterion awayTeam = Restrictions.eq("A.number", teamNumber);
 		Criterion homeTeam = Restrictions.eq("H.number", teamNumber);
 		
 		Criterion team = Restrictions.or(awayTeam, homeTeam);
+		Criterion season = Restrictions.eq("S.id",seasonId);
+		
+		//Criteria restriction = Restrictions.and(week,team);
 		
 		Criteria criteria = session.createCriteria(Match.class)
 				.createAlias("week", "W")
 				.createAlias("away", "A")
 				.createAlias("home", "H")
+				.createAlias("season", "S")
+				.add(season)
 				.add(Restrictions.and(week, team));
-		
-		@SuppressWarnings("unchecked")
-		List<Match> matches = criteria.list();
-		
-		return matches.get(0);
+				
+		return (Match) criteria.uniqueResult();
 	}
 
 	@Override

@@ -8,12 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table
-public class Week
+public class Week implements Comparable<Week>
 {
 	@Id
 	@GeneratedValue
@@ -22,6 +24,20 @@ public class Week
 	private Date date;
 	private Boolean hasStats = false;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn
+	private Season season;
+	
+
+	public Season getSeason()
+	{
+		return season;
+	}
+
+	public void setSeason(Season season)
+	{
+		this.season = season;
+	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="week")
 	private List<Match> matches;
@@ -96,5 +112,11 @@ public class Week
 	public void setHasStats(Boolean hasStats)
 	{
 		this.hasStats = hasStats;
+	}
+
+	@Override
+	public int compareTo(Week o)
+	{
+		return this.number > o.number ? 1 : -1;
 	}
 }
