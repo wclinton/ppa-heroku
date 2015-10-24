@@ -1,5 +1,6 @@
 package com.ppa8ball.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -29,12 +30,10 @@ public class SeasonServiceImpl implements SeasonService
 	public Season GetCurrent()
 	{
 		Criteria cr = session.createCriteria(Season.class);
-		cr.addOrder(Order.desc("startYear"));
-
-		@SuppressWarnings("unchecked")
-		List<Season>  season = cr.list();
+		List<Season>  seasons = cr.list();
+		Collections.sort(seasons ,Collections.reverseOrder());
 		
-		return season.get(0);
+		return seasons.get(0);
 	}
 
 	@Override
