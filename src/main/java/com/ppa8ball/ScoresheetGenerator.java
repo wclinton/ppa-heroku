@@ -122,8 +122,7 @@ public class ScoresheetGenerator
 			double average = playerView.getDisplayAdjustedAverage();
 			totalAverage += average;
 
-			String name = playerView.getFullName();
-			if (!name.isEmpty())
+			if (!playerView.getFullName().isEmpty())
 			{
 				form.setField(HomeTeamAverageFields[i], Double.toString(average));
 				form.setField(HomeTeamPlayerFields[i], playerView.getFullName());

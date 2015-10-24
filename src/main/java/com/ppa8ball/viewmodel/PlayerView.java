@@ -48,16 +48,22 @@ public class PlayerView
 
 	public String getFirstName()
 	{
+		if (firstName == null)
+			return "";
 		return firstName;
 	}
 
 	public String getLastName()
 	{
+		if (lastName == null)
+			return "";
 		return lastName;
 	}
 
 	public String getFullName()
 	{
+		if (fullName == null || fullName.isEmpty())
+			return (getFirstName() + " " +getLastName()).trim();
 		return fullName;
 	}
 
