@@ -15,12 +15,12 @@ public class Stat
 {
 	@GeneratedValue
 	@Id
-	private Long id;
+	private long id;
 
 	private int totalPoints;
 	private int gamesPlayed;
-	private Double adjustedAverage;
-	private Double actualAverage;
+	private double adjustedAverage;
+	private double actualAverage;
 	private int perfectNights;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -42,7 +42,7 @@ public class Stat
 		this.season = season;
 	}
 
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}
@@ -82,7 +82,7 @@ public class Stat
 		this.gamesPlayed = gamesPlayed;
 	}
 
-	public Double getAdjustedAverage()
+	public double getAdjustedAverage()
 	{
 		return adjustedAverage;
 	}
@@ -92,7 +92,7 @@ public class Stat
 		this.adjustedAverage = adjustedAverage;
 	}
 
-	public Double getActualAverage()
+	public double getActualAverage()
 	{
 		return actualAverage;
 	}
@@ -102,7 +102,7 @@ public class Stat
 		this.actualAverage = actualAverage;
 	}
 
-	public Integer getPerfectNights()
+	public int getPerfectNights()
 	{
 		return perfectNights;
 	}

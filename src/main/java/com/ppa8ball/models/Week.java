@@ -19,10 +19,10 @@ public class Week implements Comparable<Week>
 {
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 	private int number;
 	private Date date;
-	private Boolean hasStats = false;
+	private boolean hasStats = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
@@ -62,7 +62,7 @@ public class Week implements Comparable<Week>
 		 this.matches = matches;
 	}
 
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}

@@ -26,7 +26,7 @@ public class Team
 {
 	@GeneratedValue
 	@Id
-	private Long id;
+	private long id;
 	private String name;
 	private int number;
 
@@ -87,7 +87,7 @@ public class Team
 		this.type = type;
 	}
 
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}

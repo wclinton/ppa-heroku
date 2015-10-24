@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 public class Roster
 {
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}
@@ -105,7 +105,7 @@ public class Roster
 
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)

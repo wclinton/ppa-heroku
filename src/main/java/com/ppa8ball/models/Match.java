@@ -19,7 +19,7 @@ public class Match
 {
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 	private int number;
 	private String table1;
 	private String table2;
@@ -66,7 +66,7 @@ public class Match
 		this.away = away;
 	}
 
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}

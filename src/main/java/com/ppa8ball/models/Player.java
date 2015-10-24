@@ -23,7 +23,7 @@ public class Player
 {
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 
 	private String firstName;
 	private String lastName;
@@ -58,12 +58,12 @@ public class Player
 		setGender(gender);
 	}
 
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}
 
-	public void setId(Long id)
+	public void setId(long id)
 	{
 		this.id = id;
 	}
@@ -123,7 +123,7 @@ public class Player
 		if (stats != null)
 			for (Stat stat : stats)
 			{
-				if (stat.getSeason().getId().longValue() == season.getId().longValue())
+				if (stat.getSeason().getId() == season.getId())
 					return stat;
 			}
 		

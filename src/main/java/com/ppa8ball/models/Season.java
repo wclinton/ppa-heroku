@@ -18,9 +18,9 @@ import javax.persistence.Transient;
 
 @Entity
 @Table
-public class Season
+public class Season implements Comparable<Season>
 {
-	private Long id;
+	private long id;
 	private int startYear;
 	private int endYear;
 	private String description;
@@ -53,7 +53,7 @@ public class Season
 	@Id
 	@GeneratedValue
 	@Column
-	public Long getId()
+	public long getId()
 	{
 		return id;
 	}
@@ -142,5 +142,11 @@ public class Season
 	public String toString()
 	{
 		return "Season:" + description;
+	}
+	
+	@Override
+	public int compareTo(Season o)
+	{
+		return this.startYear > o.startYear ? 1 : -1;
 	}
 }
