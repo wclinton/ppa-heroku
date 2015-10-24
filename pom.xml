@@ -134,6 +134,11 @@
         	<artifactId>jersey-json</artifactId>
         	<version>1.9</version>
         </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-c3p0</artifactId>
+        	<version>4.0.1.Final</version>
+        </dependency>
     </dependencies>
     
     <repositories>

@@ -19,14 +19,14 @@ public class DataProcessServiceImpl implements DataProcessService
 	@Override
 	public void Clear()
 	{
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getSession();
 		clearDatabases(session);
 	}
 
 	@Override
 	public void Process(Season season)
 	{
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getSession();
 
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		seasonService.Save(season);
@@ -102,7 +102,6 @@ public class DataProcessServiceImpl implements DataProcessService
 
 	private void clearDatabases(Session session)
 	{
-		Session sess = HibernateUtil.getSessionFactory().openSession();
 		String[] tables =
 		{ "team","season","match", "stat","player", "team_player", "week" };
 
@@ -110,9 +109,9 @@ public class DataProcessServiceImpl implements DataProcessService
 		{
 			try
 			{
-				sess.beginTransaction();
-				sess.createSQLQuery("TRUNCATE TABLE " + table + " CASCADE").executeUpdate();
-				sess.getTransaction().commit();
+				session.beginTransaction();
+				session.createSQLQuery("TRUNCATE TABLE " + table + " CASCADE").executeUpdate();
+				session.getTransaction().commit();
 			} catch (Exception e)
 			{
 				// swallow the exception.

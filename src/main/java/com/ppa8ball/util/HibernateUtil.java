@@ -2,12 +2,19 @@ package com.ppa8ball.util;
 
 import java.net.URI;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil
 {
 	private static final SessionFactory sessionFactory = buildSessionFactory();
+	
+	
+	public static Session getSession()
+	{
+		return getSessionFactory().openSession();
+	}
 
 	private static SessionFactory buildSessionFactory()
 	{
@@ -32,6 +39,18 @@ public class HibernateUtil
 			cfg.setProperty("hibernate.connection.url", dbUrl);
 			cfg.setProperty("connection.username", username);
 			cfg.setProperty("connection.password", password);
+			
+			
+
+			cfg.setProperty("hibernate.c3p0.max_size","10");
+			cfg.setProperty("hibernate.c3p0.min_size","0");
+			cfg.setProperty("hibernate.c3p0.timeout","5000");
+			cfg.setProperty("hibernate.c3p0.max_statements","100");
+			cfg.setProperty("hibernate.c3p0.idle_test_period","300");
+			cfg.setProperty("hibernate.c3p0.acquire_increment","2");
+			
+			cfg.setProperty("hibernate.format_sql", "true");
+			cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 
 			cfg.setProperty("hibernate.connection.requireSSL", "true");
 			
@@ -47,7 +66,7 @@ public class HibernateUtil
 		}
 	}
 
-	public static SessionFactory getSessionFactory()
+	private static SessionFactory getSessionFactory()
 	{
 		return sessionFactory;
 	}

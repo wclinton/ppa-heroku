@@ -93,7 +93,7 @@ public class RestService
 	public MatchView getMatch(@PathParam("seasonId") long seasonId, @PathParam("weekNumber") int week,
 			@PathParam("teamNumber") int teamNumber)
 	{
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getSession();
 		MatchService service = new MatchServiceImpl(session);
 		Match match = service.getMatchByWeekTeam(seasonId, week, teamNumber);
 
@@ -226,7 +226,7 @@ public class RestService
 
 	private String getDataInfo(Season season) throws IOException
 	{
-		Session session = HibernateUtil.getSessionFactory().openSession();
+		Session session = HibernateUtil.getSession();
 
 		TeamService teamService = new TeamServiceImpl(session);
 		List<Team> savedTeams = teamService.GetBySeason(season);
@@ -248,6 +248,6 @@ public class RestService
 
 	private static Session getSession()
 	{
-		return HibernateUtil.getSessionFactory().openSession();
+		return HibernateUtil.getSession();
 	}
 }
