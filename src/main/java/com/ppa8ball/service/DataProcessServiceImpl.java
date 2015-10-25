@@ -15,19 +15,21 @@ import com.ppa8ball.util.HibernateUtil;
 
 public class DataProcessServiceImpl implements DataProcessService
 {
+	private Session session;
+	public DataProcessServiceImpl(Session session)
+	{
+		this.session = session;
+	}
 	
 	@Override
 	public void Clear()
 	{
-		Session session = HibernateUtil.getSession();
 		clearDatabases(session);
 	}
 
 	@Override
 	public void Process(Season season)
 	{
-		Session session = HibernateUtil.getSession();
-
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		seasonService.Save(season);
 		
