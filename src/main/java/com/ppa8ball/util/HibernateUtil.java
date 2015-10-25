@@ -42,12 +42,12 @@ public class HibernateUtil
 			
 			
 
-			cfg.setProperty("hibernate.c3p0.max_size","10");
-			cfg.setProperty("hibernate.c3p0.min_size","0");
-			cfg.setProperty("hibernate.c3p0.timeout","5000");
-			cfg.setProperty("hibernate.c3p0.max_statements","100");
-			cfg.setProperty("hibernate.c3p0.idle_test_period","300");
-			cfg.setProperty("hibernate.c3p0.acquire_increment","2");
+			cfg.setProperty("hibernate.c3p0.max_size","19");
+			cfg.setProperty("hibernate.c3p0.min_size","1");
+			cfg.setProperty("hibernate.c3p0.timeout","1800");
+			//cfg.setProperty("hibernate.c3p0.max_statements","100");
+			//cfg.setProperty("hibernate.c3p0.idle_test_period","300");
+			//cfg.setProperty("hibernate.c3p0.acquire_increment","2");
 			
 			cfg.setProperty("hibernate.format_sql", "true");
 			cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
