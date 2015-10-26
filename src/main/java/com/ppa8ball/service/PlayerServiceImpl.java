@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.ppa8ball.models.Player;
@@ -11,18 +12,20 @@ import com.ppa8ball.models.Team;
 
 public class PlayerServiceImpl implements PlayerService
 {
-	private Session session;
-	
-	public PlayerServiceImpl(Session session)
+	private SessionFactory sessionFactory;
+
+	public PlayerServiceImpl(SessionFactory sessionFactory)
 	{
 		super();
-		this.session = session;
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
 	public void Save(Player player)
 	{
+		Session session = getSession();
 		session.saveOrUpdate(player);
+		session.getTransaction().commit();
 	}
 
 	@Override
@@ -38,44 +41,66 @@ public class PlayerServiceImpl implements PlayerService
 	@Override
 	public List<Player> GetByTeam(Team team)
 	{
+		Session session = getSession();
 		Criteria cr = session.createCriteria(Team.class);
 		cr.add(Restrictions.eq("team.id", team.getId()));
-		return cr.list();
+
+		List<Player> players = cr.list();
+
+		session.getTransaction().commit();
+		return players;
 	}
 
 	@Override
 	public List<Player> GetSpare()
 	{
-//		TeamService teamService = new TeamServiceImpl(session);
-//		
-//		Team spareTeam = teamService.g
-//		
-//		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Player Get(long id)
 	{
-		 return  (Player) session.get(Player.class, id);
+		Session session = getSession();
+
+		Player player = (Player) session.get(Player.class, id);
+
+		session.getTransaction().commit();
+
+		return player;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Player> Get()
 	{
-		return (List<Player>) session.createCriteria(Player.class).list();
+		Session session = getSession();
+		List<Player> players = session.createCriteria(Player.class).list();
+		
+		session.getTransaction().commit();
+		
+		return players;
 	}
-	
+
 	@Override
 	public Player GetByName(String firstName, String lastName)
 	{
+		Session session = getSession();
 		Criteria cr = session.createCriteria(Player.class);
 		cr.add(Restrictions.eq("firstName", firstName));
 		cr.add(Restrictions.eq("lastName", lastName));
-		
+
 		cr.setMaxResults(1);
-		
-		return (Player) cr.uniqueResult();
+
+		Player player = (Player) cr.uniqueResult();
+		session.getTransaction().commit();
+
+		return player;
+	}
+
+	private Session getSession()
+	{
+		Session session = sessionFactory.getCurrentSession();
+		session.beginTransaction();
+		return session;
 	}
 }

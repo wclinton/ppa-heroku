@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import com.google.gson.Gson;
 import com.ppa8ball.Scoresheet;
@@ -58,11 +59,10 @@ public class RestService
 	@Produces(MediaType.APPLICATION_JSON)
 	public SeasonView getCurrentSeason()
 	{
-		Session session = HibernateUtil.getSession();
+		//Session session = HibernateUtil.getSession();
 
-		SeasonService seasonService = new SeasonServiceImpl(session);
+		SeasonService seasonService = new SeasonServiceImpl(HibernateUtil.getSessionFactory());
 		Season currentSeason = seasonService.GetCurrent();
-
 		return new SeasonView(currentSeason);
 	}
 
@@ -73,7 +73,7 @@ public class RestService
 		Session session = HibernateUtil.getSession();
 		
 		Season season = new Season(seasons2014Year);
-		DataProcessService service = new DataProcessServiceImpl(session);
+		DataProcessService service = new DataProcessServiceImpl(HibernateUtil.getSessionFactory());
 
 		// clear all the data from the database.
 		service.Clear();
@@ -95,7 +95,7 @@ public class RestService
 			@PathParam("teamNumber") int teamNumber)
 	{
 		Session session = HibernateUtil.getSession();
-		MatchService service = new MatchServiceImpl(session);
+		MatchService service = new MatchServiceImpl(HibernateUtil.getSessionFactory());
 		Match match = service.getMatchByWeekTeam(seasonId, week, teamNumber);
 
 		return new MatchView(match);
@@ -106,7 +106,7 @@ public class RestService
 	@Produces(MediaType.APPLICATION_JSON)
 	public PlayersView getTeamlayers(@PathParam("seasonId") long seasonId, @PathParam("teamNumber") int teamNumber)
 	{
-		return getPlayers(HibernateUtil.getSession(),seasonId, teamNumber);
+		return getPlayers(HibernateUtil.getSessionFactory(),seasonId, teamNumber);
 	}
 
 	@GET
@@ -114,7 +114,7 @@ public class RestService
 	@Produces(MediaType.APPLICATION_JSON)
 	public PlayersView getSparePlayers(@PathParam("seasonId") long seasonId)
 	{
-		return getPlayers(HibernateUtil.getSession(),seasonId, 11);
+		return getPlayers(HibernateUtil.getSessionFactory(),seasonId, 11);
 	}
 
 	@GET
@@ -148,7 +148,7 @@ public class RestService
 					}
 					
 					Session session = HibernateUtil.getSession();
-					TeamService teamService = new TeamServiceImpl(session);
+					TeamService teamService = new TeamServiceImpl(HibernateUtil.getSessionFactory());
 					Team homeTeam = teamService.GetByNumber(seasonId, home);
 					Team awayTeam = teamService.GetByNumber(seasonId, away);
 					Scoresheet scoresheet = new Scoresheet(homeTeam, awayTeam);
@@ -182,9 +182,9 @@ public class RestService
 	public TeamsView getTeams(@PathParam("seasonId") long seasonId)
 	{
 		Session session = HibernateUtil.getSession();
-		SeasonService seasonService = new SeasonServiceImpl(session);
+		SeasonService seasonService = new SeasonServiceImpl(HibernateUtil.getSessionFactory());
 		Season season = seasonService.Get(seasonId);
-		TeamService teamService = new TeamServiceImpl(session);
+		TeamService teamService = new TeamServiceImpl(HibernateUtil.getSessionFactory());
 		List<Team> teams = teamService.GetNormalBySeason(season);
 		TeamsView teamView = new TeamsView(teams);
 		return teamView;
@@ -197,21 +197,21 @@ public class RestService
 	{
 		Session session = HibernateUtil.getSession();
 		
-		SeasonService seasonService = new SeasonServiceImpl(session);
+		SeasonService seasonService = new SeasonServiceImpl(HibernateUtil.getSessionFactory());
 		Season season = seasonService.Get(seasonId);
 		
-		WeekService service = new WeekServiceImpl(session);
+		WeekService service = new WeekServiceImpl(HibernateUtil.getSessionFactory());
 		List<Week> weeks = service.getAll(season);
 		WeeksView weeksView = new WeeksView(weeks);
 		return weeksView;
 	}
 
-	private PlayersView getPlayers(Session session, long seasonID, int teamNumber)
+	private PlayersView getPlayers(SessionFactory sessionFactory, long seasonID, int teamNumber)
 	{
-		TeamService service = new TeamServiceImpl(session);
+		TeamService service = new TeamServiceImpl(sessionFactory);
 		Team team = service.GetByNumber(seasonID, teamNumber);
 		
-		Season season = new SeasonServiceImpl(session).Get(seasonID);
+		Season season = new SeasonServiceImpl(HibernateUtil.getSessionFactory()).Get(seasonID);
 
 		PlayersView players = new PlayersView();
 
@@ -228,10 +228,10 @@ public class RestService
 	{
 		Session session = HibernateUtil.getSession();
 
-		TeamService teamService = new TeamServiceImpl(session);
+		TeamService teamService = new TeamServiceImpl(HibernateUtil.getSessionFactory());
 		List<Team> savedTeams = teamService.GetBySeason(season);
 
-		PlayerService playerService = new PlayerServiceImpl(session);
+		PlayerService playerService = new PlayerServiceImpl(HibernateUtil.getSessionFactory());
 
 		List<Player> players = playerService.Get();
 

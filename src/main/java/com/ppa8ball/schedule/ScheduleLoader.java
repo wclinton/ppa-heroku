@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import com.ppa8ball.excel.MySheet;
 import com.ppa8ball.excel.PPACell;
@@ -39,10 +40,10 @@ public class ScheduleLoader implements DataLoader
 	private final TeamService teamService;
 	private final Season currentSeason;
 
-	public ScheduleLoader(Session session, Season season)
+	public ScheduleLoader(SessionFactory sessionFactory, Season season)
 	{
-		teamService = new TeamServiceImpl(session);
-		currentSeason = new SeasonServiceImpl(session).GetCurrent();
+		teamService = new TeamServiceImpl(sessionFactory);
+		currentSeason = new SeasonServiceImpl(sessionFactory).GetCurrent();
 	}
 
 	public List<Week> Load()

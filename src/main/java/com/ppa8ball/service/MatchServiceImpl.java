@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -11,17 +12,19 @@ import com.ppa8ball.models.Match;
 
 public class MatchServiceImpl implements MatchService
 {
-	private Session session;
+	private SessionFactory sessionFacory;
 
-	public MatchServiceImpl(Session session)
+	public MatchServiceImpl(SessionFactory sessionFacory)
 	{
 		super();
-		this.session = session;
+		this.sessionFacory = sessionFacory;
 	}
 
 	@Override
 	public Match getMatchByWeekTeam(long seasonId, int weekNumber, int teamNumber)
 	{
+		Session session = sessionFacory.getCurrentSession();
+		session.beginTransaction();
 		Criterion week = Restrictions.eq("W.number", weekNumber);
 		Criterion awayTeam = Restrictions.eq("A.number", teamNumber);
 		Criterion homeTeam = Restrictions.eq("H.number", teamNumber);
@@ -39,7 +42,10 @@ public class MatchServiceImpl implements MatchService
 				.add(season)
 				.add(Restrictions.and(week, team));
 				
-		return (Match) criteria.uniqueResult();
+		Match match = (Match) criteria.uniqueResult();
+		
+		session.getTransaction().commit();
+		return match;
 	}
 
 	@Override
@@ -54,9 +60,9 @@ public class MatchServiceImpl implements MatchService
 	@Override
 	public void Save(Match match)
 	{
+		Session session = sessionFacory.getCurrentSession();
 		session.beginTransaction();
 		session.saveOrUpdate(match);
 		session.getTransaction().commit();
 	}
-
 }
