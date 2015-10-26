@@ -88,11 +88,8 @@ public class TeamServiceImpl implements TeamService
 	}
 
 	@Override
-	public Team GetByNumber(long seasonId, int number)
+	public Team GetByNumber(Session session, long seasonId, int number)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-
 		Criteria cr = session.createCriteria(Team.class);
 
 		cr.add(Restrictions.eq("season.id", seasonId));
@@ -100,7 +97,6 @@ public class TeamServiceImpl implements TeamService
 
 		Team team = (Team) cr.uniqueResult();
 
-		session.getTransaction().commit();
 		return team;
 	}
 
