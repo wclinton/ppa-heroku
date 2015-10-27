@@ -10,13 +10,13 @@ public class HibernateUtil
 {
 	private static final SessionFactory sessionFactory = buildSessionFactory();
 
-//	public static Session getSession()
-//	{
-//		Session session = getSessionFactory().getCurrentSession();
-//		session.beginTransaction();
-//		
-//		return session;
-//	}
+	public static Session getSession()
+	{
+		Session session = getSessionFactory().getCurrentSession();
+		session.beginTransaction();
+		
+		return session;
+	}
 	
 	
 
