@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.ppa8ball.models.Season;
@@ -13,12 +12,12 @@ import com.ppa8ball.models.Week;
 public class WeekServiceImpl implements WeekService
 {
 	
-	private final SessionFactory sessionFactory;
+	private final Session session;
 
-	public WeekServiceImpl(SessionFactory sessionFactory)
+	public WeekServiceImpl(Session session)
 	{
 		super();
-		this.sessionFactory = sessionFactory;
+		this.session = session;
 	}
 
 	@Override
@@ -33,7 +32,6 @@ public class WeekServiceImpl implements WeekService
 	@Override
 	public void Save(Week week)
 	{
-		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		session.saveOrUpdate(week);
 		session.getTransaction().commit();
@@ -42,12 +40,10 @@ public class WeekServiceImpl implements WeekService
 	@Override
 	public Week getWeekbyNumber(Season season, int number)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Season.class);
 		cr.add(Restrictions.eq("id",season.getId()));
+		
 		Season s = (Season) cr.uniqueResult();
-		session.getTransaction().commit();
 		
 		for (Week week : s.getWeeks())
 		{
@@ -60,25 +56,19 @@ public class WeekServiceImpl implements WeekService
 	@Override
 	public List<Week> getAll()
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Week.class);
 		
 		@SuppressWarnings("unchecked")
 		List<Week> list = cr.list();
-		session.getTransaction().commit();
 		return list;
 	}
 	
 	@Override
 	public List<Week> getAll(Season season)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Season.class);
 		cr.add(Restrictions.eq("id",season.getId()));
 		Season s = (Season) cr.uniqueResult();
-		session.getTransaction().commit();
 		return s.getWeeks();
 	}
 

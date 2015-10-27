@@ -5,23 +5,22 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 
 import com.ppa8ball.models.Season;
 
 public class SeasonServiceImpl implements SeasonService
 {
-	private SessionFactory sessionFactory;
-
-	public SeasonServiceImpl(SessionFactory factory)
+	private Session session;
+	
+	public SeasonServiceImpl(Session session)
 	{
-		this.sessionFactory = factory;
+		this.session = session;
 	}
 
 	@Override
 	public void Save(Season season)
 	{
-		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		session.saveOrUpdate(season);
 		session.getTransaction().commit();
@@ -30,22 +29,16 @@ public class SeasonServiceImpl implements SeasonService
 	@Override
 	public Season GetCurrent()
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Season.class);
-		List<Season> seasons = cr.list();
-		Collections.sort(seasons, Collections.reverseOrder());
-		session.getTransaction().commit();
+		List<Season>  seasons = cr.list();
+		Collections.sort(seasons ,Collections.reverseOrder());
+		
 		return seasons.get(0);
 	}
 
 	@Override
 	public Season Get(long id)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-		Season season = (Season) session.get(Season.class, id);
-		session.getTransaction().commit();
-		return season;
+		 return  (Season) session.get(Season.class, id);
 	}
 }

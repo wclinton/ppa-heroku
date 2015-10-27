@@ -16,7 +16,6 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import com.ppa8ball.models.Match;
 import com.ppa8ball.models.Season;
@@ -32,9 +31,9 @@ public class Load
 	private final TeamService teamService;
 	private final Season currentSeason;
 
-	public Load(SessionFactory sessionFactory, Season season)
+	public Load(Session session, Season season)
 	{
-		teamService = new TeamServiceImpl(sessionFactory);
+		teamService = new TeamServiceImpl(session);
 		currentSeason = season;
 	}
 

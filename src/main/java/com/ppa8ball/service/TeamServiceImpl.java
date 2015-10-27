@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import com.ppa8ball.models.Season;
@@ -14,11 +13,12 @@ import com.ppa8ball.models.TeamType;
 public class TeamServiceImpl implements TeamService
 {
 
-	private SessionFactory sessionFactory;
+	private Session session;
 
-	public TeamServiceImpl(SessionFactory sessionFactory)
+	public TeamServiceImpl(Session session)
 	{
-		this.sessionFactory = sessionFactory;
+		super();
+		this.session = session;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class TeamServiceImpl implements TeamService
 		for (Team team : teams)
 		{
 			Store(team);
-		}
+		}	
 	}
 
 	@Override
@@ -46,23 +46,18 @@ public class TeamServiceImpl implements TeamService
 	@Override
 	public List<Team> GetBySeason(Season season)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Team.class);
 
 		cr.add(Restrictions.eq("season.id", season.getId()));
 
 		@SuppressWarnings("unchecked")
 		List<Team> list = cr.list();
-		session.getTransaction().commit();
 		return list;
 	}
-
+	
 	@Override
 	public List<Team> GetNormalBySeason(Season season)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Team.class);
 
 		cr.add(Restrictions.eq("season.id", season.getId()));
@@ -70,43 +65,34 @@ public class TeamServiceImpl implements TeamService
 
 		@SuppressWarnings("unchecked")
 		List<Team> list = cr.list();
-		session.getTransaction().commit();
 		return list;
 	}
 
 	@Override
 	public Team GetSpareBySeason(Season season)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
 		Criteria cr = session.createCriteria(Team.class);
+
 		cr.add(Restrictions.eq("season.id", season.getId()));
 		cr.add(Restrictions.eq("type", TeamType.Spare));
-		Team team = (Team) cr.uniqueResult();
-		session.getTransaction().commit();
-		return team;
-	}
 
+		return (Team) cr.uniqueResult();
+	}
+	
+	
 	@Override
 	public Team GetByNumber(long seasonId, int number)
 	{
-		Session session = sessionFactory.getCurrentSession();
-		session.beginTransaction();
-
 		Criteria cr = session.createCriteria(Team.class);
 
 		cr.add(Restrictions.eq("season.id", seasonId));
 		cr.add(Restrictions.eq("number", number));
 
-		Team team = (Team) cr.uniqueResult();
-
-		session.getTransaction().commit();
-		return team;
+		return (Team) cr.uniqueResult();
 	}
-
+	
 	private void Store(Team team)
 	{
-		Session session = sessionFactory.getCurrentSession();
 		session.beginTransaction();
 		session.saveOrUpdate(team);
 		session.getTransaction().commit();
