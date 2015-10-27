@@ -29,8 +29,6 @@ public class MatchServiceImpl implements MatchService
 		Criterion team = Restrictions.or(awayTeam, homeTeam);
 		Criterion season = Restrictions.eq("S.id",seasonId);
 		
-		//Criteria restriction = Restrictions.and(week,team);
-		
 		Criteria criteria = session.createCriteria(Match.class)
 				.createAlias("week", "W")
 				.createAlias("away", "A")
@@ -54,9 +52,7 @@ public class MatchServiceImpl implements MatchService
 	@Override
 	public void Save(Match match)
 	{
-		session.beginTransaction();
 		session.saveOrUpdate(match);
-		session.getTransaction().commit();
 	}
 
 }

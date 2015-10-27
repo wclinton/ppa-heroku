@@ -46,11 +46,6 @@ public class PlayerServiceImpl implements PlayerService
 	@Override
 	public List<Player> GetSpare()
 	{
-//		TeamService teamService = new TeamServiceImpl(session);
-//		
-//		Team spareTeam = teamService.g
-//		
-//		// TODO Auto-generated method stub
 		return null;
 	}
 

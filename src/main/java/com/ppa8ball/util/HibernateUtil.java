@@ -45,7 +45,7 @@ public class HibernateUtil
 			cfg.setProperty("hibernate.c3p0.max_size","19");
 			cfg.setProperty("hibernate.c3p0.min_size","1");
 			cfg.setProperty("hibernate.c3p0.timeout","1800");
-			//cfg.setProperty("hibernate.c3p0.max_statements","100");
+			cfg.setProperty("hibernate.c3p0.max_statements","300");
 			//cfg.setProperty("hibernate.c3p0.idle_test_period","300");
 			//cfg.setProperty("hibernate.c3p0.acquire_increment","2");
 			

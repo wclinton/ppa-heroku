@@ -87,20 +87,14 @@ public class RestService
 	public Response loadStats() throws ServletException, IOException
 	{
 		Session session = getSessionAndStartTransaction();
-
 		Season season = new Season(seasons2014Year);
 		DataProcessService service = new DataProcessServiceImpl(session);
-
-		// clear all the data from the database.
 		service.Clear();
 		service.Process(season);
-
-		String info = getDataInfo(season);
-
 		Season season2015 = new Season(seasons2015Year);
 		service.Process(season2015);
-
-		info = "<br>" + getDataInfo(season2015);
+		String info = "done <br>";// + getDataInfo(season2015);
+		session.getTransaction().commit();
 		return Response.status(200).entity(info).build();
 	}
 
@@ -173,7 +167,7 @@ public class RestService
 						away = myTeamNumber;
 					}
 
-					Session session = HibernateUtil.getSession();
+					Session session = getSessionAndStartTransaction();
 					TeamService teamService = new TeamServiceImpl(session);
 					Team homeTeam = teamService.GetByNumber(seasonId, home);
 					Team awayTeam = teamService.GetByNumber(seasonId, away);
@@ -190,13 +184,14 @@ public class RestService
 						scoresheet.setAwayPlayers(players);
 
 					ScoresheetGenerator.generateScoreSheet(output, scoresheet);
+					
+					session.getTransaction().commit();
 
 				} catch (Exception e)
 				{
 					throw new WebApplicationException(e);
 				}
 			}
-
 		};
 
 		return Response.ok(stream).header("content-disposition", "inline; filename='javatpoint.pdf'").build();

@@ -32,9 +32,9 @@ public class WeekServiceImpl implements WeekService
 	@Override
 	public void Save(Week week)
 	{
-		session.beginTransaction();
+		//session.beginTransaction();
 		session.saveOrUpdate(week);
-		session.getTransaction().commit();
+		//session.getTransaction().commit();
 	}
 
 	@Override

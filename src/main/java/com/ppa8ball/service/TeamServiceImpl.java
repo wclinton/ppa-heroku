@@ -93,8 +93,6 @@ public class TeamServiceImpl implements TeamService
 	
 	private void Store(Team team)
 	{
-		session.beginTransaction();
 		session.saveOrUpdate(team);
-		session.getTransaction().commit();
 	}
 }
