@@ -9,7 +9,18 @@ public class SeasonView
 	private int endYear;
 	private String description;
 	private boolean complete;
-	
+	private boolean isCurrentStatsAvailable;
+
+	public boolean isCurrentStatsAvailable()
+	{
+		return isCurrentStatsAvailable;
+	}
+
+	public void setCurrentStatsAvailable(boolean isCurrentStatsAvailable)
+	{
+		this.isCurrentStatsAvailable = isCurrentStatsAvailable;
+	}
+
 	public SeasonView(Season season)
 	{
 		this.id = season.getId();
@@ -17,6 +28,7 @@ public class SeasonView
 		this.endYear = season.getEndYear();
 		this.description = season.getDescription();
 		this.complete = season.isComplete();
+		this.isCurrentStatsAvailable = season.isCurrentStatsAvailble();
 	}
 
 	public long getId()

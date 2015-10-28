@@ -1,5 +1,6 @@
 package com.ppa8ball.models;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -138,12 +139,32 @@ public class Season implements Comparable<Season>
 		this.lastStatWeek = week;
 	}
 
+	@Transient
+	public boolean isCurrentStatsAvailble()
+	{
+		// get the last week with stats.
+		int lastWeekNum = getLastStatWeek().getNumber();
+
+		// next week to play will be +1 but indexed from zero so +1 -1 ...
+		Week nextWeekToPlay = weeks.get(lastWeekNum);
+
+		// Get the current date and time
+
+		Date d = new Date();
+
+		d.setHours(0);
+		d.setMinutes(0);
+		d.setSeconds(0);
+
+		return (d.compareTo(nextWeekToPlay.getDate()) <= 0);
+	}
+
 	@Override
 	public String toString()
 	{
 		return "Season:" + description;
 	}
-	
+
 	@Override
 	public int compareTo(Season o)
 	{
