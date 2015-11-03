@@ -22,6 +22,10 @@
 <body ng-controller="MyCtrl">
 
 
+<div class='no-stats-tab' ng-show="noStats">
+	<b>A scoresheet for this week cannot be generated as the current stats have not been processed.</b>
+</div>
+
 	<div class='tab' ng-show="show">
 		<div data-ng-init="getCurrentSeason()"
 			class="activeTeamsDropdownStyle">
@@ -29,7 +33,7 @@
 			
 			<b>Current Week</b>
 			<select id="activeWeeks"
-				data-ng-model="selectedWeek" data-ng-change="weekSelected();"
+				data-ng-model="selectedWeek" data-ng-init="setWeek()" data-ng-change="weekSelected();"
 				style="font-size: 11px">
 				<option value="">-- Select Week --</option>
 

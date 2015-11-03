@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.ppa8ball.dateutil.Day;
+
 @Entity
 @Table
 public class Season implements Comparable<Season>
@@ -149,14 +151,17 @@ public class Season implements Comparable<Season>
 		Week nextWeekToPlay = weeks.get(lastWeekNum);
 
 		// Get the current date and time
-
-		Date d = new Date();
-
-		d.setHours(0);
-		d.setMinutes(0);
-		d.setSeconds(0);
-
-		return (d.compareTo(nextWeekToPlay.getDate()) <= 0);
+		
+		Day currentDay = Day.Today();
+		Day nextPLay = new Day(nextWeekToPlay.getDate());
+		return (currentDay.beforeOrOn(nextPLay));
+	}
+	
+	@Transient
+	public int getNextWeek()
+	{
+		//TODO this will fail at the end of the season
+		return getLastStatWeek().getNumber()+1;
 	}
 
 	@Override

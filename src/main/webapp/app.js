@@ -5,26 +5,35 @@ var app = angular.module('myApp', [ 'ngGrid' ])
 app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
 
   $scope.show = false;
+  $scope.noStats = false;
 
   $scope.position = "home";
-  
-  $scope.getCurrentSeason = function (){
+
+  $scope.getCurrentSeason = function() {
     $http({ method : 'GET',
-      url : 'rest/currentSeason',
-      }).success(function(data, status, headers, config) {
-        $scope.currentSeason = data;
+    url : 'rest/currentSeason',
+    }).success(function(data, status, headers, config) {
+      $scope.currentSeason = data;
+
+      if (!$scope.currentSeason.currentStatsAvailable)
+        $scope.noStats = true;
+      else
         $scope.getDropDownDataFromServer();
 
-      }).error(function(data, status, headers, config) {
-        // called asynchronously if an error occurs
-        // show
-        // here
-      });
+    }).error(function(data, status, headers, config) {
+      // called asynchronously if an error occurs
+      // show
+      // here
+    });
   }
   
+  $scope.setWeek = function(){
+    $scope.selectedWeek = ''+ weekNo +'';
+  };
+
   $scope.populateGridAndMatchData = function() {
-    var playersUrl = 'rest/teamPlayers/' + $scope.currentSeason.id + '/'+ $scope.selectedTeam;
-    var matchUrl = 'rest/matches/' + $scope.currentSeason.id + '/' + $scope.selectedWeek + '/' +$scope.selectedTeam;
+    var playersUrl = 'rest/teamPlayers/' + $scope.currentSeason.id + '/' + $scope.selectedTeam;
+    var matchUrl = 'rest/matches/' + $scope.currentSeason.id + '/' + $scope.selectedWeek + '/' + $scope.selectedTeam;
 
     var deferred = $q.defer();
 
@@ -61,6 +70,8 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
         $scope.position = "away";
       }
     };
+    
+    
 
     $scope.setOpponentTeam = function(match) {
       if (match.homeTeam == $scope.selectedTeam) {
@@ -189,7 +200,7 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
 
     var deferred = $q.defer();
     var getTeams = $http({ method : 'GET',
-    url : 'rest/teams/'+ $scope.currentSeason.id,
+    url : 'rest/teams/' + $scope.currentSeason.id,
     cache : 'false'
     });
     var getSpares = $http({ method : 'GET',
@@ -197,7 +208,7 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
     cache : 'false'
     });
     var getWeeks = $http({ method : 'GET',
-    url : 'rest/weeks/'+ $scope.currentSeason.id,
+    url : 'rest/weeks/' + $scope.currentSeason.id,
     cache : 'false'
     });
 
@@ -213,6 +224,9 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
       $scope.sparePlayers = results[1].data;
       $scope.weeks = results[2].data.weeks;
       $scope.show = true;
+      
+      $scope.setWeek();
+
 
     }, function(httperror) {
       deferred.resolve(console.log('some error'));
@@ -246,9 +260,9 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
 
     var date = $filter('date')($scope.weeks[$scope.selectedWeek - 1].date, 'MMMM d yyyy', 'UTC');
 
-    window.open('rest/generateScoreSheet/'+$scope.currentSeason.id+'?myTeam=' + $scope.selectedTeam + '&opponentTeam=' + $scope.selectedOpponentTeam + '&week='
-        + $scope.selectedWeek + '&ishome=' + h + '&date=' + date + '&table1=' + $scope.match.table1 + '&table2=' + $scope.match.table2 + '&roster='
-        + JSON.stringify(roster), '_blank');
+    window.open('rest/generateScoreSheet/' + $scope.currentSeason.id + '?myTeam=' + $scope.selectedTeam + '&opponentTeam='
+        + $scope.selectedOpponentTeam + '&week=' + $scope.selectedWeek + '&ishome=' + h + '&date=' + date + '&table1=' + $scope.match.table1
+        + '&table2=' + $scope.match.table2 + '&roster=' + JSON.stringify(roster), '_blank');
   };
 
   $scope.SaveRoster = function() {

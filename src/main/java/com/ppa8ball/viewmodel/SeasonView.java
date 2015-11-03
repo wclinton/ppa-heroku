@@ -10,6 +10,17 @@ public class SeasonView
 	private String description;
 	private boolean complete;
 	private boolean isCurrentStatsAvailable;
+	private int nextWeek;
+
+	public int getNextWeek()
+	{
+		return nextWeek;
+	}
+
+	public void setNextWeek(int nextWeek)
+	{
+		this.nextWeek = nextWeek;
+	}
 
 	public boolean isCurrentStatsAvailable()
 	{
@@ -29,6 +40,7 @@ public class SeasonView
 		this.description = season.getDescription();
 		this.complete = season.isComplete();
 		this.isCurrentStatsAvailable = season.isCurrentStatsAvailble();
+		this.nextWeek = season.getNextWeek();
 	}
 
 	public long getId()
