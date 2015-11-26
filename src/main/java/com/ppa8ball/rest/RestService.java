@@ -230,6 +230,25 @@ public class RestService
 		session.getTransaction().commit();
 		return weeksView;
 	}
+	
+	@GET
+	@Path("/players/{seasonId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PlayersView getPlayer(@PathParam("seasonId") long seasonId)
+	{
+		Session session = getSessionAndStartTransaction();
+		PlayersView players = new PlayersView();
+		
+		for (int i=1;i<=10;i++)
+		{
+			PlayersView playersTeam = getPlayers(session, seasonId, i);
+			players.addPlayers(playersTeam);
+		}
+		session.getTransaction().commit();
+		
+		return players;
+	}
+	
 
 	private PlayersView getPlayers(Session session, long seasonID, int teamNumber)
 	{

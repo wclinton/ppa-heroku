@@ -73,4 +73,11 @@ public class PlayerServiceImpl implements PlayerService
 		
 		return (Player) cr.uniqueResult();
 	}
+	
+//	public List<Player>GetBySeason(long seasonId)
+//	{
+//		Criteria cr = session.createCriteria(Team.class);
+//		cr.add(Restrictions.eq("team.id", team.getId()));
+//		return cr.list();
+//	}
 }

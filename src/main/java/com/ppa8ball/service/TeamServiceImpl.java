@@ -87,6 +87,8 @@ public class TeamServiceImpl implements TeamService
 
 		cr.add(Restrictions.eq("season.id", seasonId));
 		cr.add(Restrictions.eq("number", number));
+		
+		List<Team> teams = cr.list();
 
 		return (Team) cr.uniqueResult();
 	}

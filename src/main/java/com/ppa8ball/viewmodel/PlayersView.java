@@ -9,18 +9,21 @@ public class PlayersView
 	
 	public PlayersView()
 	{
-		
+		players = new ArrayList<PlayerView>();
 	}
 
 	public List<PlayerView> getPlayers()
 	{
-		if (players == null)
-			players = new ArrayList<PlayerView>();
 		return players;
 	}
 
 	public void setPlayers(List<PlayerView> players)
 	{
 		this.players = players;
+	}
+	
+	public void addPlayers(PlayersView players)
+	{
+		this.players.addAll(players.getPlayers());
 	}
 }
