@@ -25,14 +25,6 @@ import com.ppa8ball.service.TeamServiceImpl;
 
 public class ScheduleLoader implements DataLoader
 {
-
-	// private final String PPAUrl = "http://www.ppa8ball.com";
-	//
-	// private final String FirstHalfSchedule = PPAUrl +
-	// "/schedule/2014-2015_First_Half_Schedule.xls";
-	// private final String SecondHalfSchedule = PPAUrl +
-	// "/schedule/2014-2015_Second_Half_Schedule.xls";
-
 	private final String PPAUrl = "http://www.ppa8ball.com";
 	private final int FirstHalfYear = 2014;
 	private final int SecondHalfYear = 2015;
@@ -47,7 +39,6 @@ public class ScheduleLoader implements DataLoader
 
 	public List<Week> Load()
 	{
-
 		Sheet sheet = new MySheet(getExcelSpreadSheet(getFirstHalfScheduleUrl(currentSeason)), 0);
 		List<Week> firstHalfWeeks = getWeeks(sheet, FirstHalfYear);
 
@@ -102,56 +93,6 @@ public class ScheduleLoader implements DataLoader
 
 	}
 
-	// private Schedule getSchedule(Sheet sheet, int year)
-	// {
-	// Cell startCell = sheet.getCell("B1");
-	//
-	// Cell cell = startCell;
-	//
-	// Schedule schedule = new Schedule();
-	//
-	// while (schedule.weeks.size() < 9)
-	// {
-	// Week week = getWeek(sheet, cell);
-	//
-	// if (week != null)
-	// {
-	//
-	// // Match match = null;
-	//
-	// while (week.getMatches().size() < 5)
-	// {
-	// cell = CellHelp.getCellBelow(sheet, cell);
-	//
-	// Match match = getMatch(cell);
-	//
-	// if (match != null)
-	// {
-	// // match.week = week.number;
-	// // match.season = week.season;
-	// match.match = week.getMatches().size();
-	// week.getMatches().add(match);
-	//
-	// cell = CellHelp.getCellBelow(sheet, cell);
-	//
-	// String[] tables = getTables(cell);
-	//
-	// match.table1 = tables[0];
-	// match.table2 = tables[1];
-	//
-	// }
-	// }
-	//
-	// week.date.setYear(year - 1900);
-	// schedule.weeks.add(week);
-	//
-	// }
-	// cell = CellHelp.getNextTopColumn(sheet, cell);
-	// }
-	//
-	// return schedule;
-	// }
-
 	private Match getMatch(int number, Sheet sheet, PPACell cell)
 	{
 		String contents = cell.getStringValue();
@@ -170,7 +111,7 @@ public class ScheduleLoader implements DataLoader
 
 			String[] tables = getTables(cell);
 
-			return new Match(currentSeason,number, tables[0], tables[1], home, away);
+			return new Match(currentSeason, number, tables[0], tables[1], home, away);
 		}
 		return null;
 	}
@@ -215,7 +156,6 @@ public class ScheduleLoader implements DataLoader
 
 	private int getWeekDate(PPACell cell)
 	{
-
 		if (!cell.IsString())
 			return -1;
 

@@ -4,19 +4,52 @@ import com.ppa8ball.models.Match;
 
 public class MatchView
 {
-	public int id;
-	public int weekId;
-	public int match;
-	public int homeTeam;
-	public int awayTeam;
-	public String table1;
-	public String table2;
-	
-	
-	public MatchView()
+	private int id;
+	private int weekId;
+	private int match;
+	private int homeTeam;
+	private int awayTeam;
+	private String table1;
+	private String table2;
+
+	public int getId()
 	{
+		return id;
+	}
+
+	public int getWeekId()
+	{
+		return weekId;
+	}
+
+	public int getMatch()
+	{
+		return match;
+	}
+
+	public int getHomeTeam()
+	{
+		return homeTeam;
+	}
+
+	public int getAwayTeam()
+	{
+		return awayTeam;
+	}
+
+	public String getTable1()
+	{
+		return table1;
+	}
+
+	public String getTable2()
+	{
+		return table2;
 	}
 	
+	public MatchView()
+	{}
+
 	public MatchView(Match match)
 	{
 		weekId = match.getWeek().getNumber();

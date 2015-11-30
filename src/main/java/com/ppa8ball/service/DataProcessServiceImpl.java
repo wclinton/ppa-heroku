@@ -14,6 +14,13 @@ import com.ppa8ball.schedule.Load;
 
 public class DataProcessServiceImpl implements DataProcessService
 {
+	private static final String WEEK_TABLE_NAME = "week";
+	private static final String TEAM_PLAYER_TABLE_NAME = "team_player";
+	private static final String PLAYER_TABLE_NAME = "player";
+	private static final String STAT_TABLE_NAME = "stat";
+	private static final String MATCH_TABLE_NAME = "match";
+	private static final String SEASON_TABLE_NAME = "season";
+	private static final String TEAM_TABLE_NAME = "team";
 	private Session session;
 
 	public DataProcessServiceImpl(Session session)
@@ -101,7 +108,7 @@ public class DataProcessServiceImpl implements DataProcessService
 	private void clearDatabases(Session session)
 	{
 		String[] tables =
-		{ "team", "season", "match", "stat", "player", "team_player", "week" };
+		{ TEAM_TABLE_NAME, SEASON_TABLE_NAME, MATCH_TABLE_NAME, STAT_TABLE_NAME, PLAYER_TABLE_NAME, TEAM_PLAYER_TABLE_NAME, WEEK_TABLE_NAME };
 
 		for (String table : tables)
 		{

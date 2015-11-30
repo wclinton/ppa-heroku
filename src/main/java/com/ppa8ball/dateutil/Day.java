@@ -53,5 +53,4 @@ public class Day
 			return false;
 		return true;
 	}
-
 }

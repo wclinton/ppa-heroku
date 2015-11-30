@@ -2,7 +2,6 @@ package com.ppa8ball.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,13 +14,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table
-
 public class Team
 {
 	@GeneratedValue
@@ -37,22 +34,19 @@ public class Team
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn
 	private Season season;
-	
-//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinColumn (name = "TEAM_ID")
-//	List<Player> players;
-	
+
+	// @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// @JoinColumn (name = "TEAM_ID")
+	// List<Player> players;
+
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "team_player", 
-	joinColumns = { 
-		@JoinColumn(name = "TEAM_ID", nullable = false, updatable = false) }, 
-		inverseJoinColumns = { @JoinColumn(name = "PLAYER_ID", 
-				nullable = false, updatable = false) })
+	@JoinTable(name = "team_player", joinColumns =
+	{ @JoinColumn(name = "TEAM_ID", nullable = false, updatable = false) }, inverseJoinColumns =
+	{ @JoinColumn(name = "PLAYER_ID", nullable = false, updatable = false) })
 	private List<Player> players;
 
 	public Team()
-	{
-	}
+	{}
 
 	public Team(Season season, String name, int number)
 	{
@@ -120,13 +114,13 @@ public class Team
 	@Override
 	public String toString()
 	{
-		String s =  "Season:" + season.getDescription() + " Team:" + number + " " + name;
-		
+		String s = "Season:" + season.getDescription() + " Team:" + number + " " + name;
+
 		for (Player player : getPlayers())
 		{
 			s += "\n" + player;
 		}
-		
+
 		return s;
 	}
 

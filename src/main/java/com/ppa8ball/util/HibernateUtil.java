@@ -9,8 +9,7 @@ import org.hibernate.cfg.Configuration;
 public class HibernateUtil
 {
 	private static final SessionFactory sessionFactory = buildSessionFactory();
-	
-	
+
 	public static Session getSession()
 	{
 		return getSessionFactory().openSession();
@@ -39,21 +38,19 @@ public class HibernateUtil
 			cfg.setProperty("hibernate.connection.url", dbUrl);
 			cfg.setProperty("connection.username", username);
 			cfg.setProperty("connection.password", password);
-			
-			
 
-			cfg.setProperty("hibernate.c3p0.max_size","19");
-			cfg.setProperty("hibernate.c3p0.min_size","1");
-			cfg.setProperty("hibernate.c3p0.timeout","1800");
-			cfg.setProperty("hibernate.c3p0.max_statements","300");
-			//cfg.setProperty("hibernate.c3p0.idle_test_period","300");
-			//cfg.setProperty("hibernate.c3p0.acquire_increment","2");
-			
+			cfg.setProperty("hibernate.c3p0.max_size", "19");
+			cfg.setProperty("hibernate.c3p0.min_size", "1");
+			cfg.setProperty("hibernate.c3p0.timeout", "1800");
+			cfg.setProperty("hibernate.c3p0.max_statements", "300");
+			// cfg.setProperty("hibernate.c3p0.idle_test_period","300");
+			// cfg.setProperty("hibernate.c3p0.acquire_increment","2");
+
 			cfg.setProperty("hibernate.format_sql", "true");
 			cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 
 			cfg.setProperty("hibernate.connection.requireSSL", "true");
-			
+
 			SessionFactory sessionFactory = cfg.buildSessionFactory();
 
 			return sessionFactory;

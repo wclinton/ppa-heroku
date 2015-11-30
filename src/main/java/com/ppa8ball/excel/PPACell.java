@@ -1,4 +1,5 @@
 package com.ppa8ball.excel;
+
 import java.sql.Date;
 
 public interface PPACell
@@ -7,7 +8,6 @@ public interface PPACell
 	public boolean IsString();
 	public boolean IsNumeric();
 	public boolean hasData();
-	
 	public Date getDateValue();
 	public String getStringValue();
 	public int getIntValue();

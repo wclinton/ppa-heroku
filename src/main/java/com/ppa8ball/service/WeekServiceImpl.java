@@ -32,9 +32,7 @@ public class WeekServiceImpl implements WeekService
 	@Override
 	public void Save(Week week)
 	{
-		//session.beginTransaction();
 		session.saveOrUpdate(week);
-		//session.getTransaction().commit();
 	}
 
 	@Override
@@ -71,5 +69,4 @@ public class WeekServiceImpl implements WeekService
 		Season s = (Season) cr.uniqueResult();
 		return s.getWeeks();
 	}
-
 }

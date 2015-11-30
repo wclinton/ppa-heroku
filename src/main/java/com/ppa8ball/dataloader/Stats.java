@@ -34,30 +34,30 @@ public class Stats
 	private final static int actualAverageColumn = ColumnToInt("AC");
 	private final static int gamesPlayedColumn = ColumnToInt("AB");
 	private final static int perfectNightsColumn = ColumnToInt("AD");
-	
+
 	public void Process(Season season)
 	{
 		LoadSeasonStats(season);
 	}
-	
+
 	public static List<Team> LoadSeasonStats(Season season)
 	{
 		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
 		return loadTeamsAndPlayers(season, sheet);
 	}
-	
+
 	public static List<Team> LoadTeams(Season season)
 	{
 		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
 		return loadTeams(season, sheet);
 	}
-	
+
 	public static Map<Player, Integer> LoadPlayers(Season season)
 	{
 		Sheet sheet = new MySheet(getExcelSpreadSheet(season), 1);
-		return loadPlayers(season,sheet);
+		return loadPlayers(season, sheet);
 	}
-	
+
 	public static int GetLatestStatWeek(Season season)
 	{
 		try
@@ -82,7 +82,7 @@ public class Stats
 		}
 		return -1;
 	}
-	
+
 	private static List<Team> loadTeams(Season season, Sheet sheet)
 	{
 		List<Team> teams = new ArrayList<Team>();
@@ -92,7 +92,7 @@ public class Stats
 
 		while (cell.getIntValue() != 12)
 		{
-			//Player player = getPlayerStat(season, sheet, cell.getRowIndex());
+			// Player player = getPlayerStat(season, sheet, cell.getRowIndex());
 
 			Team team = getTeam(season, sheet, cell);
 
@@ -102,7 +102,7 @@ public class Stats
 				lastTeam = team;
 			}
 
-			//lastTeam.getPlayers().add(player);
+			// lastTeam.getPlayers().add(player);
 			cell = cell.getCellBelow();
 		}
 
@@ -111,11 +111,11 @@ public class Stats
 		teams.add(noPlayer);
 		return teams;
 	}
-	
+
 	private static Map<Player, Integer> loadPlayers(Season season, Sheet sheet)
 	{
-		Map<Player,Integer> map= new HashMap<Player,Integer>();
-		
+		Map<Player, Integer> map = new HashMap<Player, Integer>();
+
 		PPACell cell = sheet.getCell(1, teamNumberColumn);
 
 		while (cell.getIntValue() != 12)
@@ -123,10 +123,9 @@ public class Stats
 			Player player = getPlayerStat(season, sheet, cell.getRowIndex());
 
 			Team team = getTeam(season, sheet, cell);
-			
+
 			map.put(player, team.getNumber());
 
-					
 			cell = cell.getCellBelow();
 		}
 		return map;

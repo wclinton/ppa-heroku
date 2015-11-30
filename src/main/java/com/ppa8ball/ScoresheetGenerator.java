@@ -17,7 +17,6 @@ import com.ppa8ball.viewmodel.PlayerView;
 
 public class ScoresheetGenerator
 {
-
 	private static final String ScoreSheetUrl = "http://www.ppa8ball.com/Scoresheet.pdf";
 
 	private static final String WeekField = "Week";
@@ -38,7 +37,6 @@ public class ScoresheetGenerator
 	private static final String[] HomeLegHandicaps  = {"Home_Leg1_Handicap","Home_Leg2_Handicap","Home_Leg3_Handicap","Home_Leg4_Handicap","Home_Leg5_Handicap"};
 	
 	private static final String HomeTotalHandicap = "Home_Total_Handicap";
-
 	
 	// Away Team fields
 	private static final String AwayTeamNameField = "Away_Team_Name";
@@ -102,10 +100,7 @@ public class ScoresheetGenerator
 			Double homeAverageTotal = Double.parseDouble(homeAverageTotalString);
 			
 			calcualteHandicap(form, homeAverageTotal, awayAverageTotal);
-			
-			
 		}
-
 		stamper.close();
 		reader.close();
 	}
@@ -132,7 +127,6 @@ public class ScoresheetGenerator
 
 		if (has5Players(players))
 			form.setField(HomeAverageTotal, Double.toString(RoundTo1Decimals(totalAverage)));
-		
 	}
 
 	static private void SetAwayFields(AcroFields form, Team team, List<PlayerView> players) throws IOException, DocumentException
@@ -184,7 +178,6 @@ public class ScoresheetGenerator
 		{
 			form.setField(leg, roundTo0Decimals(handicap));
 		}
-		
 		form.setField(HomeTotalHandicap, roundTo0Decimals(handicap*5));
 	}
 	
@@ -194,7 +187,6 @@ public class ScoresheetGenerator
 		{
 			form.setField(leg, roundTo0Decimals(handicap));
 		}
-		
 		form.setField(AwayTotalHandicap, roundTo0Decimals(handicap*5));
 	}
 
@@ -221,6 +213,5 @@ public class ScoresheetGenerator
 	{
 		DecimalFormat df = new DecimalFormat("#");	
 		return df.format(Math.round(d));
-	
 	}
 }

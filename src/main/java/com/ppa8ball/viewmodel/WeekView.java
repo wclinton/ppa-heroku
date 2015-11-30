@@ -10,7 +10,6 @@ public class WeekView
 	private int number;
 	private Date date;
 	
-	
 	public WeekView()
 	{
 	}

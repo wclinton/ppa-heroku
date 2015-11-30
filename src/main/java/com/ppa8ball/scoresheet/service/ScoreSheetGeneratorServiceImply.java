@@ -3,16 +3,14 @@ package com.ppa8ball.scoresheet.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import javax.servlet.http.HttpServletResponse;
-
 import com.itextpdf.text.DocumentException;
 import com.ppa8ball.Scoresheet;
 import com.ppa8ball.ScoresheetGenerator;
 
 public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 {
-	
+
 	public void GenerateScoreSheet(HttpServletResponse resp, Scoresheet scoresheet) throws IOException
 	{
 		try
@@ -37,9 +35,4 @@ public class ScoreSheetGeneratorServiceImply implements ScoreSheetGenerator
 			return;
 		}
 	}
-	
-//	public OutputStream GenerateScoreSheetPdf(Scoresheet scoresheet)
-//	{
-//		
-//	}
 }

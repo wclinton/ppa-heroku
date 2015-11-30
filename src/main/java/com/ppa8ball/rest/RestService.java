@@ -301,12 +301,4 @@ public class RestService
 		s.beginTransaction();
 		return s;
 	}
-
-	private void endSession(Session s)
-	{
-		if (s != null)
-		{
-			s.close();
-		}
-	}
 }

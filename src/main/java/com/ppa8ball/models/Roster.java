@@ -106,36 +106,36 @@ public class Roster
 	@Id
 	@GeneratedValue
 	private long id;
-	
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn
 	private Season season;
-	
+
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn
 	private Team team;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Player player1;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Player player2;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Player player3;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Player player4;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Player player5;
-	
+
 	private boolean isHome;
 }
