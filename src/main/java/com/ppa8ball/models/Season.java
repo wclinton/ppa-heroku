@@ -144,17 +144,19 @@ public class Season implements Comparable<Season>
 	@Transient
 	public boolean isCurrentStatsAvailble()
 	{
-		// get the last week with stats.
-		int lastWeekNum = getLastStatWeek().getNumber();
-
-		// next week to play will be +1 but indexed from zero so +1 -1 ...
-		Week nextWeekToPlay = weeks.get(lastWeekNum);
-
-		// Get the current date and time
+//		// get the last week with stats.
+//		int lastWeekNum = getLastStatWeek().getNumber();
+//
+//		// next week to play will be +1 but indexed from zero so +1 -1 ...
+//		Week nextWeekToPlay = weeks.get(lastWeekNum);
+//
+//		// Get the current date and time
+//		
+//		Day currentDay = Day.Today();
+//		Day nextPLay = new Day(nextWeekToPlay.getDate());
+//		return (currentDay.beforeOrOn(nextPLay));
 		
-		Day currentDay = Day.Today();
-		Day nextPLay = new Day(nextWeekToPlay.getDate());
-		return (currentDay.beforeOrOn(nextPLay));
+		return true;
 	}
 	
 	@Transient
