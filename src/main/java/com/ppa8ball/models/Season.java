@@ -1,6 +1,5 @@
 package com.ppa8ball.models;
 
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +26,6 @@ public class Season implements Comparable<Season>
 	private int startYear;
 	private int endYear;
 	private String description;
-	private boolean complete;
 	private Week lastStatWeek;
 	private List<Week> weeks;
 
@@ -121,12 +119,7 @@ public class Season implements Comparable<Season>
 	@Transient
 	public boolean isComplete()
 	{
-		return false;
-	}
-
-	public void setComplete(boolean complete)
-	{
-		this.complete = complete;
+		return getLastStatWeek().getNumber() == 18;
 	}
 
 	@OneToOne(fetch = FetchType.LAZY)
@@ -144,27 +137,28 @@ public class Season implements Comparable<Season>
 	@Transient
 	public boolean isCurrentStatsAvailble()
 	{
-//		// get the last week with stats.
-//		int lastWeekNum = getLastStatWeek().getNumber();
-//
-//		// next week to play will be +1 but indexed from zero so +1 -1 ...
-//		Week nextWeekToPlay = weeks.get(lastWeekNum);
-//
-//		// Get the current date and time
-//		
-//		Day currentDay = Day.Today();
-//		Day nextPLay = new Day(nextWeekToPlay.getDate());
-//		return (currentDay.beforeOrOn(nextPLay));
-		
-		return true;
+		// get the last week with stats.
+		int lastWeekNum = getLastStatWeek().getNumber();
+
+		// next week to play will be +1 but indexed from zero so +1 -1 ...
+		Week nextWeekToPlay = weeks.get(lastWeekNum);
+
+		// Get the current date and time in PST - server may not be in PST.
+		Day today = Day.TodayInPST();
+		Day nextPlayDate = new Day(nextWeekToPlay.getDate());
+		return (today.beforeOrOn(nextPlayDate));
 	}
 	
 	@Transient
 	public int getNextWeek()
 	{
 		//TODO this will fail at the end of the season
-		return getLastStatWeek().getNumber()+1;
+		
+		if (!isComplete())
+			return getLastStatWeek().getNumber()+1;
+		return -1;
 	}
+	
 
 	@Override
 	public String toString()

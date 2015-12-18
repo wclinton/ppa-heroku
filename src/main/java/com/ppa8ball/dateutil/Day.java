@@ -1,19 +1,25 @@
 package com.ppa8ball.dateutil;
 
-import java.sql.Date;
+import java.time.*;
 
 public class Day
 {
-	private Date date;
-
-	public static Day Today()
+	private LocalDate date;
+	
+	public static Day TodayInPST()
 	{
-		return new Day(new java.util.Date());
+		ZonedDateTime today =  ZonedDateTime.now(ZoneId.of("America/Vancouver"));
+		return new Day(today.toLocalDate());
 	}
 
+	public Day(LocalDate date)
+	{
+		this.date = date;
+	}
+	
 	public Day(java.util.Date date)
 	{
-		this.date = new Date(date.getYear(), date.getMonth(), date.getDay());
+		this.date = LocalDate.of(date.getYear() + 1900, date.getMonth()+1, date.getDate());
 	}
 
 	@Override
@@ -32,7 +38,7 @@ public class Day
 
 	public boolean before(Day otherDay)
 	{
-		return date.before(otherDay.date);
+		return date.isBefore(otherDay.date);
 	}
 
 	@Override
