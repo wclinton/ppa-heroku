@@ -30,6 +30,7 @@
 		<mapping class="com.ppa8ball.models.Team" />
 		<mapping class="com.ppa8ball.models.Week" />
 		<mapping class="com.ppa8ball.models.Match" />
+		<mapping class="com.ppa8ball.models.Roster"/>
 
 
 

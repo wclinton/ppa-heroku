@@ -1,12 +1,19 @@
 package com.ppa8ball.viewmodel;
 
-import java.util.List;
-
 import com.ppa8ball.models.Player;
 import com.ppa8ball.models.Stat;
 
 public class PlayerView
 {
+
+	private long idx;
+	public long getIdx() {
+		return idx;
+	}
+
+	public void setIdx(long idx) {
+		this.idx = idx;
+	}
 
 	private long id;
 	// private int teamNumber;
@@ -21,6 +28,11 @@ public class PlayerView
 	private int perfectNights = 0;
 	private double displayAdjustedAverage = 0;
 	private double displayActualAverage = 0;
+	
+	public PlayerView()
+	{
+		
+	}
 
 	public PlayerView(Player player, Stat stat)
 	{
@@ -39,6 +51,55 @@ public class PlayerView
 			displayActualAverage = stat.getDisplayActualAverage();
 			displayAdjustedAverage = stat.getDisplayAdjustedAverage();
 		}
+	}
+	
+	public void setId(long id)
+	{
+		this.id = id;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public void setTotalPoints(int totalPoints) {
+		this.totalPoints = totalPoints;
+	}
+
+	public void setGamesPlayed(int gamesPlayed) {
+		this.gamesPlayed = gamesPlayed;
+	}
+
+	public void setAdjustedAverage(double adjustedAverage) {
+		this.adjustedAverage = adjustedAverage;
+	}
+
+	public void setActualAverage(double actualAverage) {
+		this.actualAverage = actualAverage;
+	}
+
+	public void setPerfectNights(int perfectNights) {
+		this.perfectNights = perfectNights;
+	}
+
+	public void setDisplayAdjustedAverage(double displayAdjustedAverage) {
+		this.displayAdjustedAverage = displayAdjustedAverage;
+	}
+
+	public void setDisplayActualAverage(double displayActualAverage) {
+		this.displayActualAverage = displayActualAverage;
 	}
 
 	public long getId()

@@ -2,11 +2,13 @@ package com.ppa8ball.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,6 +25,7 @@ import com.ppa8ball.Scoresheet;
 import com.ppa8ball.ScoresheetGenerator;
 import com.ppa8ball.models.Match;
 import com.ppa8ball.models.Player;
+import com.ppa8ball.models.Roster;
 import com.ppa8ball.models.Season;
 import com.ppa8ball.models.Stat;
 import com.ppa8ball.models.Team;
@@ -33,6 +36,8 @@ import com.ppa8ball.service.MatchService;
 import com.ppa8ball.service.MatchServiceImpl;
 import com.ppa8ball.service.PlayerService;
 import com.ppa8ball.service.PlayerServiceImpl;
+import com.ppa8ball.service.RosterService;
+import com.ppa8ball.service.RosterServiceImpl;
 import com.ppa8ball.service.SeasonService;
 import com.ppa8ball.service.SeasonServiceImpl;
 import com.ppa8ball.service.TeamService;
@@ -43,6 +48,7 @@ import com.ppa8ball.util.HibernateUtil;
 import com.ppa8ball.viewmodel.MatchView;
 import com.ppa8ball.viewmodel.PlayerView;
 import com.ppa8ball.viewmodel.PlayersView;
+import com.ppa8ball.viewmodel.RosterView;
 import com.ppa8ball.viewmodel.SeasonView;
 import com.ppa8ball.viewmodel.TeamsView;
 import com.ppa8ball.viewmodel.WeeksView;
@@ -63,6 +69,8 @@ public class RestService
 		{
 			SeasonView s = getCurrentSeason(session);
 			session.getTransaction().commit();
+			
+			s.setCurrentStatsAvailable(true);
 
 			return s;
 		} catch (Exception e)
@@ -249,6 +257,111 @@ public class RestService
 		return players;
 	}
 	
+	@POST
+	@Path("/roster")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response consumeJSON(RosterView rosterView ) 
+	{
+		Session session = getSessionAndStartTransaction();
+		
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		Season season = seasonService.GetCurrent();
+		
+		Roster roster = new Roster();
+		roster.setHome(rosterView.isHome);
+		roster.setSeason(season);
+		
+		TeamService teamService = new TeamServiceImpl(session);
+		Team team = teamService.GetByNumber(season.getId(), rosterView.teamId);
+		
+		roster.setTeam(team);
+		
+		List<Player> players = new ArrayList<Player>();
+		
+//		PlayerService playerService = new PlayerServiceImpl(session);
+//		
+////		for (long playerId : rosterView.playerIds)
+////		{
+////			Player p = playerService.Get(playerId);
+////			players.add(p);
+////		}
+		
+//		rosterView.playersView.
+//		
+//		foreach
+		
+		PlayerService playerService = new PlayerServiceImpl(session);
+		for (PlayerView playerView : rosterView.rosterPlayers) {
+			Player p = playerService.Get(playerView.getId());
+			players.add(p);
+		}
+		
+		
+		
+		roster.setPlayers(players);
+		
+		
+		RosterService rosterService = new RosterServiceImpl(session);
+		
+		Roster currentRoster = rosterService.getByTeam(season, team, rosterView.isHome);
+		
+		if (currentRoster != null)
+		{
+			roster.setId(currentRoster.getId());
+		}
+		
+		session.getTransaction().commit();
+		
+		Session session2 = getSessionAndStartTransaction();
+		
+		
+		
+		
+		
+		RosterService rosterService2 = new RosterServiceImpl(session2);
+		
+		rosterService2.Save(roster);
+		
+		session2.getTransaction().commit();
+		
+		return Response.status(200).build();
+	}
+	
+	@GET
+	@Path("/roster/{teamId}/{isHome}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public RosterView getRoster(@PathParam("teamId") int teamNumber, @PathParam("isHome") boolean isHome)
+	{
+		
+		Session session = getSessionAndStartTransaction();
+		
+		SeasonService seasonService = new SeasonServiceImpl(session);
+		Season season = seasonService.GetCurrent();
+		
+
+		TeamService teamService = new TeamServiceImpl(session);
+		Team team = teamService.GetByNumber(season.getId(), teamNumber);
+		
+		
+		
+		
+		RosterService rosterService = new  RosterServiceImpl(session);
+		
+		
+		Roster roster = rosterService.getByTeam(season, team, isHome);
+		
+		
+		
+		
+		RosterView rosterView = new RosterView(roster);
+		
+		session.getTransaction().commit();
+		
+		return rosterView;
+	
+	}
+	
+	
 
 	private PlayersView getPlayers(Session session, long seasonID, int teamNumber)
 	{
@@ -301,4 +414,13 @@ public class RestService
 		s.beginTransaction();
 		return s;
 	}
+	
+	private Team getTeam(Session session, int teamId)
+	{
+		TeamService service = new TeamServiceImpl(session);
+		return service.Get(teamId);
+	}
+	
+	
+	
 }

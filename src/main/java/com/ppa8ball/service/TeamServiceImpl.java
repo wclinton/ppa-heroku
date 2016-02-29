@@ -37,10 +37,9 @@ public class TeamServiceImpl implements TeamService
 	}
 
 	@Override
-	public Team Get(int id)
+	public Team Get(long id)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return  (Team) session.get(Team.class, id);
 	}
 
 	@Override
@@ -88,7 +87,6 @@ public class TeamServiceImpl implements TeamService
 		cr.add(Restrictions.eq("season.id", seasonId));
 		cr.add(Restrictions.eq("number", number));
 		
-		List<Team> teams = cr.list();
 
 		return (Team) cr.uniqueResult();
 	}

@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.ppa8ball.models.Roster;
+import com.ppa8ball.models.Season;
+import com.ppa8ball.models.Team;
 
 public class RosterServiceImpl implements RosterService
 {
@@ -16,21 +18,21 @@ public class RosterServiceImpl implements RosterService
 	}
 
 	@Override
-	public Roster getByTeam(long seasonId, long teamId)
+	public Roster getByTeam(Season season, Team team, boolean isHome)
 	{
 		Criteria cr = session.createCriteria(Roster.class);
 
-		cr.add(Restrictions.eq("season.id", seasonId));
-		cr.add(Restrictions.eq("team.id", teamId));
-
+		cr.add(Restrictions.eq("season.id", season.getId()));
+		cr.add(Restrictions.eq("team.id", team.getId()));
+		cr.add(Restrictions.eq("isHome", isHome));
 		return (Roster) cr.uniqueResult();
 	}
 
 	@Override
 	public void Save(Roster roster)
 	{
-		session.beginTransaction();
+		//session.beginTransaction();
 		session.saveOrUpdate(roster);
-		session.getTransaction().commit();
+		//session.getTransaction().commit();
 	}
 }

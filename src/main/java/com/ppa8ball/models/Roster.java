@@ -1,18 +1,53 @@
 package com.ppa8ball.models;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+@Entity
+@Table
+(uniqueConstraints=
+@UniqueConstraint(columnNames = {"ishome","team_id","season_id"})) 
 
 public class Roster
 {
+	@Id
+	@GeneratedValue
+	private long id;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn
+	private Season season;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn
+	private Team team;
+	
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "roster_player", joinColumns =
+	{ @JoinColumn(name = "ROSTER_ID", nullable = false, updatable = false) }, inverseJoinColumns =
+	{ @JoinColumn(name = "PLAYER_ID", nullable = false, updatable = false) })
+	private List<Player> players;
+	
+	@Column
+	private boolean isHome;
+	
 	public long getId()
 	{
 		return id;
@@ -43,56 +78,18 @@ public class Roster
 		this.team = team;
 	}
 
-	public Player getPlayer1()
+	
+	public void setPlayers(List<Player>  players)
 	{
-		return player1;
+		this.players = players;
 	}
-
-	public void setPlayer1(Player player1)
+	
+	
+	public List<Player> getPlayers()
 	{
-		this.player1 = player1;
+		return players;
 	}
-
-	public Player getPlayer2()
-	{
-		return player2;
-	}
-
-	public void setPlayer2(Player player2)
-	{
-		this.player2 = player2;
-	}
-
-	public Player getPlayer3()
-	{
-		return player3;
-	}
-
-	public void setPlayer3(Player player3)
-	{
-		this.player3 = player3;
-	}
-
-	public Player getPlayer4()
-	{
-		return player4;
-	}
-
-	public void setPlayer4(Player player4)
-	{
-		this.player4 = player4;
-	}
-
-	public Player getPlayer5()
-	{
-		return player5;
-	}
-
-	public void setPlayer5(Player player5)
-	{
-		this.player5 = player5;
-	}
-
+	
 	public boolean isHome()
 	{
 		return isHome;
@@ -102,40 +99,4 @@ public class Roster
 	{
 		this.isHome = isHome;
 	}
-
-	@Id
-	@GeneratedValue
-	private long id;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn
-	private Season season;
-
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn
-	private Team team;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn
-	private Player player1;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn
-	private Player player2;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn
-	private Player player3;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn
-	private Player player4;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn
-	private Player player5;
-
-	private boolean isHome;
 }

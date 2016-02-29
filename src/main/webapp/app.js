@@ -269,13 +269,15 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
     var rosterPlayers = $scope.getRoster();
 
     var home = $scope.position != "away";
+    
+    //var ids = [rosterPlayers[0].id,rosterPlayers[1].id,rosterPlayers[2].id,rosterPlayers[3].id,rosterPlayers[4].id];
 
-    var rosterViewModel = { teamNumber : $scope.selectedTeam,
-    players : rosterPlayers,
+    var rosterViewModel = { teamId : $scope.selectedTeam,
+    		rosterPlayers : rosterPlayers,
     isHome : home
     };
 
-    $http.post('/roster', rosterViewModel);
+    $http.post('rest/roster', rosterViewModel);
     success(function(data, status, headers, config) {
       // this callback will be called asynchronously
       // when the response is available
@@ -289,7 +291,7 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
     var home = $scope.position != "away";
 
     $http({ method : 'GET',
-    url : 'roster?teamNumber=' + $scope.selectedTeam + '&isHome=' + home,
+    url : 'rest/roster/' + $scope.selectedTeam + '/' + home,
     }).success(function(data, status, headers, config) {
 
       $scope.setRoster(data);
@@ -312,7 +314,7 @@ app.controller('MyCtrl', function($scope, $filter, $q, $http, $timeout) {
   $scope.setRoster = function(roster) {
     $scope.myData.players.length = 0;
 
-    $scope.myData.players = roster.players;
+    $scope.myData.players = roster.rosterPlayers;
 
     // In order to show the correct sequence we need to
     // update to idx values to match the array indexs and
