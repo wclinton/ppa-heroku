@@ -31,8 +31,12 @@ public class RosterServiceImpl implements RosterService
 	@Override
 	public void Save(Roster roster)
 	{
-		//session.beginTransaction();
 		session.saveOrUpdate(roster);
-		//session.getTransaction().commit();
+	}
+
+	@Override
+	public Roster Get(long id) 
+	{
+		return (Roster) session.get(Roster.class, id);
 	}
 }

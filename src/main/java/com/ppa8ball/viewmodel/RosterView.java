@@ -7,6 +7,7 @@ import com.ppa8ball.models.Roster;
 
 public class RosterView
 {
+	public long id;
 	public int teamId;
 	public PlayerView [] rosterPlayers;
 	public boolean isHome;
@@ -19,6 +20,7 @@ public class RosterView
 	{
 		this.isHome = roster.isHome();
 		this.teamId = roster.getTeam().getNumber();
+		this.id = roster.getId();
 		
 		List<PlayerView> players = new ArrayList<PlayerView>();
 		

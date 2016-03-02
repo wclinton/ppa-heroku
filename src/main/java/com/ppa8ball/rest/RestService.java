@@ -54,36 +54,30 @@ import com.ppa8ball.viewmodel.TeamsView;
 import com.ppa8ball.viewmodel.WeeksView;
 
 @Path("")
-public class RestService
-{
+public class RestService {
 	private static final int seasons2014Year = 2014;
 	private static final int seasons2015Year = 2015;
 
 	@GET
 	@Path("/currentSeason")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SeasonView getCurrentSeason()
-	{
+	public SeasonView getCurrentSeason() {
 		Session session = getSessionAndStartTransaction();
-		try
-		{
+		try {
 			SeasonView s = getCurrentSeason(session);
 			session.getTransaction().commit();
-			
+
 			s.setCurrentStatsAvailable(true);
 
 			return s;
-		} catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw e;
-		} finally
-		{
-			//endSession(session);
+		} finally {
+			// endSession(session);
 		}
 	}
 
-	private SeasonView getCurrentSeason(Session session)
-	{
+	private SeasonView getCurrentSeason(Session session) {
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		Season currentSeason = seasonService.GetCurrent();
 
@@ -92,8 +86,7 @@ public class RestService
 
 	@GET
 	@Path("/loadStats")
-	public Response loadStats() throws ServletException, IOException
-	{
+	public Response loadStats() throws ServletException, IOException {
 		Session session = getSessionAndStartTransaction();
 		Season season = new Season(seasons2014Year);
 		DataProcessService service = new DataProcessServiceImpl(session);
@@ -110,26 +103,24 @@ public class RestService
 	@Path("/matches/{seasonId}/{weekNumber}/{teamNumber}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public MatchView getMatch(@PathParam("seasonId") long seasonId, @PathParam("weekNumber") int week,
-			@PathParam("teamNumber") int teamNumber)
-	{
+			@PathParam("teamNumber") int teamNumber) {
 		Session session = getSessionAndStartTransaction();
 		MatchService service = new MatchServiceImpl(session);
 		Match match = service.getMatchByWeekTeam(seasonId, week, teamNumber);
-		
+
 		MatchView matchView = new MatchView(match);
 
 		session.getTransaction().commit();
-		
+
 		return matchView;
 	}
 
 	@GET
 	@Path("/teamPlayers/{seasonId}/{teamNumber}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PlayersView getTeamlayers(@PathParam("seasonId") long seasonId, @PathParam("teamNumber") int teamNumber)
-	{
+	public PlayersView getTeamlayers(@PathParam("seasonId") long seasonId, @PathParam("teamNumber") int teamNumber) {
 		Session session = getSessionAndStartTransaction();
-		PlayersView pv =  getPlayers(session, seasonId, teamNumber);
+		PlayersView pv = getPlayers(session, seasonId, teamNumber);
 		session.getTransaction().commit();
 		return pv;
 	}
@@ -137,8 +128,7 @@ public class RestService
 	@GET
 	@Path("/sparePlayers/{seasonId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PlayersView getSparePlayers(@PathParam("seasonId") long seasonId)
-	{
+	public PlayersView getSparePlayers(@PathParam("seasonId") long seasonId) {
 		Session session = getSessionAndStartTransaction();
 		PlayersView pv = getPlayers(session, seasonId, 11);
 		session.getTransaction().commit();
@@ -146,39 +136,94 @@ public class RestService
 	}
 
 	@GET
+	@Path("generatePlayoffScoreSheet")
+	@Produces("application/pdf")
+	public Response generateScoreSheet(@QueryParam("homeTeam") final int homeTeamNumber,
+			@QueryParam("awayTeam") final int awayTeamNumber, @QueryParam("homeRosterId") final long homeRosterId,
+			@QueryParam("awayRosterId") final long awayRosterId, @QueryParam("date") final String date,
+			@QueryParam("table1") final String table1, @QueryParam("table2") final String table2) throws Exception {
+
+		StreamingOutput stream = new StreamingOutput() {
+			@Override
+			public void write(OutputStream output) throws IOException, WebApplicationException {
+				try {
+
+					Session session = getSessionAndStartTransaction();
+
+					RosterService rosterService = new RosterServiceImpl(session);
+
+					Roster homeRoster = rosterService.Get(homeRosterId);
+					Roster awayRoster = rosterService.Get(awayRosterId);
+
+					RosterView homeRosterView = new RosterView(homeRoster);
+					RosterView awayRosterView = new RosterView(awayRoster);
+
+					List<PlayerView> homePlayers = Arrays.asList(homeRosterView.rosterPlayers);
+					List<PlayerView> awayPlayers = Arrays.asList(awayRosterView.rosterPlayers);
+
+					Scoresheet scoresheet = new Scoresheet(homeRoster.getTeam(), awayRoster.getTeam());
+					scoresheet.setDate(date);
+					scoresheet.setTable1(table1);
+					scoresheet.setTable2(table2);
+
+					scoresheet.setHomePlayers(homePlayers);
+
+					scoresheet.setAwayPlayers(awayPlayers);
+
+					ScoresheetGenerator.generateScoreSheet(output, scoresheet);
+
+					session.getTransaction().commit();
+
+				} catch (Exception e) {
+					throw new WebApplicationException(e);
+				}
+			}
+		};
+
+		return Response.ok(stream).header("content-disposition", "inline; filename='javatpoint.pdf'").build();
+	}
+
+	@GET
 	@Path("generateScoreSheet/{seasonId}")
 	@Produces("application/pdf")
-	public Response generateScoreSheet(@PathParam("seasonId") final long seasonId, @QueryParam("myTeam") final int myTeamNumber,
-			@QueryParam("opponentTeam") final int opponentTeamNumber, @QueryParam("ishome") final boolean isHome,
-			@QueryParam("roster") final String roster, @QueryParam("week") final int week, @QueryParam("date") final String date,
-			@QueryParam("table1") final String table1, @QueryParam("table2") final String table2) throws Exception
-	{
-		StreamingOutput stream = new StreamingOutput()
-		{
+	public Response generateScoreSheet(@PathParam("seasonId") long seasonId,
+			@QueryParam("myTeam") final int myTeamNumber, @QueryParam("opponentTeam") final int opponentTeamNumber,
+			@QueryParam("ishome") final boolean isHome, @QueryParam("roster") final String roster,
+			@QueryParam("week") final int week, @QueryParam("date") final String date,
+			@QueryParam("table1") final String table1, @QueryParam("table2") final String table2) throws Exception {
+		StreamingOutput stream = new StreamingOutput() {
 			@Override
-			public void write(OutputStream output) throws IOException, WebApplicationException
-			{
-				try
-				{
+			public void write(OutputStream output) throws IOException, WebApplicationException {
+				try {
 					Gson gson = new Gson();
 					List<PlayerView> players = Arrays.asList(gson.fromJson(roster, PlayerView[].class));
 
 					final int home, away;
 
-					if (isHome)
-					{
+					final long sid;
+
+					if (isHome) {
 						home = myTeamNumber;
 						away = opponentTeamNumber;
-					} else
-					{
+					} else {
 						home = opponentTeamNumber;
 						away = myTeamNumber;
 					}
 
 					Session session = getSessionAndStartTransaction();
+
+					if (seasonId == 0) {
+						SeasonService seasonService = new SeasonServiceImpl(session);
+
+						Season season = seasonService.GetCurrent();
+
+						sid = season.getId();
+					} else
+						sid = seasonId;
+
 					TeamService teamService = new TeamServiceImpl(session);
-					Team homeTeam = teamService.GetByNumber(seasonId, home);
-					Team awayTeam = teamService.GetByNumber(seasonId, away);
+					Team homeTeam = teamService.GetByNumber(sid, home);
+					Team awayTeam = teamService.GetByNumber(sid, away);
 					Scoresheet scoresheet = new Scoresheet(homeTeam, awayTeam);
 
 					scoresheet.setWeek(week);
@@ -192,11 +237,10 @@ public class RestService
 						scoresheet.setAwayPlayers(players);
 
 					ScoresheetGenerator.generateScoreSheet(output, scoresheet);
-					
+
 					session.getTransaction().commit();
 
-				} catch (Exception e)
-				{
+				} catch (Exception e) {
 					throw new WebApplicationException(e);
 				}
 			}
@@ -208,15 +252,20 @@ public class RestService
 	@GET
 	@Path("/teams/{seasonId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public TeamsView getTeams(@PathParam("seasonId") long seasonId)
-	{
+	public TeamsView getTeams(@PathParam("seasonId") long seasonId) {
 		Session session = getSessionAndStartTransaction();
 		SeasonService seasonService = new SeasonServiceImpl(session);
-		Season season = seasonService.Get(seasonId);
+
+		Season season;
+
+		if (seasonId == 0)
+			season = seasonService.GetCurrent();
+		else
+			season = seasonService.Get(seasonId);
 		TeamService teamService = new TeamServiceImpl(session);
 		List<Team> teams = teamService.GetNormalBySeason(season);
 		TeamsView teamView = new TeamsView(teams);
-		
+
 		session.getTransaction().commit();
 		return teamView;
 	}
@@ -224,8 +273,7 @@ public class RestService
 	@GET
 	@Path("/weeks/{seasonId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public WeeksView getWeeks(@PathParam("seasonId") long seasonId)
-	{
+	public WeeksView getWeeks(@PathParam("seasonId") long seasonId) {
 		Session session = getSessionAndStartTransaction();
 
 		SeasonService seasonService = new SeasonServiceImpl(session);
@@ -234,137 +282,102 @@ public class RestService
 		WeekService service = new WeekServiceImpl(session);
 		List<Week> weeks = service.getAll(season);
 		WeeksView weeksView = new WeeksView(weeks);
-		
+
 		session.getTransaction().commit();
 		return weeksView;
 	}
-	
+
 	@GET
 	@Path("/players/{seasonId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public PlayersView getPlayer(@PathParam("seasonId") long seasonId)
-	{
+	public PlayersView getPlayer(@PathParam("seasonId") long seasonId) {
 		Session session = getSessionAndStartTransaction();
 		PlayersView players = new PlayersView();
-		
-		for (int i=1;i<=10;i++)
-		{
+
+		for (int i = 1; i <= 10; i++) {
 			PlayersView playersTeam = getPlayers(session, seasonId, i);
 			players.addPlayers(playersTeam);
 		}
 		session.getTransaction().commit();
-		
+
 		return players;
 	}
-	
+
 	@POST
 	@Path("/roster")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response consumeJSON(RosterView rosterView ) 
-	{
+	public Response consumeJSON(RosterView rosterView) {
 		Session session = getSessionAndStartTransaction();
-		
+
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		Season season = seasonService.GetCurrent();
-		
+
 		Roster roster = new Roster();
 		roster.setHome(rosterView.isHome);
 		roster.setSeason(season);
-		
+
 		TeamService teamService = new TeamServiceImpl(session);
 		Team team = teamService.GetByNumber(season.getId(), rosterView.teamId);
-		
+
 		roster.setTeam(team);
-		
+
 		List<Player> players = new ArrayList<Player>();
-		
-//		PlayerService playerService = new PlayerServiceImpl(session);
-//		
-////		for (long playerId : rosterView.playerIds)
-////		{
-////			Player p = playerService.Get(playerId);
-////			players.add(p);
-////		}
-		
-//		rosterView.playersView.
-//		
-//		foreach
-		
+
 		PlayerService playerService = new PlayerServiceImpl(session);
 		for (PlayerView playerView : rosterView.rosterPlayers) {
 			Player p = playerService.Get(playerView.getId());
 			players.add(p);
 		}
-		
-		
-		
+
 		roster.setPlayers(players);
-		
-		
+
 		RosterService rosterService = new RosterServiceImpl(session);
-		
+
 		Roster currentRoster = rosterService.getByTeam(season, team, rosterView.isHome);
-		
-		if (currentRoster != null)
-		{
+
+		if (currentRoster != null) {
 			roster.setId(currentRoster.getId());
 		}
-		
+
 		session.getTransaction().commit();
-		
+
 		Session session2 = getSessionAndStartTransaction();
-		
-		
-		
-		
-		
+
 		RosterService rosterService2 = new RosterServiceImpl(session2);
-		
+
 		rosterService2.Save(roster);
-		
+
 		session2.getTransaction().commit();
-		
+
 		return Response.status(200).build();
 	}
-	
+
 	@GET
 	@Path("/roster/{teamId}/{isHome}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public RosterView getRoster(@PathParam("teamId") int teamNumber, @PathParam("isHome") boolean isHome)
-	{
-		
+	public RosterView getRoster(@PathParam("teamId") int teamNumber, @PathParam("isHome") boolean isHome) {
+
 		Session session = getSessionAndStartTransaction();
-		
+
 		SeasonService seasonService = new SeasonServiceImpl(session);
 		Season season = seasonService.GetCurrent();
-		
 
 		TeamService teamService = new TeamServiceImpl(session);
 		Team team = teamService.GetByNumber(season.getId(), teamNumber);
-		
-		
-		
-		
-		RosterService rosterService = new  RosterServiceImpl(session);
-		
-		
-		Roster roster = rosterService.getByTeam(season, team, isHome);
-		
-		
-		
-		
-		RosterView rosterView = new RosterView(roster);
-		
-		session.getTransaction().commit();
-		
-		return rosterView;
-	
-	}
-	
-	
 
-	private PlayersView getPlayers(Session session, long seasonID, int teamNumber)
-	{
+		RosterService rosterService = new RosterServiceImpl(session);
+
+		Roster roster = rosterService.getByTeam(season, team, isHome);
+
+		RosterView rosterView = new RosterView(roster);
+
+		session.getTransaction().commit();
+
+		return rosterView;
+
+	}
+
+	private PlayersView getPlayers(Session session, long seasonID, int teamNumber) {
 		TeamService service = new TeamServiceImpl(session);
 		Team team = service.GetByNumber(seasonID, teamNumber);
 
@@ -372,8 +385,7 @@ public class RestService
 
 		PlayersView players = new PlayersView();
 
-		for (Player player : team.getPlayers())
-		{
+		for (Player player : team.getPlayers()) {
 			Stat stat = player.getStats(season);
 			players.getPlayers().add(new PlayerView(player, stat));
 		}
@@ -381,8 +393,7 @@ public class RestService
 		return players;
 	}
 
-	private String getDataInfo(Season season) throws IOException
-	{
+	private String getDataInfo(Season season) throws IOException {
 		Session session = HibernateUtil.getSession();
 
 		TeamService teamService = new TeamServiceImpl(session);
@@ -403,24 +414,19 @@ public class RestService
 		return s;
 	}
 
-	private Session getSession()
-	{
+	private Session getSession() {
 		return HibernateUtil.getSessionFactory().getCurrentSession();
 	}
 
-	private Session getSessionAndStartTransaction()
-	{
+	private Session getSessionAndStartTransaction() {
 		Session s = getSession();
 		s.beginTransaction();
 		return s;
 	}
-	
-	private Team getTeam(Session session, int teamId)
-	{
+
+	private Team getTeam(Session session, int teamId) {
 		TeamService service = new TeamServiceImpl(session);
 		return service.Get(teamId);
 	}
-	
-	
-	
+
 }

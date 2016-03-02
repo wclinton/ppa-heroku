@@ -21,7 +21,7 @@ app
 						var deferred = $q.defer();
 						var getTeams = $http({
 							method : 'GET',
-							url : '/rest/teams',
+							url : 'rest/teams/0',
 							cache : 'false'
 						});
 
@@ -48,8 +48,7 @@ app
 						$http(
 								{
 									method : 'GET',
-									url : 'roster?teamNumber=' + teamNumber
-											+ '&isHome=' + isHome,
+									url :  'rest/roster/' + teamNumber + '/' + isHome											+ '&isHome=' + isHome,
 								}).success(
 								function(data, status, headers, config) {
 
@@ -81,14 +80,14 @@ app
 					// Open a new window and show the generated scoresheet.
 					$scope.GenerateScoreSheet = function() {
 						
-						var url = 'PlayoffScoreSheetGenerator?homeTeamNumber='
+						var url = 'rest/generatePlayoffScoreSheet/?homeTeamNumber='
 							+ $scope.selectedHomeTeam + '&awayTeamNumber='
 							+ $scope.selectedAwayTeam 
 							+ '&date=' + $scope.date + '&table1='
 							+ $scope.table1 + '&table2='
 							+ $scope.table2 
-							+ '&homeRoster='+ JSON.stringify($scope.homeRoster)
-							+ '&awayRoster='+ JSON.stringify($scope.awayRoster);
+							+ '&homeRosterId='+ $scope.homeRoster.id
+							+ '&awayRosterId='+ $scope.awayRoster.id;
 						
 
 						window.open(url,'_blank');

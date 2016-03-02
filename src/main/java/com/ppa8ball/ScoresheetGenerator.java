@@ -114,6 +114,8 @@ public class ScoresheetGenerator
 
 		for (PlayerView playerView : players)
 		{
+			if (i >=5)
+				break;
 			double average = playerView.getDisplayAdjustedAverage();
 			totalAverage += average;
 
@@ -139,6 +141,8 @@ public class ScoresheetGenerator
 
 		for (PlayerView playerView : players)
 		{
+			if (i >=5)
+				break;
 			double average = playerView.getDisplayAdjustedAverage();
 			totalAverage += average;
 
