@@ -264,6 +264,7 @@ public class RestService {
 			season = seasonService.Get(seasonId);
 		TeamService teamService = new TeamServiceImpl(session);
 		List<Team> teams = teamService.GetNormalBySeason(season);
+		
 		TeamsView teamView = new TeamsView(teams);
 
 		session.getTransaction().commit();
@@ -393,26 +394,26 @@ public class RestService {
 		return players;
 	}
 
-	private String getDataInfo(Season season) throws IOException {
-		Session session = HibernateUtil.getSession();
-
-		TeamService teamService = new TeamServiceImpl(session);
-		List<Team> savedTeams = teamService.GetBySeason(season);
-
-		PlayerService playerService = new PlayerServiceImpl(session);
-
-		List<Player> players = playerService.Get();
-
-		String s = "Data uploaded for season:" + season.getDescription();
-		s += "\n";
-		s += "Teams:" + savedTeams.size();
-		s += "\n";
-		s += "Players:" + players.size();
-
-		session.close();
-
-		return s;
-	}
+//	private String getDataInfo(Season season) throws IOException {
+//		Session session = HibernateUtil.getSession();
+//
+//		TeamService teamService = new TeamServiceImpl(session);
+//		List<Team> savedTeams = teamService.GetBySeason(season);
+//
+//		PlayerService playerService = new PlayerServiceImpl(session);
+//
+//		List<Player> players = playerService.Get();
+//
+//		String s = "Data uploaded for season:" + season.getDescription();
+//		s += "\n";
+//		s += "Teams:" + savedTeams.size();
+//		s += "\n";
+//		s += "Players:" + players.size();
+//
+//		session.close();
+//
+//		return s;
+//	}
 
 	private Session getSession() {
 		return HibernateUtil.getSessionFactory().getCurrentSession();
@@ -424,9 +425,9 @@ public class RestService {
 		return s;
 	}
 
-	private Team getTeam(Session session, int teamId) {
-		TeamService service = new TeamServiceImpl(session);
-		return service.Get(teamId);
-	}
+//	private Team getTeam(Session session, int teamId) {
+//		TeamService service = new TeamServiceImpl(session);
+//		return service.Get(teamId);
+//	}
 
 }

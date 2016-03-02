@@ -1,5 +1,6 @@
 package com.ppa8ball.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -64,6 +65,8 @@ public class TeamServiceImpl implements TeamService
 
 		@SuppressWarnings("unchecked")
 		List<Team> list = cr.list();
+		
+		list.sort((team1, team2) -> team1.getNumber() - team2.getNumber() );
 		return list;
 	}
 
