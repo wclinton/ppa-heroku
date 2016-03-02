@@ -1,6 +1,5 @@
 package com.ppa8ball.service;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
