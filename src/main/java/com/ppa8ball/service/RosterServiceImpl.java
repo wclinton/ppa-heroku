@@ -39,4 +39,12 @@ public class RosterServiceImpl implements RosterService
 	{
 		return (Roster) session.get(Roster.class, id);
 	}
+
+	@Override
+	public void Delete(long id) {
+		
+		Roster roster = Get(id);
+		if (roster != null)
+			session.delete(roster);
+	}
 }

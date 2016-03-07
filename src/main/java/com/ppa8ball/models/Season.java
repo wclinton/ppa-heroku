@@ -139,6 +139,10 @@ public class Season implements Comparable<Season>
 	{
 		// get the last week with stats.
 		int lastWeekNum = getLastStatWeek().getNumber();
+		
+		if (lastWeekNum == 18)
+			return true;
+		
 
 		// next week to play will be +1 but indexed from zero so +1 -1 ...
 		Week nextWeekToPlay = weeks.get(lastWeekNum);

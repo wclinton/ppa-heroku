@@ -44,11 +44,10 @@ app
 
 					$scope.loadRoster = function(isHome, teamNumber) {
 						
-
 						$http(
 								{
 									method : 'GET',
-									url :  'rest/roster/' + teamNumber + '/' + isHome											+ '&isHome=' + isHome,
+									url :  'rest/roster/' + teamNumber + '/' + isHome
 								}).success(
 								function(data, status, headers, config) {
 

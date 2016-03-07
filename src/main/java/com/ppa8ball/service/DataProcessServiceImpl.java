@@ -22,6 +22,7 @@ public class DataProcessServiceImpl implements DataProcessService
 	private static final String SEASON_TABLE_NAME = "season";
 	private static final String TEAM_TABLE_NAME = "team";
 	private static final String ROSTER_TABLE_NAME = "roster";
+	private static final String ORDERED_PLAYER_TABLE_NAME = "orderedplayer";
 	
 	private Session session;
 
@@ -110,7 +111,7 @@ public class DataProcessServiceImpl implements DataProcessService
 	private void clearDatabases(Session session)
 	{
 		String[] tables =
-		{ TEAM_TABLE_NAME, SEASON_TABLE_NAME, MATCH_TABLE_NAME, STAT_TABLE_NAME, PLAYER_TABLE_NAME, TEAM_PLAYER_TABLE_NAME, WEEK_TABLE_NAME, ROSTER_TABLE_NAME};
+		{ TEAM_TABLE_NAME, SEASON_TABLE_NAME, MATCH_TABLE_NAME, STAT_TABLE_NAME, PLAYER_TABLE_NAME, TEAM_PLAYER_TABLE_NAME, WEEK_TABLE_NAME, ROSTER_TABLE_NAME, ORDERED_PLAYER_TABLE_NAME};
 
 		for (String table : tables)
 		{

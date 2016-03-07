@@ -66,9 +66,12 @@ public class ScoresheetGenerator
 
 		stamper = new PdfStamper(reader, writer);
 		AcroFields form = stamper.getAcroFields();
+		
+		boolean homeHasNoPLayer = hasNoPlayer(scoresheet.getHomePlayers());
+		boolean awayHasNoPlayer = hasNoPlayer(scoresheet.getAwayPlayers());
 
-		SetHomeFields(form, scoresheet.getHome(), scoresheet.getHomePlayers());
-		SetAwayFields(form, scoresheet.getAway(), scoresheet.getAwayPlayers());
+		SetHomeFields(form, scoresheet.getHome(), scoresheet.getHomePlayers(),awayHasNoPlayer);
+		SetAwayFields(form, scoresheet.getAway(), scoresheet.getAwayPlayers(),homeHasNoPLayer);
 		
 		//if home team has averages && away team has averages ... 
 
@@ -105,12 +108,14 @@ public class ScoresheetGenerator
 		reader.close();
 	}
 
-	static private void SetHomeFields(AcroFields form, Team team, List<PlayerView> players) throws IOException, DocumentException
+	static private void SetHomeFields(AcroFields form, Team team, List<PlayerView> players, boolean onlyFourPlayers) throws IOException, DocumentException
 	{
 		form.setField(HomeTeamNameField, team.getName());
 		form.setField(HomeTeamNumberField, Integer.toString(team.getNumber()));
 		int i = 0;
 		double totalAverage = 0;
+		
+		PlayerView maxPLayer = getMaxHandicapPlayer(players);
 
 		for (PlayerView playerView : players)
 		{
@@ -122,6 +127,12 @@ public class ScoresheetGenerator
 			if (!playerView.getFullName().isEmpty())
 			{
 				form.setField(HomeTeamAverageFields[i], Double.toString(average));
+				
+				if (onlyFourPlayers && maxPLayer.getId() == playerView.getId())
+				{
+					
+				}
+				else
 				form.setField(HomeTeamPlayerFields[i], playerView.getFullName());
 			}
 			i++;
@@ -131,7 +142,7 @@ public class ScoresheetGenerator
 			form.setField(HomeAverageTotal, Double.toString(RoundTo1Decimals(totalAverage)));
 	}
 
-	static private void SetAwayFields(AcroFields form, Team team, List<PlayerView> players) throws IOException, DocumentException
+	static private void SetAwayFields(AcroFields form, Team team, List<PlayerView> players, boolean onlyFourPlayers) throws IOException, DocumentException
 	{
 		form.setField(AwayTeamNameField, team.getName());
 		form.setField(AwayTeamNumberField, Integer.toString(team.getNumber()));
@@ -139,17 +150,27 @@ public class ScoresheetGenerator
 		int i = 0;
 		double totalAverage = 0;
 
+		PlayerView maxPLayer = getMaxHandicapPlayer(players);
+		
 		for (PlayerView playerView : players)
 		{
 			if (i >=5)
 				break;
+			
+			
 			double average = playerView.getDisplayAdjustedAverage();
 			totalAverage += average;
 
 			String name = playerView.getFullName();
 			if (!name.isEmpty())
 			{
-				form.setField(AwayTeamAverageFields[i], Double.toString(average));
+				if (onlyFourPlayers && maxPLayer.getId() == playerView.getId())
+				{
+				}
+				else
+				{
+					form.setField(AwayTeamAverageFields[i], Double.toString(average));
+				}
 				form.setField(AwayTeamPlayerFields[i], playerView.getFullName());
 			}
 			i++;
@@ -217,5 +238,24 @@ public class ScoresheetGenerator
 	{
 		DecimalFormat df = new DecimalFormat("#");	
 		return df.format(Math.round(d));
+	}
+	
+	private static boolean hasNoPlayer(List<PlayerView> players)
+	{
+		for (PlayerView playerView : players) {
+			if (playerView.getActualAverage() == 0)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	private static PlayerView getMaxHandicapPlayer(List<PlayerView> players)
+	{
+		PlayerView max = players.stream()
+                .max((p1, p2) -> Double.compare(p1.getActualAverage(), p2.getActualAverage()))
+                .get();
+		
+		return max;
 	}
 }

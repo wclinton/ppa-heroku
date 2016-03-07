@@ -9,4 +9,5 @@ public interface RosterService
 	public Roster getByTeam(Season season, Team team, boolean isHome);
 	public void Save(Roster roster);
 	public Roster Get(long id);
+	public void Delete(long id);
 }
