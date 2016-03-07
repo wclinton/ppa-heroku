@@ -68,21 +68,13 @@ public class RestService
    public SeasonView getCurrentSeason()
    {
       Session session = getSessionAndStartTransaction();
-      try
-         {
-            SeasonView s = getCurrentSeason(session);
-            session.getTransaction().commit();
 
-            s.setCurrentStatsAvailable(true);
+      SeasonView s = getCurrentSeason(session);
+      session.getTransaction().commit();
 
-            return s;
-         } catch (Exception e)
-         {
-            throw e;
-         } finally
-         {
-            // endSession(session);
-         }
+     // s.setCurrentStatsAvailable(true);
+
+      return s;
    }
 
    private SeasonView getCurrentSeason(Session session)
@@ -472,9 +464,18 @@ public class RestService
 
    private Session getSessionAndStartTransaction()
    {
-      Session s = getSession();
-      s.beginTransaction();
-      return s;
+      Session s = null;
+      try
+         {
+            s = getSession();
+            s.beginTransaction();
+            return s;
+         } finally
+         {
+            if (s != null)
+               s.clear();
+         }
+
    }
 
    // private Team getTeam(Session session, int teamId) {
