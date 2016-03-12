@@ -5,7 +5,6 @@ import com.ppa8ball.models.Stat;
 
 public class PlayerView
 {
-
 	private long idx;
 	public long getIdx() {
 		return idx;
@@ -16,8 +15,7 @@ public class PlayerView
 	}
 
 	private long id;
-	// private int teamNumber;
-	private String firstName;
+   private String firstName;
 	private String lastName;
 	private String fullName;
 	private String gender;

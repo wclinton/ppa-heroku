@@ -69,7 +69,7 @@ public class RestService
    {
       Session session = getSessionAndStartTransaction();
 
-      SeasonView s = getCurrentSeason(session);
+      SeasonView s = new SeasonView(getCurrentSeason(session));
       session.getTransaction().commit();
 
      // s.setCurrentStatsAvailable(true);
@@ -77,12 +77,11 @@ public class RestService
       return s;
    }
 
-   private SeasonView getCurrentSeason(Session session)
+   private Season getCurrentSeason(Session session)
    {
       SeasonService seasonService = new SeasonServiceImpl(session);
       Season currentSeason = seasonService.GetCurrent();
-
-      return new SeasonView(currentSeason);
+      return currentSeason;
    }
 
    @GET
@@ -309,11 +308,30 @@ public class RestService
       session.getTransaction().commit();
       return weeksView;
    }
+   
+   @GET
+   @Path("/currentPlayers")
+   @Produces(MediaType.APPLICATION_JSON)
+   public PlayersView getCurrentPlayers()
+   {
+      Session session = getSessionAndStartTransaction();
+      Season season = getCurrentSeason(session);
+      PlayersView players = new PlayersView();
+
+      for (int i = 1; i <= 10; i++)
+         {
+            PlayersView playersTeam = getPlayers(session, season.getId(), i);
+            players.addPlayers(playersTeam);
+         }
+      session.getTransaction().commit();
+
+      return players;
+   }
 
    @GET
    @Path("/players/{seasonId}")
    @Produces(MediaType.APPLICATION_JSON)
-   public PlayersView getPlayer(@PathParam("seasonId") long seasonId)
+   public PlayersView getPlayers(@PathParam("seasonId") long seasonId)
    {
       Session session = getSessionAndStartTransaction();
       PlayersView players = new PlayersView();
